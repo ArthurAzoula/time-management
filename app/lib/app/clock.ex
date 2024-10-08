@@ -5,7 +5,7 @@ defmodule App.Clock do
   schema "clocks" do
     field :status, :boolean, default: false
     field :time, :naive_datetime
-    field :user, :id
+    belongs_to :user, App.User, foreign_key: :user_id  # Utiliser :user pour l'association, :user_id pour la clé étrangère
 
     timestamps()
   end
@@ -13,7 +13,7 @@ defmodule App.Clock do
   @doc false
   def changeset(clock, attrs) do
     clock
-    |> cast(attrs, [:time, :status])
-    |> validate_required([:time, :status])
+    |> cast(attrs, [:time, :status, :user])
+    |> validate_required([:time, :status, :user])
   end
 end

@@ -11,7 +11,14 @@ defmodule AppWeb.WorkingTimeController do
     render(conn, "index.json", workingtime: workingtime)
   end
 
-  def create(conn, %{"working_time" => working_time_params}) do
+  def create(conn, %{"userID" => user_id, "workingtime" => working_time_params}) do
+    IO.inspect(user_id, label: "User ID")
+    IO.inspect(working_time_params, label: "Working Time Params Before")
+
+    working_time_params = Map.put(working_time_params, "user", user_id)
+
+    IO.inspect(working_time_params, label: "Working Time Params After")
+
     with {:ok, %WorkingTime{} = working_time} <- Time.create_working_time(working_time_params) do
       conn
       |> put_status(:created)
@@ -25,7 +32,7 @@ defmodule AppWeb.WorkingTimeController do
     render(conn, "show.json", working_time: working_time)
   end
 
-  def update(conn, %{"id" => id, "working_time" => working_time_params}) do
+  def update(conn, %{"id" => id, "workingtime" => working_time_params}) do
     working_time = Time.get_working_time!(id)
 
     with {:ok, %WorkingTime{} = working_time} <- Time.update_working_time(working_time, working_time_params) do

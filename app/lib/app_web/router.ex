@@ -8,6 +8,8 @@ defmodule AppWeb.Router do
 
   scope "/api", AppWeb do
     pipe_through :api
+
+    resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
   end
 
   scope "/swagger" do

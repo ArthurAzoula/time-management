@@ -74,14 +74,12 @@ defmodule AppWeb.ClockController do
   end
 
   def create(conn, %{"userID" => user_id}) do
-    # Prépare les paramètres avec user_id inclus
     clock_params = %{
-      "user_id" => user_id,  # Associe le user_id au bon champ
+      "user" => user_id,
       "time" => DateTime.utc_now(),
-      "status" => true  # Exemple pour "clock in"
+      "status" => true
     }
 
-    # Insère les données dans la table clocks
     with {:ok, %Clock{} = clock} <- Repo.insert(Clock.changeset(%Clock{}, clock_params)) do
       conn
       |> put_status(:created)

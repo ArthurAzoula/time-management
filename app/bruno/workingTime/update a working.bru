@@ -1,0 +1,27 @@
+meta {
+  name: Update workingtime
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{BASE}}/api/workingtime/2
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "workingtime" : {
+      "start": "2024-11-01 10:00:00",
+      "end": "2024-12-01 18:00:00"
+    }
+  }
+}
+
+tests {
+  test("update a working", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(200);
+  });
+}

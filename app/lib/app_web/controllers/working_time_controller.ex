@@ -2,6 +2,7 @@ defmodule AppWeb.WorkingTimeController do
   use AppWeb, :controller
   use PhoenixSwagger
 
+  alias ElixirLS.LanguageServer.Plugins.Ecto.Schema
   alias App.Time
   alias App.Time.WorkingTime
 
@@ -64,6 +65,32 @@ defmodule AppWeb.WorkingTimeController do
         }
       }
     }
+  end
+
+  swagger_path :create do
+    post "/api/workingtime/{userId}"
+    summary "Create a workingtime"
+    description "Create a workingtime for a user"
+    parameter :userId, :path, :string, "User ID", required: true
+    parameter :workingtime, :body, :WorkingTime, "WorkingTime attributes", required: true
+    response 201, "Created", :WorkingTime
+  end
+
+  swagger_path :update do
+    put "/api/workingtime/{id}"
+    summary "Update a workingtime"
+    description "Update a workingtime by ID"
+    parameter :id, :path, :string, "WorkingTime ID", required: true
+    parameter :workingtime, :body, :WorkingTime, "WorkingTime attributes", required: true
+    response 200, "OK", :WorkingTime
+  end
+
+  swagger_path :delete do
+    PhoenixSwagger.Path.delete "/api/workingtime/{id}"
+    summary "Delete a workingtime"
+    description "Delete a workingtime by ID"
+    parameter :id, :path, :string, "WorkingTime ID", required: true
+    response 204, "No Content"
   end
 
   def index(conn, _params) do

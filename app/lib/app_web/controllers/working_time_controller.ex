@@ -114,6 +114,19 @@ defmodule AppWeb.WorkingTimeController do
     render(conn, "show.json", working_time: working_time)
   end
 
+  def show_by_user_and_id(conn, %{"userID" => user_id, "id" => id}) do
+    case Time.get_working_time_by_user_and_id(user_id, id) do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> json(%{error: "Working time not found"})
+      working_time ->
+        conn
+        |> put_status(:ok)
+        |> json(working_time)
+    end
+  end
+
   def update(conn, %{"id" => id, "workingtime" => working_time_params}) do
     working_time = Time.get_working_time!(id)
 

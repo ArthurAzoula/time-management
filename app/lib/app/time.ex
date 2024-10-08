@@ -142,6 +142,10 @@ defmodule App.Time do
   """
   def get_working_time!(id), do: Repo.get!(WorkingTime, id)
 
+  def get_working_time_by_user_and_id(user_id, id) do
+    Repo.one(from wt in WorkingTime, where: wt.user == ^user_id and wt.id == ^id)
+  end
+
   @doc """
   Creates a working_time.
 

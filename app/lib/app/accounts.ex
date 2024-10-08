@@ -1,4 +1,5 @@
 defmodule App.Accounts do
+
   @moduledoc """
   The Accounts context.
   """

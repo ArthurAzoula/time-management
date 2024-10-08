@@ -1,0 +1,23 @@
+meta {
+  name: Create a task
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BASE}}/api/tasks
+  body: none
+  auth: none
+}
+
+tests {
+  test("create a task", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(201);
+  });
+  
+  test("task already exist", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(400);
+  });
+}

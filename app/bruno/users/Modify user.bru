@@ -1,0 +1,33 @@
+meta {
+  name: Modify user
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{BASE}}/api/users/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "user" : {
+      "username": "test",
+      "email": "arthur.azoula@epitech.eu"
+    }
+  }
+}
+
+tests {
+  test("patch user", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("User exist", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).not.equal(404);
+  });
+  
+}

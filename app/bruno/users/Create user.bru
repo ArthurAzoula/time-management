@@ -1,0 +1,31 @@
+meta {
+  name: Create user
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{BASE}}/api/users
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "user" : {
+      "username": "test",
+      "email": "arthur.azoula@epitech.eu"
+    }
+  }
+}
+
+tests {
+  test("Create a user", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(201);
+  });
+}

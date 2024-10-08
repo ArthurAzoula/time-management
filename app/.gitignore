@@ -32,3 +32,9 @@ app-*.tar
 
 # Database file
 data/
+
+# IDE files
+.idea/
+.vscode/
+.DS_Store
+../.DS_Store

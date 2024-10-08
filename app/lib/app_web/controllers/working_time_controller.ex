@@ -12,12 +12,7 @@ defmodule AppWeb.WorkingTimeController do
   end
 
   def create(conn, %{"userID" => user_id, "workingtime" => working_time_params}) do
-    IO.inspect(user_id, label: "User ID")
-    IO.inspect(working_time_params, label: "Working Time Params Before")
-
     working_time_params = Map.put(working_time_params, "user", user_id)
-
-    IO.inspect(working_time_params, label: "Working Time Params After")
 
     with {:ok, %WorkingTime{} = working_time} <- Time.create_working_time(working_time_params) do
       conn

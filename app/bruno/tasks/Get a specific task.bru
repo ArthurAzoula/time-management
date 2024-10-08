@@ -1,0 +1,27 @@
+meta {
+  name: Get a specific task
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BASE}}/api/tasks/:id
+  body: none
+  auth: none
+}
+
+params:path {
+  id: 
+}
+
+tests {
+  test("Get a task", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("task doesn't exist", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(404);
+  });
+}

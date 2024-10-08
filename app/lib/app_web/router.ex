@@ -2,6 +2,9 @@ defmodule AppWeb.Router do
   use AppWeb, :router
   use PhoenixSwagger
 
+  alias App.Repo
+  alias App.Clock
+
   pipeline :api do
     plug :accepts, ["json"]
   end
@@ -9,7 +12,9 @@ defmodule AppWeb.Router do
   scope "/api", AppWeb do
     pipe_through :api
 
-    resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
+    resources "/users", UserController, only: [:index, :create, :show, :update, :delete]
+    resources "/clocks", ClockController, only: [:index, :show, :update, :delete]
+    post "/clocks/:userID", ClockController, :create
   end
 
   scope "/swagger" do

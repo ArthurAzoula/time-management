@@ -18,6 +18,7 @@ defmodule AppWeb.Router do
     resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
     resources "/workingtime", WorkingTimeController, only: [:index, :create, :show, :update, :delete]
     post "/workingtime/:userID", WorkingTimeController, :create
+    get "/workingtime/:userID/:id", WorkingTimeController, :show_by_user_and_id
   end
 
   scope "/swagger" do

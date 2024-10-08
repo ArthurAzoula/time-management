@@ -1,0 +1,23 @@
+meta {
+  name: Get workingtime by user
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BASE}}/api/workingtime/1/2
+  body: none
+  auth: none
+}
+
+tests {
+  test("Get the user", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("User doesn't exist", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).not.equal(404);
+  });
+}

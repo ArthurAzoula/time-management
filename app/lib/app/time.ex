@@ -102,6 +102,15 @@ defmodule App.Time do
     Clock.changeset(clock, attrs)
   end
 
+
+  def get_user_clocks(user_id) do
+    query = from c in Clock,
+      where: c.user == ^user_id,
+      select: c
+
+    Repo.all(query)
+  end
+
   alias App.Time.WorkingTime
 
   @doc """
@@ -201,4 +210,6 @@ defmodule App.Time do
   def change_working_time(%WorkingTime{} = working_time, attrs \\ %{}) do
     WorkingTime.changeset(working_time, attrs)
   end
+
+
 end

@@ -65,7 +65,22 @@ defmodule AppWeb.ClockController do
     }
   end
 
-  # TODO : add swagger_path for each action
+  swagger_path :create do
+    post "/api/clocks/{userId}"
+    summary "Create a clock"
+    description "Create a clock for the user"
+    parameter :userId, :path, :string, "User ID", required: true
+    parameter :clock, :body, Schema.ref(:Clock), "Clock attributes", required: true
+    response 201, "Clock created", Schema.ref(:Clock)
+  end
+
+  swagger_path :show do
+    get "/api/clocks/{userId}"
+    summary "List clocks"
+    description "List all clocks"
+    parameter :userId, :path, :string, "User ID", required: true
+    response 200, "OK", Schema.ref(:Clock)
+  end
 
 
   def index(conn, _params) do
@@ -74,14 +89,12 @@ defmodule AppWeb.ClockController do
   end
 
   def create(conn, %{"userID" => user_id}) do
-    # Prépare les paramètres avec user_id inclus
     clock_params = %{
-      "user_id" => user_id,  # Associe le user_id au bon champ
+      "user" => user_id,
       "time" => DateTime.utc_now(),
-      "status" => true  # Exemple pour "clock in"
+      "status" => true
     }
 
-    # Insère les données dans la table clocks
     with {:ok, %Clock{} = clock} <- Repo.insert(Clock.changeset(%Clock{}, clock_params)) do
       conn
       |> put_status(:created)
@@ -95,9 +108,9 @@ defmodule AppWeb.ClockController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    clock = Time.get_clock!(id)
-    render(conn, "show.json", clock: clock)
+  def show(conn, %{"userID" => user_id}) do
+    clocks = Time.get_user_clocks(user_id)
+    render(conn, "index.json", clocks: clocks)
   end
 
   def update(conn, %{"id" => id, "clock" => clock_params}) do

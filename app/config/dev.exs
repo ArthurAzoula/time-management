@@ -2,11 +2,11 @@ use Mix.Config
 
 # Configure your database
 config :app, App.Repo,
-  username: System.get_env("POSTGRES_USER") || "postgres",
-  password: System.get_env("POSTGRES_PASSWORD") || "postgres",
-  database: System.get_env("POSTGRES_DB") || "app_dev",
+  username: System.get_env("POSTGRES_USER") || "timeuser",
+  password: System.get_env("POSTGRES_PASSWORD") || "timepassword",
+  database: System.get_env("POSTGRES_DB") || "timemanagement",
   hostname: System.get_env("POSTGRES_HOST") || "localhost",
-  port: String.to_integer(System.get_env("POSTGRES_PORT") || "5434"),
+  port: String.to_integer(System.get_env("POSTGRES_PORT") || "5432"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

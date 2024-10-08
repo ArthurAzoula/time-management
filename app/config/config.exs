@@ -16,15 +16,18 @@ config :app, AppWeb.Endpoint,
   secret_key_base: "Hh4TNfjvaX9BbWOvhz7h4vOjwom1T6HIvSLqXgm1dd6tYyqDZYN/qsB3ELf9JQgb",
   render_errors: [view: AppWeb.ErrorView, accepts: ~w(json), layout: false],
   pubsub_server: App.PubSub,
-  live_view: [signing_salt: "yvN71r0P"],
-  swagger: [
-    swagger_files: %{
-      "priv/static/swagger.json" => [
-        router: AppWeb.Router,
-        endpoint: AppWeb.Endpoint
-      ]
-    }
-  ]
+  live_view: [signing_salt: "yvN71r0P"]
+
+# Configure swagger
+config :app, :phoenix_swagger,
+  swagger_files: %{
+    "priv/static/swagger.json" => [
+      router: AppWeb.Router,     # phoenix routes will be converted to swagger paths
+      endpoint: AppWeb.Endpoint  # (optional) endpoint config used to set host, port and https schemes.
+    ]
+  }
+
+config :phoenix, :json_library, Jason # Use Jason for JSON parsing in Phoenix
 
 # Configures Elixir's Logger
 config :logger, :console,

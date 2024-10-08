@@ -14,8 +14,8 @@ defmodule AppWeb.Router do
 
   scope "/swagger" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI,
-    otp_app: :app,
-    swagger_file: "swagger.json"
+      otp_app: :app,
+      swagger_file: "swagger.json"
   end
 
   # Enables LiveDashboard only for development
@@ -36,11 +36,13 @@ defmodule AppWeb.Router do
 
   def swagger_info do
     %{
+      schemes: ["http"],
       info: %{
         title: "Time management private API",
         version: "0.1.0",
         description: "This is a private API for Epitech students to manage their time",
-      }
+      },
+      definitions: AppWeb.SwaggerSchema.swagger_definitions()
     }
   end
 end

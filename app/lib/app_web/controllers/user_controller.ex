@@ -1,10 +1,108 @@
 defmodule AppWeb.UserController do
   use AppWeb, :controller
+  use PhoenixSwagger
 
   alias App.Accounts
   alias App.Accounts.User
 
-  action_fallback AppWeb.FallbackController
+  action_fallback(AppWeb.FallbackController)
+
+  def swagger_info do
+    %{
+      tags: ["User"],
+      description: "User management",
+      produces: ["application/json"],
+      consumes: ["application/json"],
+      parameters: [
+        %{
+          name: "id",
+          in: "path",
+          description: "User ID",
+          required: true,
+          type: :string
+        },
+        %{
+          name: "user",
+          in: "body",
+          description: "User attributes",
+          required: true,
+          schema: %{
+            type: :object,
+            properties: %{
+              username: %{type: :string},
+              email: %{type: :string}
+            }
+          }
+        }
+      ],
+      responses: %{
+        "200": %{
+          description: "User found",
+          schema: %{
+            type: :object,
+            properties: %{
+              username: %{type: :string},
+              email: %{type: :string}
+            }
+          }
+        },
+        "201": %{
+          description: "User created",
+          schema: %{
+            type: :object,
+            properties: %{
+              username: %{type: :string},
+              email: %{type: :string}
+            }
+          }
+        },
+        "204": %{
+          description: "User deleted"
+        }
+      }
+    }
+  end
+
+  swagger_path :index do
+    get "/api/users"
+    summary "List users"
+    description "List all users"
+    response 200, "OK", Schema.ref(:User)
+  end
+
+  swagger_path :create do
+    post "/api/users"
+    summary "Create user"
+    description "Create a new user"
+    parameter :user, :body, Schema.ref(:User), "User attributes", required: true
+    response 201, "Created", Schema.ref(:User)
+  end
+
+  swagger_path :show do
+    get "/api/users/{id}"
+    summary "Show user"
+    description "Show a user by ID"
+    parameter :id, :path, :string, "User ID", required: true
+    response 200, "OK", Schema.ref(:User)
+  end
+
+  swagger_path :update do
+    put "/api/users/{id}"
+    summary "Update user"
+    description "Update a user by ID"
+    parameter :id, :path, :string, "User ID", required: true
+    parameter :user, :body, Schema.ref(:User), "User attributes", required: true
+    response 200, "OK", Schema.ref(:User)
+  end
+
+  swagger_path :delete do
+    PhoenixSwagger.Path.delete "/api/users/{id}"
+    summary "Delete a user"
+    description "Delete a user by ID"
+    parameter :id, :path, :string, "User ID", required: true, example: 3
+    response 204, "No Content (User deleted)"
+
+  end
 
   def index(conn, _params) do
     users = Accounts.list_users()

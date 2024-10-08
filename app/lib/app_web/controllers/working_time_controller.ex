@@ -67,6 +67,15 @@ defmodule AppWeb.WorkingTimeController do
     }
   end
 
+  swagger_path :show_by_user_and_id do
+    get "/api/workingtime/{userId}/{id}"
+    summary "Show a workingtime by user and ID"
+    description "Show a workingtime by user and ID"
+    parameter :userId, :path, :string, "User ID", required: true
+    parameter :id, :path, :string, "WorkingTime ID", required: true
+    response 200, "OK", :WorkingTime
+  end
+
   swagger_path :create do
     post "/api/workingtime/{userId}"
     summary "Create a workingtime"

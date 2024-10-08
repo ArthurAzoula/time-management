@@ -67,6 +67,8 @@ defmodule AppWeb.UserController do
     get "/api/users"
     summary "List users"
     description "List all users"
+    parameter :email, :query, :string, "Filter by email", required: false
+    parameter :username, :query, :string, "Filter by username", required: false
     response 200, "OK", Schema.ref(:User)
   end
 
@@ -104,8 +106,8 @@ defmodule AppWeb.UserController do
 
   end
 
-  def index(conn, _params) do
-    users = Accounts.list_users()
+  def index(conn, params) do
+    users = Accounts.list_users(params)
     render(conn, "index.json", users: users)
   end
 

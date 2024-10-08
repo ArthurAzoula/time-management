@@ -102,4 +102,36 @@ defmodule App.Accounts do
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
   end
+
+
+  @doc """
+  Return the user with params.
+
+  ## Examples
+
+      iex> get_user(%{field: value})
+      %User{}
+  """
+  def list_users(params \\ %{}) do
+    User
+    |> filter_by_params(params)
+    |> Repo.all()
+  end
+
+  defp filter_by_params(query, params) do
+    query
+    |> filter_by_email(Map.get(params, "email"))
+    |> filter_by_username(Map.get(params, "username"))
+  end
+
+  defp filter_by_email(query, nil), do: query
+  defp filter_by_email(query, email) do
+    from u in query, where: ilike(u.email, ^"%#{email}%")
+  end
+
+  defp filter_by_username(query, nil), do: query
+  defp filter_by_username(query, username) do
+    from u in query, where: ilike(u.username, ^"%#{username}%")
+  end
+
 end

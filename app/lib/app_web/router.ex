@@ -12,12 +12,19 @@ defmodule AppWeb.Router do
   scope "/api", AppWeb do
     pipe_through :api
 
+    # Users
     resources "/users", UserController, only: [:index, :create, :show, :update, :delete]
-    resources "/clocks", ClockController, only: [:index, :show, :update, :delete]
-    post "/clocks/:userID", ClockController, :create
     resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
+
+    # WorkingTime
     resources "/workingtime", WorkingTimeController, only: [:index, :create, :show, :update, :delete]
     post "/workingtime/:userID", WorkingTimeController, :create
+
+    # Clocks
+    resources "/clocks", ClockController, only: [:index, :update, :delete]
+    post "/clocks/:userID", ClockController, :create
+    get "/clocks/:userID", ClockController, :show
+
   end
 
   scope "/swagger" do

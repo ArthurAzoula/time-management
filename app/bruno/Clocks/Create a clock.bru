@@ -9,3 +9,10 @@ post {
   body: none
   auth: none
 }
+
+tests {
+  test("Create a clock", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(201);
+  });
+}

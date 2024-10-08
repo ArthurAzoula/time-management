@@ -11,7 +11,7 @@ get {
 }
 
 tests {
-  test("Get all clocks or empty", function() {
+  test("Get a clock or empty", function() {
     const data = res.getBody();
     expect(res.getStatus()).to.equal(200);
   });

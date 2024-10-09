@@ -2,6 +2,9 @@ defmodule AppWeb.Router do
   use AppWeb, :router
   use PhoenixSwagger
 
+  alias App.Repo
+  alias App.Clock
+
   pipeline :api do
     plug :accepts, ["json"]
   end

@@ -76,6 +76,16 @@ defmodule AppWeb.WorkingTimeController do
     response 200, "OK", :WorkingTime
   end
 
+  swagger_path :show_by_user do
+    get "/api/workingtime/{userId}"
+    summary "Show workingtimes by user"
+    description "Show workingtimes by user"
+    parameter :user_id, :path, :string, "User ID", required: true
+    parameter :start, :query, :date, "Start date", required: false
+    parameter :end, :query, :date, "End date", required: false
+    response 200, "OK", :WorkingTime
+  end
+
   swagger_path :create do
     post "/api/workingtime/{userId}"
     summary "Create a workingtime"
@@ -118,14 +128,8 @@ defmodule AppWeb.WorkingTimeController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    working_time = Time.get_working_time!(id)
-    render(conn, "show.json", working_time: working_time)
-  end
-
-  def show_by_user(conn, %{"user_id" => user_id} = params) do
+  def show_by_user(conn, %{"userID" => user_id} = params) do
     working_times = Time.list_working_time_by_user(user_id, params)
-
     render(conn, "index.json", working_times: working_times)
   end
 

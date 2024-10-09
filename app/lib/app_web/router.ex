@@ -17,10 +17,10 @@ defmodule AppWeb.Router do
     resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
 
     # WorkingTime
-    resources "/workingtime", WorkingTimeController, only: [:index, :create, :show, :update, :delete]
+    resources "/workingtime", WorkingTimeController, only: [:index, :create, :update, :delete]
 
     post "/workingtime/:userID", WorkingTimeController, :create
-    get "/workingtime/user/:user_id", WorkingTimeController, :show_by_user
+    get "/workingtime/:userID", WorkingTimeController, :show_by_user
     get "/workingtime/:userID/:id", WorkingTimeController, :show_by_user_and_id
 
     # Clocks

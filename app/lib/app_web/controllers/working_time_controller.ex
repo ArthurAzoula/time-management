@@ -114,6 +114,12 @@ defmodule AppWeb.WorkingTimeController do
     render(conn, "show.json", working_time: working_time)
   end
 
+  def show_by_user(conn, %{"user_id" => user_id} = params) do
+    working_times = Time.list_working_time_by_user(user_id, params)
+
+    render(conn, "index.json", working_times: working_times)
+  end
+
   def show_by_user_and_id(conn, %{"userID" => user_id, "id" => id}) do
     case Time.get_working_time_by_user_and_id(user_id, id) do
       nil ->

@@ -47,11 +47,13 @@ defmodule AppWeb.Router do
 
   def swagger_info do
     %{
+      schemes: ["http"],
       info: %{
         title: "Time management private API",
         version: "0.1.0",
         description: "This is a private API for Epitech students to manage their time",
-      }
+      },
+      definitions: AppWeb.SwaggerSchema.swagger_definitions()
     }
   end
 end

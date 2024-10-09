@@ -88,23 +88,14 @@ defmodule AppWeb.ClockController do
     render(conn, "index.json", clocks: clocks)
   end
 
-  def create(conn, %{"userID" => user_id}) do
-    clock_params = %{
-      "user" => user_id,
-      "time" => DateTime.utc_now(),
-      "status" => true
-    }
+  def create(conn, %{"userID" => user_id, "clock" => clock_params}) do
+    clock_params = Map.put(clock_params, "user", user_id)
 
-    with {:ok, %Clock{} = clock} <- Repo.insert(Clock.changeset(%Clock{}, clock_params)) do
+    with {:ok, %Clock{} = clock} <- Time.create_clock(clock_params) do
       conn
       |> put_status(:created)
       |> put_resp_header("location", Routes.clock_path(conn, :show, clock))
       |> render("show.json", clock: clock)
-    else
-      {:error, changeset} ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render(AppWeb.ChangesetView, "error.json", changeset: changeset)
     end
   end
 

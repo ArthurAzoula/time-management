@@ -9,6 +9,42 @@ export const workingTimeService = {
         } catch (error) {
             throw new Error(error)
         }
-    }   
+    },
+
+    async getWorkingTimeByUserAndById (userId, id) {
+        try {
+            const response = await api.get(`workingtime/${userId}/${id}`)
+            return response.data
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+
+    async createWorkingTime (userId, data) {
+        try {
+            const response = await api.post(`workingtime/${userId}`, data)
+            return response.data
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+
+    async updateWorkingTime (id, data) {
+        try {
+            const response = await api.put(`workingtime/${id}`, data)
+            return response.data
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+
+    async deleteWorkingTime (id) {
+        try {
+            const response = await api.delete(`workingtime/${id}`)
+            return response // No content to return
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
 
 }

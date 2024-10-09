@@ -41,7 +41,7 @@ export const userService = {
     async deleteUser(id) {
         try {
             const response = await api.delete(`users/${id}`)
-            return response.data
+            return response // No content to return
         } catch (error) {
             throw new Error(error)
         }

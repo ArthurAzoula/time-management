@@ -45,7 +45,8 @@ defmodule App.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_swagger, "~> 0.8"},
       {:ex_json_schema, "~> 0.5"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 

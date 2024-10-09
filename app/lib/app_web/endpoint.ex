@@ -33,6 +33,10 @@ defmodule AppWeb.Endpoint do
     plug Phoenix.Ecto.CheckRepoStatus, otp_app: :app
   end
 
+  plug CORSPlug
+
+  plug AppWeb.Router
+
   plug Phoenix.LiveDashboard.RequestLogger,
     param_key: "request_logger",
     cookie_key: "request_logger"

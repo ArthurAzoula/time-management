@@ -18,7 +18,9 @@ defmodule AppWeb.Router do
 
     # WorkingTime
     resources "/workingtime", WorkingTimeController, only: [:index, :create, :show, :update, :delete]
+
     post "/workingtime/:userID", WorkingTimeController, :create
+    get "/workingtime/user/:user_id", WorkingTimeController, :show_by_user
     get "/workingtime/:userID/:id", WorkingTimeController, :show_by_user_and_id
 
     # Clocks
@@ -30,8 +32,8 @@ defmodule AppWeb.Router do
 
   scope "/swagger" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI,
-      otp_app: :app,
-      swagger_file: "swagger.json"
+    otp_app: :app,
+    swagger_file: "swagger.json"
   end
 
   if Mix.env() in [:dev, :test] do

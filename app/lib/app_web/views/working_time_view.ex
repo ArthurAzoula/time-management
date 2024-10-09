@@ -2,9 +2,10 @@ defmodule AppWeb.WorkingTimeView do
   use AppWeb, :view
   alias AppWeb.WorkingTimeView
 
-  def render("index.json", %{workingtime: workingtime}) do
-    %{data: render_many(workingtime, WorkingTimeView, "working_time.json")}
+  def render("index.json", %{working_times: working_times}) do
+    %{data: render_many(working_times, WorkingTimeView, "working_time.json")}
   end
+
 
   def render("show.json", %{working_time: working_time}) do
     %{data: render_one(working_time, WorkingTimeView, "working_time.json")}
@@ -13,6 +14,7 @@ defmodule AppWeb.WorkingTimeView do
   def render("working_time.json", %{working_time: working_time}) do
     %{id: working_time.id,
       start: working_time.start,
-      end: working_time.end}
+      end: working_time.end,
+      user: working_time.user}
   end
 end

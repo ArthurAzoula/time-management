@@ -211,5 +211,23 @@ defmodule App.Time do
     WorkingTime.changeset(working_time, attrs)
   end
 
+  def list_working_time_by_user(user_id, params \\ %{}) do
+    from(w in WorkingTime, where: w.user == ^user_id)
+    |> filter_by_start_date(params["start_date"])
+    |> filter_by_end_date(params["end_date"])
+    |> Repo.all()
+end
+
+defp filter_by_start_date(query, nil), do: query
+
+defp filter_by_start_date(query, start_date) do
+    from w in query, where: w.start >= ^start_date
+end
+
+defp filter_by_end_date(query, nil), do: query
+
+defp filter_by_end_date(query, end_date) do
+    from w in query, where: w.end <= ^end_date
+end
 
 end

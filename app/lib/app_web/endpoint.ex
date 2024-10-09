@@ -35,8 +35,6 @@ defmodule AppWeb.Endpoint do
 
   plug CORSPlug
 
-  plug AppWeb.Router
-
   plug Phoenix.LiveDashboard.RequestLogger,
     param_key: "request_logger",
     cookie_key: "request_logger"

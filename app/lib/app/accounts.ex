@@ -87,7 +87,20 @@ defmodule App.Accounts do
 
   """
   def delete_user(%User{} = user) do
-    Repo.delete(user)
+    Repo.transaction(fn ->
+      from(c in App.Time.Clock, where: c.user == ^user.id)
+      |> Repo.delete_all()
+
+      from(wt in App.Time.WorkingTime, where: wt.user == ^user.id)
+      |> Repo.delete_all()
+
+      Repo.delete(user)
+    end)
+    |> case do
+      {:ok, {:ok, user}} -> {:ok, user}
+      {:ok, _} -> {:error, :unexpected_result}
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   @doc """

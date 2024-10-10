@@ -12,7 +12,6 @@ defmodule AppWeb.SwaggerSchema do
           email :string, "User email"
         end
         example %{
-          id: 1,
           username: "John Doe",
           email: "john.doe@example.com",
         }

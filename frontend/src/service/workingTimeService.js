@@ -40,7 +40,7 @@ export const workingTimeService = {
     async deleteWorkingTime(id) {
         try {
             const response = await api.delete(`workingtime/${id}`)
-            return response // No content to return
+            return response
         } catch (error) {
             throw new Error(error)
         }

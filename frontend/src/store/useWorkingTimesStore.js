@@ -10,6 +10,9 @@ export const useWorkingTimesStore = defineStore('workingTimes', {
     },
     addWorkingTime(data) {
       this.workingTimes.push(data)
+    },
+    removeWorkingTime(id) {
+      this.workingTimes = this.workingTimes.filter(time => time.id !== id)
     }
   }
 })

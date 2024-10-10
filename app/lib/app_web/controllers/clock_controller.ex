@@ -97,12 +97,8 @@ defmodule AppWeb.ClockController do
     render(conn, "index.json", clocks: clocks)
   end
 
-  def create(conn, %{"userID" => user_id}) do
-    clock_params = %{
-      "user" => user_id,
-      "time" => DateTime.utc_now(),
-      "status" => true
-    }
+  def create(conn, %{"userID" => user_id, "clock" => clock_params}) do
+    clock_params = Map.put(clock_params, "user", user_id)
 
     clocks = Repo.all(from(c in Clock, where: c.user == ^user_id))
 

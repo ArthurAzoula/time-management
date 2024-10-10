@@ -47,6 +47,8 @@ const handleClock = async () => {
 
         if (!responseUpdateClock) return;
 
+        if (!lastClock) return;
+
         // crée un temps de travail
         const responseCreateWorkingTime = await workingTimeService.createWorkingTime(userId.value, {
             workingtime: {

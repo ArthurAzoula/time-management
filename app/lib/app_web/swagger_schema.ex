@@ -12,7 +12,6 @@ defmodule AppWeb.SwaggerSchema do
           email :string, "User email"
         end
         example %{
-          id: 1,
           username: "John Doe",
           email: "john.doe@example.com",
         }
@@ -22,12 +21,10 @@ defmodule AppWeb.SwaggerSchema do
         title "Clock"
         description "A clock for the user"
         properties do
-          user :integer, "User ID"
           time :nativedatetime, "Time"
           status :boolean, "Status"
         end
         example %{
-          user: 1,
           time: "2020-01-01T00:00:00Z",
           status: false,
         }
@@ -37,12 +34,10 @@ defmodule AppWeb.SwaggerSchema do
         title "WorkingTime"
         description "A working time for the user"
         properties do
-          user :integer, "User ID"
           start_time :nativedatetime, "Start time"
           end_time :nativedatetime, "End time"
         end
         example %{
-          user: 1,
           start_time: "2020-01-01T00:00:00Z",
           end_time: "2020-01-01T08:00:00Z",
         }

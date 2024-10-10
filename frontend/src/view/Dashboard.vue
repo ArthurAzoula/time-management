@@ -1,10 +1,9 @@
 <template>
     <div>
-        <h1>Dashboard vue</h1>        
+        <Clock />
     </div>
 </template>
 
-
 <script>
-
+import Clock from '../components/Clock/Clock.vue'
 </script>

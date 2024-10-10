@@ -5,6 +5,7 @@ defmodule App.User do
   schema "users" do
     field :username, :string
     field :email, :string
+    has_one :clock, App.Clock, on_delete: :delete_all
 
     timestamps()
   end

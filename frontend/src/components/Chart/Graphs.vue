@@ -7,6 +7,13 @@ const lineChart = ref(null)
 const pieChart = ref(null)
 const radarChart = ref(null)
 
+const props = defineProps({
+    all: {
+        type: Boolean,
+        required: true,
+    },
+})
+
 const userId = 1
 
 const formatTime = (minutes) => {
@@ -258,6 +265,9 @@ onMounted(async () => {
         </div>
         <div class="p-5 bg-[#FEFFEE] rounded-lg">
             <canvas id="pieChart" width="400" height="400"></canvas>
+        </div>
+        <div v-if="all" class="p-5 bg-[#FEFFEE] rounded-lg">
+            <canvas id="radarChart" width="400" height="400"></canvas>
         </div>
     </div>
 </template>

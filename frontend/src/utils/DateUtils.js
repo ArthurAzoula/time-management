@@ -11,3 +11,11 @@ export const formatDateUtils = (date) => {
         return `Last clock-in on ${format(parsedDate, 'PPpp')}`
     }
 }
+
+export const extractHourFromISO = (date) => {
+    return new Date(date).getHours();
+}
+
+export const getDifferenceInhours = (date1, date2) => {
+    return Math.abs(new Date(date1).getHours() - new Date(date2).getHours());
+}

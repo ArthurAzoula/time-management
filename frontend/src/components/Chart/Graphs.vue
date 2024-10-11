@@ -103,19 +103,23 @@ onMounted(async () => {
             type: 'doughnut',
             data: {
                 labels: pieLabels,
-                datasets: [
-                    {
-                        label: 'Time Distribution',
-                        data: [workingMinutes, breakMinutes],
-                        backgroundColor: ['#C026D3', '#FAE8FF'],
-                        borderColor: ['#FAE8FF', '#C026D3'],
-                        borderWidth: 1,
-                        hoverOffset: 4,
-                        radius: '85%',
-                        borderRadius: [20, 2],
-                        spacing: -5,
-                    },
-                ],
+                datasets: [{
+                    label: 'Time Distribution',
+                    data: [workingMinutes, breakMinutes], // Placer les heures de pause avant les heures de travail
+                    backgroundColor: [
+                    '#C026D3', // Couleur pour les heures de travail
+                        '#FAE8FF',  // Couleur pour les heures de pause
+                    ],
+                    borderColor: [
+                        '#FAE8FF',  // Couleur pour les heures de pause
+                        '#C026D3', // Couleur pour les heures de travail
+                    ],
+                    borderWidth: 1,
+                    hoverOffset: 4,
+                    radius: '85%', // Réduire le rayon du cercle doughnut
+                    borderRadius: [20, 2], // Ajouter un borderRadius uniquement à la partie C026D3
+                    spacing: -5 // Réduire l'espace entre les segments
+                }]
             },
             options: {
                 cutout: '85%',
@@ -152,18 +156,17 @@ onMounted(async () => {
             type: 'line',
             data: {
                 labels: lineLabels,
-                datasets: [
-                    {
-                        label: 'Working Hours',
-                        data: weeklyWorkingMinutes,
-                        backgroundColor: gradient,
-                        borderColor: '#C026D3',
-                        borderWidth: 2,
-                        tension: 0.47,
-                        fill: true,
-                        pointRadius: 0,
-                    },
-                ],
+                datasets: [{
+                    label: 'Working Hours',
+                    data: weeklyWorkingMinutes,
+                    backgroundColor: gradient,
+                    borderColor: '#C026D3',
+                    borderWidth: 2,
+                    tension: 0.47,
+                    fill: true,
+                    pointRadius: 2
+                    
+                }]
             },
             options: {
                 plugins: {

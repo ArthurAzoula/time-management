@@ -88,8 +88,6 @@ onMounted(async () => {
 
         const workingTimes = response.data || []
 
-        workingTimes.map((wt) => console.log('Start:', wt.start, 'End:', wt.end))
-
         const { workingMinutes, breakMinutes } = getDailyWorkingTimes(workingTimes)
 
         const workingTimeFormatted = formatTime(workingMinutes)

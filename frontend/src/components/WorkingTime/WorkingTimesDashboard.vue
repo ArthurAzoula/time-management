@@ -3,10 +3,7 @@
         <div class="flex flex-col space-y-8">
             <h1 class="text-xl font-bold">My working hours</h1>
             <div class="flex items-center gap-2">
-                <div class="h-40 rounded-md w-[25%] border border-card-100"></div>
-                <div class="h-40 rounded-md w-[25%] border border-card-100"></div>
-                <div class="h-40 rounded-md w-[25%] border border-card-100"></div>
-                <div class="h-40 rounded-md w-[25%] border border-card-100"></div>
+                <WorkingTimes :workingTimes="latestWorkingTimes" />
             </div>
             <button
                 class="bg-button-300 border border-button-200 px-2 py-1 text-text-color-100 font-bold rounded-lg w-max"
@@ -17,4 +14,21 @@
     </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed, watch } from 'vue'
+import WorkingTimes from './WorkingTimes.vue'
+
+const props = defineProps({
+    workingTimes: {
+        type: Array,
+        required: true
+    }
+})
+
+const latestWorkingTimes = computed(() => {
+    return props.workingTimes.slice(-4).reverse()
+})
+
+watch(() => props.workingTimes, (newVal) => {
+}, { immediate: true })
+</script>

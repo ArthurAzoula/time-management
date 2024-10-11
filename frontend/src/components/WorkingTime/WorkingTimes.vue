@@ -54,11 +54,13 @@
                 </div>
             </div>
         </div>
+        <ModalCreate v-if="showCreateButton" @workingTimeCreated="addWorkingTime" />
     </div>
 </template>
 
 <script setup>
 import { defineProps } from 'vue'
+import { useRoute } from 'vue-router'
 import ModalCreate from '../Modal/ModalCreate.vue'
 import ModalDelete from '../Modal/ModalDelete.vue'
 import ModalUpdate from '../Modal/ModalUpdate.vue'
@@ -71,6 +73,9 @@ const props = defineProps({
         required: true,
     },
 })
+
+const route = useRoute()
+const showCreateButton = route.path !== '/'
 
 const workingTimesStore = useWorkingTimesStore()
 

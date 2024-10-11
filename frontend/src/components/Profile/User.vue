@@ -10,7 +10,7 @@
 
 <script>
 import { ref, onMounted } from 'vue'
-import { userService } from '../service/userService'
+import { userService } from '../../service/userService'
 export default {
     setup() {
         const user = ref([])

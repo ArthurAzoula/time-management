@@ -1,27 +1,77 @@
 <template>
-    <div class="flex flex-col h-screen">
-        <div class="flex flex-col items-center p-4 bg-gray-200">
-            <img src="https://via.placeholder.com/250" alt="Profile" class="rounded-full mb-2" />
-            <p class="text-lg font-semibold">Voir mon profil</p>
+    <div class="flex h-full">
+        <!-- Menu fixe à gauche -->
+        <div
+            class="menu-layout fixed top-0 left-0 bottom-0 m-6 rounded-lg bg-button-300 w-1/6 h-full flex flex-col items-start p-4"
+        >
+            <div class="flex flex-col items-center mb-8 w-full">
+                <router-link
+                    to="/myProfil"
+                    @click="setActive('myProfil')"
+                    :class="{ active: activeLink === 'myProfil' }"
+                >
+                    <img
+                        class="rounded-full mb-6 mt-4 w-28 h-28"
+                        src="https://randomuser.me/api/portraits/men/1.jpg"
+                        alt="Profile Picture"
+                    />
+                </router-link>
+            </div>
+            <nav class="w-full">
+                <ul class="flex flex-col space-y-4 ml-4 mr-4">
+                    <li
+                        class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
+                        @click="setActive('dashboard')"
+                        :class="{ active: activeLink === 'dashboard' }"
+                    >
+                        <DashboardIcon />
+                        <router-link to="/" class="font-regular">Dashboard</router-link>
+                    </li>
+                    <li
+                        class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
+                        @click="setActive('workingtimes')"
+                        :class="{ active: activeLink === 'workingtimes' }"
+                    >
+                        <WorkingTimeIcon />
+                        <router-link to="/workingtimes" class="font-regular">Working time</router-link>
+                    </li>
+                </ul>
+                <div v-if="activeLink" class="active-bar"></div>
+            </nav>
         </div>
-        <div class="flex-1 bg-gray-100 p-4">
-            <ul>
-                <li v-for="item in items" :key="item.id" class="mb-4">
-                    <router-link :to="item.to" class="flex items-center p-2 rounded hover:bg-gray-300">
-                        <component :is="item.icon" class="w-6 h-6 mr-2" />
-                        <span class="text-lg">{{ item.title }}</span>
-                    </router-link>
-                </li>
-            </ul>
+
+        <!-- Contenu principal à côté du menu fixe -->
+        <div class="content flex-1 ml-[18%] px-6">
+            <router-view></router-view>
         </div>
     </div>
 </template>
 
 <script setup>
-import { Dashboard, User } from 'lucide-vue-next'
-
-const items = [
-    { id: 1, title: 'Dashboard', icon: Dashboard, to: '/' },
-    { id: 2, title: 'Temps de travail', icon: User, to: '/workingtime' },
-]
+import DashboardIcon from '../../icons/DashboardIcon.vue'
+import WorkingTimeIcon from '../../icons/WorkingTimeIcon.vue'
 </script>
+
+<script>
+export default {
+    name: 'Layout',
+    data() {
+        return {
+            activeLink: '',
+        }
+    },
+    methods: {
+        setActive(link) {
+            this.activeLink = link
+        },
+    },
+}
+</script>
+
+<style scoped>
+.menu-layout {
+    top: 0;
+    left: 0;
+    bottom: 0;
+}
+</style>

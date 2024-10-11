@@ -10,6 +10,8 @@
             <Graphs />
             <WorkingTimesDashboard />
         </div>
+
+    </div>
     </div>
 </template>
 

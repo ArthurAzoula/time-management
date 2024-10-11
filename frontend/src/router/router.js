@@ -15,7 +15,6 @@ const routes = [
         component: WorkingTimeView
       },
       { path: '/myProfil', name: 'UserProfile', component: User },
-    },
     {
         path: '/graphs',
         name: 'Graphs',

@@ -16,7 +16,7 @@
           <button @click="toggleEdit" class="ml-4 text-gray-500">
             <svg
               v-if="!isEditing"
-              xmlns="http://www.w3.org/2000/svg" // add pen from lucid
+              xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
               stroke-width="2"
@@ -49,6 +49,7 @@
           />
         </div>
         <div class="mt-4 flex space-x-4">
+          <button @click="createUser" class="bg-blue-500 text-white py-2 px-4 rounded">Create user</button>
           <button @click="updateUser" v-if="isEditing" class="bg-blue-500 text-white py-2 px-4 rounded">Update</button>
           <button @click="deleteUser" class="bg-red-500 text-white py-2 px-4 rounded">Delete</button>
         </div>
@@ -66,7 +67,7 @@ export default {
   setup() {
     const user = ref({});
     const userId = 1; 
-    const isEditing = ref(false); // Flag to manage edit state
+    const isEditing = ref(false); 
 
     onMounted(async () => {
       try {
@@ -80,6 +81,20 @@ export default {
     const toggleEdit = () => {
       isEditing.value = !isEditing.value;
     };
+
+    const createUser=async() =>{
+        const dataUser={
+            user:{
+                username:user.value.username,
+                email:user.value.email
+            }
+        };
+        try{
+            await userService.createUser(dataUser);
+            toast.success("User created successfully !");
+        }catch (error) {
+        toast.error("Erreur lors de la mise à jour de l'utilisateur :", error);
+    }};
 
     const updateUser = async () => {
       const dataUser = {
@@ -110,8 +125,10 @@ export default {
       user,
       isEditing,
       toggleEdit,
+      createUser,
       updateUser,
       deleteUser,
+
     };
   },
 };

@@ -8,7 +8,7 @@
                 <router-link to="/me" @click="setActive('myProfil')">
                     <img
                         class="rounded-full mb-6 mt-4 w-28 h-28"
-                        src="https://randomuser.me/api/portraits/men/1.jpg"
+                        src="https://randomuser.me/api/portraits/men/29.jpg"
                         alt="Profile Picture"
                     />
                     <p class="hover:underline">View my profile</p>

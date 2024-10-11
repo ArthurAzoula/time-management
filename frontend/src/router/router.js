@@ -2,21 +2,22 @@ import { createRouter, createWebHistory } from 'vue-router'
 import App from '../App.vue'
 import Clock from '../components/Clock/Clock.vue'
 import WorkingTimeView from '../view/WorkingTimeView.vue'
-import Graphs from '../components/Graphs.vue'
+import Graphs from '../components/Chart/Graphs.vue'
+import Dashboard from '../view/Dashboard.vue'
 
 const routes = [
     { path: '/', component: App },
-    { path: '/dashboard', component: Clock },
+    { path: '/dashboard', component: Dashboard },
     {
         path: '/workingtimes',
         name: 'WorkingTimes',
-        component: WorkingTimeView
-      },
-      {
+        component: WorkingTimeView,
+    },
+    {
         path: '/graphs',
         name: 'Graphs',
-        component: Graphs
-      }
+        component: Graphs,
+    },
 ]
 
 const router = createRouter({

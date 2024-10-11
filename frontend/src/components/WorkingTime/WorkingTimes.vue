@@ -13,15 +13,15 @@
 
 <script setup>
 import { defineProps } from 'vue'
-import ModalCreate from './Modal/ModalCreate.vue'
-import ModalDelete from './Modal/ModalDelete.vue'
-import { useWorkingTimesStore } from '../store/useWorkingTimesStore'
+import ModalCreate from '../Modal/ModalCreate.vue'
+import ModalDelete from '../Modal/ModalDelete.vue'
+import { useWorkingTimesStore } from '../../store/useWorkingTimesStore'
 
 const props = defineProps({
     workingTimes: {
         type: Array,
-        required: true
-    }
+        required: true,
+    },
 })
 
 const workingTimesStore = useWorkingTimesStore()

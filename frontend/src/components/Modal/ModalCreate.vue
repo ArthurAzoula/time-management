@@ -1,21 +1,35 @@
 <template>
     <div>
         <button @click="showModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Create</button>
-        <Modal :isVisible="isModalVisible" title="Create Working Time" confirmText="Create" cancelText="Cancel"
-            @close="closeModal" @confirm="handleConfirm">
+        <Modal
+            :isVisible="isModalVisible"
+            title="Create Working Time"
+            confirmText="Create"
+            cancelText="Cancel"
+            @close="closeModal"
+            @confirm="handleConfirm"
+        >
             <template #default>
                 <form @submit.prevent="handleConfirm">
                     <div class="mb-4">
                         <label for="start" class="block text-gray-700">Start</label>
-                        <input type="datetime-local" id="start" v-model="workingTime.start"
+                        <input
+                            type="datetime-local"
+                            id="start"
+                            v-model="workingTime.start"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            required>
+                            required
+                        />
                     </div>
                     <div class="mb-4">
                         <label for="end" class="block text-gray-700">End</label>
-                        <input type="datetime-local" id="end" v-model="workingTime.end"
+                        <input
+                            type="datetime-local"
+                            id="end"
+                            v-model="workingTime.end"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            required>
+                            required
+                        />
                     </div>
                 </form>
             </template>
@@ -42,7 +56,7 @@ const emit = defineEmits(['workingTimeCreated'])
 const isModalVisible = ref(false)
 const workingTime = ref({
     start: '',
-    end: ''
+    end: '',
 })
 
 const showModal = () => {
@@ -72,8 +86,8 @@ const handleConfirm = async () => {
     const data = {
         workingtime: {
             start: formattedStart,
-            end: formattedEnd
-        }
+            end: formattedEnd,
+        },
     }
 
     try {

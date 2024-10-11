@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import WorkingTimes from '../components/WorkingTimes.vue'
+import WorkingTimes from '../components/WorkingTime/WorkingTimes.vue'
 import { ref, onMounted } from 'vue'
 import { userService } from '../service/userService'
 import { workingTimeService } from '../service/workingTimeService'
@@ -22,7 +22,6 @@ onMounted(() => {
         workingTimesStore.setWorkingTimes(response.data)
     })
 })
-
 </script>
 
 <style scoped></style>

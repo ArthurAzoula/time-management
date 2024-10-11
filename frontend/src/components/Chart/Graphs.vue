@@ -106,14 +106,14 @@ onMounted(async () => {
                 datasets: [
                     {
                         label: 'Time Distribution',
-                        data: [breakMinutes, workingMinutes],
-                        backgroundColor: ['#FAE8FF', '#C026D3'],
+                        data: [workingMinutes, breakMinutes],
+                        backgroundColor: ['#C026D3', '#FAE8FF'],
                         borderColor: ['#FAE8FF', '#C026D3'],
                         borderWidth: 1,
                         hoverOffset: 4,
                         radius: '85%',
-                        borderRadius: [0, 10],
-                        spacing: -7,
+                        borderRadius: [20, 2],
+                        spacing: -5,
                     },
                 ],
             },

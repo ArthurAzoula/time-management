@@ -25,7 +25,6 @@ const userId = ref(1)
 const message = ref('')
 
 const updateMessage = async () => {
-
     const response = await clockService.getClocks(userId.value)
 
     if (!response) return

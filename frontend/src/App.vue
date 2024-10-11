@@ -1,23 +1,21 @@
-<script setup>
-import Menu from './components/Menu.vue'; 
+<script>
+import Menu from './components/Menu.vue'
 
 export default {
-  name: 'App',
-  components: {
-    Menu,
-  },
-};
+    name: 'App',
+    components: {
+        Menu,
+    },
+}
 </script>
 
 <template>
-
-  <div class="flex h-screen">
-    <Menu /> 
-    <div class="flex-1 p-6"> 
-      <router-view></router-view> 
+    <div class="flex h-screen">
+        <Menu />
+        <div class="flex-1 p-6">
+            <router-view></router-view>
+        </div>
     </div>
-  </div>
-
 </template>
 
 <style scoped></style>

@@ -21,14 +21,17 @@ import WorkingTimes from './WorkingTimes.vue'
 const props = defineProps({
     workingTimes: {
         type: Array,
-        required: true
-    }
+        required: true,
+    },
 })
 
 const latestWorkingTimes = computed(() => {
     return props.workingTimes.slice(-4).reverse()
 })
 
-watch(() => props.workingTimes, (newVal) => {
-}, { immediate: true })
+watch(
+    () => props.workingTimes,
+    (newVal) => {},
+    { immediate: true },
+)
 </script>

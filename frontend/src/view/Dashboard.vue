@@ -7,7 +7,7 @@
                     <Clock />
                 </div>
                 <Graphs />
-                <WorkingTimesDashboard :workingTimes="workingTimesStore.workingTimes"/>
+                <WorkingTimesDashboard :workingTimes="workingTimesStore.workingTimes" />
             </div>
         </div>
     </div>

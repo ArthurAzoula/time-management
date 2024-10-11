@@ -5,10 +5,7 @@
             class="menu-layout fixed top-0 left-0 bottom-0 m-6 rounded-lg bg-button-300 w-1/6 h-full flex flex-col items-start p-4"
         >
             <div class="flex flex-col items-center mb-8 w-full">
-                <router-link
-                    to="/me"
-                    @click="setActive('myProfil')"
-                >
+                <router-link to="/me" @click="setActive('myProfil')">
                     <img
                         class="rounded-full mb-6 mt-4 w-28 h-28"
                         src="https://randomuser.me/api/portraits/men/1.jpg"
@@ -64,7 +61,7 @@
 <script setup>
 import DashboardIcon from '../../icons/DashboardIcon.vue'
 import WorkingTimeIcon from '../../icons/WorkingTimeIcon.vue'
-import { ChartColumnBigIcon } from 'lucide-vue-next';
+import { ChartColumnBigIcon } from 'lucide-vue-next'
 </script>
 
 <script>

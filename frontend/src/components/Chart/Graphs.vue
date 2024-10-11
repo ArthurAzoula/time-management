@@ -259,8 +259,5 @@ onMounted(async () => {
         <div class="p-5 bg-[#FEFFEE] rounded-lg">
             <canvas id="pieChart" width="400" height="400"></canvas>
         </div>
-        <div class="p-5 bg-[#FEFFEE] rounded-lg">
-            <canvas id="radarChart" width="400" height="400"></canvas>
-        </div>
     </div>
 </template>

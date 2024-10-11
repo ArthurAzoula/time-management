@@ -1,7 +1,7 @@
 <template>
     <div>
-        <button @click="showModal" class="text-text-color-100 px-2 py-1 rounded bg-button-300 border-2 border-button-200">
-            <Trash />
+        <button @click="showModal" class="text-text-color-100 p-2 rounded-full bg-button-300 border border-button-200">
+            <Trash stroke="#fa9115" size="20" />
         </button>
         <Modal
             :isVisible="isModalVisible"

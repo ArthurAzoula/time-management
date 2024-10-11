@@ -14,24 +14,21 @@ export default {
                 },
                 'text-color': {
                     100: '#544407',
-                    purple:"#86198F"
+                    purple: '#86198F',
                 },
                 card: {
                     100: '#544407',
-                    200: "#FAE8FF",
-                    date:"#FAE8FF"
+                    200: '#FAE8FF',
+                    date: '#FAE8FF',
                 },
                 workingHeader: {
-
-                    100: "#54440712",
-
+                    100: '#54440712',
                 },
                 menu: {
                     100: '#FFD4A2',
                 },
             },
         },
-        
     },
     plugins: [],
 }

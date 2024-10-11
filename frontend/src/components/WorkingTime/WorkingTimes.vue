@@ -1,27 +1,59 @@
 <template>
-    <div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-3/4">
-            <div v-for="time in workingTimes" :key="time.id"
-                class="bg-white border-2 border-text-color-100 rounded-lg p-4 h-48 w-80 flex flex-col justify-between">
-                <div class="mb-4 flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
-                    <h2 class="m-3">Total duration</h2>
-                    <h2 class="font-bold m-3">{{ calculateDuration(time.start, time.end) }}</h2>
+    <div class="p-6 py-12">
+        <div>
+            <div>
+                <h2 class="text-2xl font-bold">My working times</h2>
+                <div class="flex gap-2 items-center mt-6 mb-6">
+                    <ButtonDate placeholder="JJ" />
+                    <p class="text-button-200 text-xl">/</p>
+                    <ButtonDate placeholder="MM" />
+                    <p class="text-button-200 text-xl">/</p>
+                    <ButtonDate customClass="w-20" placeholder="YYYY" />
+                    <button
+                        class="text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded-lg ml-4 font-semibold"
+                    >
+                        Search by date
+                    </button>
                 </div>
-                <div class="flex justify-between w-11/12 mx-auto text-text-color-100 font-bold">
+                <ModalCreate @workingTimeCreated="addWorkingTime" />
+            </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
+            <div
+                v-for="time in workingTimes"
+                :key="time.id"
+                class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
+            >
+                <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
+                    <h2 class="m-3">Total duration</h2>
+                    <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
+                </div>
+                <div class="flex justify-between w-11/12 my-2 mx-auto text-text-color-100 font-bold">
                     <p>{{ formatTime(time.start) }}</p>
                     <p>{{ formatTime(time.end) }}</p>
                 </div>
+                <div class="flex flex-col gap-2 my-2">
+                    <p class="font-bold">Activity performed</p>
+                    <p class="text-sm text-wrap text-ellipsis">
+                        During this time, I did accounting, answered emails...
+                    </p>
+                </div>
                 <div class="mt-4 text-text-color-purple font-semibold flex justify-between">
-                    <p class="bg-card-date rounded-lg p-3 text-sm">{{ formatDateRange(time.start, time.end) }}</p>
-                    <div class="flex space-x-4">
+                    <div class="bg-card-date rounded px-6 flex justify-center items-center">
+                        <p class="text-sm">{{ formatDateRange(time.start, time.end) }}</p>
+                    </div>
+                    <div class="flex space-x-3">
                         <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
-                        <ModalUpdate :workingTimeId="time.id" :initialStart="time.start" :initialEnd="time.end"
-                            @workingTimeUpdated="updateWorkingTime" />
+                        <ModalUpdate
+                            :workingTimeId="time.id"
+                            :initialStart="time.start"
+                            :initialEnd="time.end"
+                            @workingTimeUpdated="updateWorkingTime"
+                        />
                     </div>
                 </div>
             </div>
         </div>
-        <ModalCreate @workingTimeCreated="addWorkingTime" />
     </div>
 </template>
 
@@ -31,12 +63,13 @@ import ModalCreate from '../Modal/ModalCreate.vue'
 import ModalDelete from '../Modal/ModalDelete.vue'
 import ModalUpdate from '../Modal/ModalUpdate.vue'
 import { useWorkingTimesStore } from '../../store/useWorkingTimesStore'
+import ButtonDate from '../Input/ButtonDate.vue'
 
 const props = defineProps({
     workingTimes: {
         type: Array,
-        required: true
-    }
+        required: true,
+    },
 })
 
 const workingTimesStore = useWorkingTimesStore()
@@ -79,7 +112,11 @@ const formatDateRange = (start, end) => {
     const startDate = new Date(start)
     const endDate = new Date(end)
 
-    const formattedEnd = endDate.toISOString().split('T')[0]
+    const day = String(endDate.getDate()).padStart(2, '0')
+    const month = String(endDate.getMonth() + 1).padStart(2, '0') // Les mois commencent à 0
+    const year = endDate.getFullYear()
+
+    const formattedEnd = `${day} / ${month} / ${year}`
     return formattedEnd
 }
 </script>

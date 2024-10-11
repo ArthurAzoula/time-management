@@ -19,22 +19,26 @@
             </div>
             <nav class="w-full">
                 <ul class="flex flex-col space-y-4 ml-4 mr-4">
-                    <li
-                        class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
-                        @click="setActive('dashboard')"
-                        :class="{ active: activeLink === 'dashboard' }"
-                    >
-                        <DashboardIcon />
-                        <router-link to="/" class="font-regular">Dashboard</router-link>
-                    </li>
-                    <li
-                        class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
-                        @click="setActive('workingtimes')"
-                        :class="{ active: activeLink === 'workingtimes' }"
-                    >
-                        <WorkingTimeIcon />
-                        <router-link to="/workingtimes" class="font-regular">Working time</router-link>
-                    </li>
+                    <router-link to="/" class="font-regular">
+                        <li
+                            class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
+                            @click="setActive('dashboard')"
+                            :class="{ active: activeLink === 'dashboard' }"
+                        >
+                            <DashboardIcon />
+                            <p>Dashboard</p>
+                        </li>
+                    </router-link>
+                    <router-link to="/workingtimes" class="font-regular">
+                        <li
+                            class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
+                            @click="setActive('workingtimes')"
+                            :class="{ active: activeLink === 'workingtimes' }"
+                        >
+                            <WorkingTimeIcon />
+                            <p>Working time</p>
+                        </li>
+                    </router-link>
                 </ul>
                 <div v-if="activeLink" class="active-bar"></div>
             </nav>
@@ -73,5 +77,9 @@ export default {
     top: 0;
     left: 0;
     bottom: 0;
+}
+
+.active {
+    background-color: #ffd4a2;
 }
 </style>

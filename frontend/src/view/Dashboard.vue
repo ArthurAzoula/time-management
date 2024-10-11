@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="p-6">
+        <div class="p-6 py-12">
             <div class="flex flex-col space-y-7">
                 <div class="flex flex-col space-y-7">
                     <h1 class="text-2xl font-bold">Dashboard</h1>

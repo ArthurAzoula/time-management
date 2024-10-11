@@ -1,6 +1,5 @@
 <template>
     <div>
-        <Clock />
         <div class="p-6">
             <div class="flex flex-col space-y-7">
                 <div class="flex flex-col space-y-7">

@@ -18,6 +18,9 @@ export default {
                 card: {
                     100: '#544407',
                 },
+                menu: {
+                    100: '#FFD4A2',
+                },
             },
         },
     },

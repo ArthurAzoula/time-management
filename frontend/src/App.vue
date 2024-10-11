@@ -1,4 +1,4 @@
-<script>
+<script setup>
 import Menu from './components/Menu.vue'; 
 
 export default {
@@ -8,14 +8,16 @@ export default {
   },
 };
 </script>
+
 <template>
+
   <div class="flex h-screen">
     <Menu /> 
     <div class="flex-1 p-6"> 
       <router-view></router-view> 
     </div>
   </div>
+
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

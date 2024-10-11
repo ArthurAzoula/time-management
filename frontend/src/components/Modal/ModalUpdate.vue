@@ -1,21 +1,35 @@
 <template>
     <div>
         <button @click="showModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update</button>
-        <Modal :isVisible="isModalVisible" title="Update Working Time" confirmText="Update" cancelText="Cancel"
-            @close="closeModal" @confirm="handleConfirm">
+        <Modal
+            :isVisible="isModalVisible"
+            title="Update Working Time"
+            confirmText="Update"
+            cancelText="Cancel"
+            @close="closeModal"
+            @confirm="handleConfirm"
+        >
             <template #default>
                 <form @submit.prevent="handleConfirm">
                     <div class="mb-4">
                         <label for="start" class="block text-gray-700">Start</label>
-                        <input type="datetime-local" id="start" v-model="workingTime.start"
+                        <input
+                            type="datetime-local"
+                            id="start"
+                            v-model="workingTime.start"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            required>
+                            required
+                        />
                     </div>
                     <div class="mb-4">
                         <label for="end" class="block text-gray-700">End</label>
-                        <input type="datetime-local" id="end" v-model="workingTime.end"
+                        <input
+                            type="datetime-local"
+                            id="end"
+                            v-model="workingTime.end"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            required>
+                            required
+                        />
                     </div>
                 </form>
             </template>
@@ -40,16 +54,16 @@ import 'vue3-toastify/dist/index.css'
 const props = defineProps({
     workingTimeId: {
         type: Number,
-        required: true
+        required: true,
     },
     initialStart: {
         type: String,
-        required: true
+        required: true,
     },
     initialEnd: {
         type: String,
-        required: true
-    }
+        required: true,
+    },
 })
 
 const emit = defineEmits(['workingTimeUpdated'])
@@ -57,13 +71,16 @@ const emit = defineEmits(['workingTimeUpdated'])
 const isModalVisible = ref(false)
 const workingTime = ref({
     start: props.initialStart,
-    end: props.initialEnd
+    end: props.initialEnd,
 })
 
-watch(() => props.workingTimeId, () => {
-    workingTime.value.start = props.initialStart
-    workingTime.value.end = props.initialEnd
-})
+watch(
+    () => props.workingTimeId,
+    () => {
+        workingTime.value.start = props.initialStart
+        workingTime.value.end = props.initialEnd
+    },
+)
 
 const showModal = () => {
     isModalVisible.value = true
@@ -92,8 +109,8 @@ const handleConfirm = async () => {
     const data = {
         workingtime: {
             start: formattedStart,
-            end: formattedEnd
-        }
+            end: formattedEnd,
+        },
     }
 
     try {

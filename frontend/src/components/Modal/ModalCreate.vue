@@ -1,6 +1,11 @@
 <template>
-    <div>
-        <button @click="showModal" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Create</button>
+    <div class="flex justify-end">
+        <button
+            @click="showModal"
+            class="bg-button-200 text-white p-2 rounded-full hover:scale-105 transform ease-in-out duration-200"
+        >
+            <PlusIcon />
+        </button>
         <Modal
             :isVisible="isModalVisible"
             title="Create Working Time"
@@ -50,6 +55,7 @@ import Modal from './Modal.vue'
 import { workingTimeService } from '../../service/workingTimeService'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import { PlusIcon } from 'lucide-vue-next'
 
 const emit = defineEmits(['workingTimeCreated'])
 

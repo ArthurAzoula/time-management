@@ -1,14 +1,48 @@
 <template>
-    <div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div v-for="time in workingTimes" :key="time.id" class="bg-white shadow-md rounded-lg p-6">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-900">Time Slot</h3>
-                        <p class="text-gray-600">Start: {{ time.start }}</p>
-                        <p class="text-gray-600">End: {{ time.end }}</p>
+    <div class="p-6 py-12">
+        <div>
+            <div>
+                <h2 class="text-2xl font-bold">My working times</h2>
+                <div class="flex gap-2 items-center mt-6 mb-6">
+                    <ButtonDate placeholder="JJ" />
+                    <p class="text-button-200 text-xl">/</p>
+                    <ButtonDate placeholder="MM" />
+                    <p class="text-button-200 text-xl">/</p>
+                    <ButtonDate customClass="w-20" placeholder="YYYY" />
+                    <button
+                        class="text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded-lg ml-4 font-semibold"
+                    >
+                        Search by date
+                    </button>
+                </div>
+                <ModalCreate v-if="showCreateButton" @workingTimeCreated="addWorkingTime" />
+            </div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
+            <div
+                v-for="time in workingTimes"
+                :key="time.id"
+                class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
+            >
+                <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
+                    <h2 class="m-3">Total duration</h2>
+                    <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
+                </div>
+                <div class="flex justify-between w-11/12 my-2 mx-auto text-text-color-100 font-bold">
+                    <p>{{ formatTime(time.start) }}</p>
+                    <p>{{ formatTime(time.end) }}</p>
+                </div>
+                <div class="flex flex-col gap-2 my-2">
+                    <p class="font-bold">Activity performed</p>
+                    <p class="text-sm text-wrap text-ellipsis">
+                        During this time, I did accounting, answered emails...
+                    </p>
+                </div>
+                <div class="mt-4 text-text-color-purple font-semibold flex justify-between">
+                    <div class="bg-card-date rounded px-6 flex justify-center items-center">
+                        <p class="text-sm">{{ formatDateRange(time.start, time.end) }}</p>
                     </div>
-                    <div class="flex space-x-4">
+                    <div class="flex space-x-3">
                         <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
                         <ModalUpdate
                             :workingTimeId="time.id"
@@ -20,17 +54,17 @@
                 </div>
             </div>
         </div>
-
-        <ModalCreate @workingTimeCreated="addWorkingTime" />
     </div>
 </template>
 
 <script setup>
 import { defineProps } from 'vue'
+import { useRoute } from 'vue-router'
 import ModalCreate from '../Modal/ModalCreate.vue'
 import ModalDelete from '../Modal/ModalDelete.vue'
 import ModalUpdate from '../Modal/ModalUpdate.vue'
 import { useWorkingTimesStore } from '../../store/useWorkingTimesStore'
+import ButtonDate from '../Input/ButtonDate.vue'
 
 const props = defineProps({
     workingTimes: {
@@ -38,6 +72,9 @@ const props = defineProps({
         required: true,
     },
 })
+
+const route = useRoute()
+const showCreateButton = route.path !== '/'
 
 const workingTimesStore = useWorkingTimesStore()
 
@@ -51,5 +88,39 @@ const removeWorkingTime = (id) => {
 
 const updateWorkingTime = (updatedWorkingTime) => {
     workingTimesStore.updateWorkingTime(updatedWorkingTime)
+}
+
+const formatTime = (timeString) => {
+    const date = new Date(timeString)
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+}
+
+const calculateDuration = (start, end) => {
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+
+    const diffMs = endDate - startDate
+
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+    const diffHrs = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+    const diffMins = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
+
+    if (diffDays > 0) {
+        return `${diffDays}d ${diffHrs}h ${diffMins}min`
+    } else {
+        return `${diffHrs}h ${diffMins}min`
+    }
+}
+
+const formatDateRange = (start, end) => {
+    const startDate = new Date(start)
+    const endDate = new Date(end)
+
+    const day = String(endDate.getDate()).padStart(2, '0')
+    const month = String(endDate.getMonth() + 1).padStart(2, '0') // Les mois commencent à 0
+    const year = endDate.getFullYear()
+
+    const formattedEnd = `${day} / ${month} / ${year}`
+    return formattedEnd
 }
 </script>

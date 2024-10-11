@@ -1,6 +1,8 @@
 <template>
     <div>
-        <button @click="showModal" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Update</button>
+        <button @click="showModal" class="text-text-color-100 p-2 rounded-full bg-button-300 border border-button-200">
+            <PenLine stroke="#fa9115" size="20" />
+        </button>
         <Modal
             :isVisible="isModalVisible"
             title="Update Working Time"
@@ -49,6 +51,7 @@ import { format } from 'date-fns'
 import Modal from './Modal.vue'
 import { workingTimeService } from '../../service/workingTimeService'
 import { toast } from 'vue3-toastify'
+import { PenLine } from 'lucide-vue-next'
 import 'vue3-toastify/dist/index.css'
 
 const props = defineProps({

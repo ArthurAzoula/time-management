@@ -88,8 +88,6 @@ onMounted(async () => {
 
         const workingTimes = response.data || []
 
-        workingTimes.map((wt) => console.log('Start:', wt.start, 'End:', wt.end))
-
         const { workingMinutes, breakMinutes } = getDailyWorkingTimes(workingTimes)
 
         const workingTimeFormatted = formatTime(workingMinutes)
@@ -260,9 +258,6 @@ onMounted(async () => {
         </div>
         <div class="p-5 bg-[#FEFFEE] rounded-lg">
             <canvas id="pieChart" width="400" height="400"></canvas>
-        </div>
-        <div class="p-5 bg-[#FEFFEE] rounded-lg">
-            <canvas id="radarChart" width="400" height="400"></canvas>
         </div>
     </div>
 </template>

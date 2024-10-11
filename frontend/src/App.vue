@@ -1,14 +1,12 @@
+<!-- App.vue -->
 <template>
-  <div class="flex h-screen">
-    <Menu />
-    <div class="flex-1 p-6">
-      <router-view></router-view>
-    </div>
-  </div>
+    <router-view />
 </template>
 
-<script setup>
-import Menu from './components/Menu.vue'; // Import your Menu component
+<script>
+export default {
+    name: 'App',
+}
 </script>
 
 <style scoped></style>

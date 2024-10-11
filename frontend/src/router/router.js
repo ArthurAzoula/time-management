@@ -5,6 +5,7 @@ import User from '../components/Profile/User.vue'
 import Graphs from '../components/Chart/Graphs.vue'
 import Dashboard from '../view/Dashboard.vue'
 import Layout from '../components/Layout/Layout.vue'
+import Statistics from '../view/Statistics.vue'
 
 const routes = [
     {
@@ -13,8 +14,9 @@ const routes = [
         children: [
             { path: '', component: Dashboard },
             { path: 'workingtimes', name: 'WorkingTimes', component: WorkingTimeView },
-            { path: 'myProfil', name: 'UserProfile', component: User },
+            { path: 'me', name: 'UserProfile', component: User },
             { path: 'graphs', name: 'Graphs', component: Graphs },
+            { path: 'statistics', name: 'Statistics', component: Statistics },
         ],
     },
 ]

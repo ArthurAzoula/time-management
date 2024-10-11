@@ -15,7 +15,7 @@
                         Search by date
                     </button>
                 </div>
-                <ModalCreate @workingTimeCreated="addWorkingTime" />
+                <ModalCreate v-if="showCreateButton" @workingTimeCreated="addWorkingTime" />
             </div>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
@@ -54,7 +54,6 @@
                 </div>
             </div>
         </div>
-        <ModalCreate v-if="showCreateButton" @workingTimeCreated="addWorkingTime" />
     </div>
 </template>
 

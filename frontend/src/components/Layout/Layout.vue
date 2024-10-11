@@ -6,15 +6,15 @@
         >
             <div class="flex flex-col items-center mb-8 w-full">
                 <router-link
-                    to="/myProfil"
+                    to="/me"
                     @click="setActive('myProfil')"
-                    :class="{ active: activeLink === 'myProfil' }"
                 >
                     <img
                         class="rounded-full mb-6 mt-4 w-28 h-28"
                         src="https://randomuser.me/api/portraits/men/1.jpg"
                         alt="Profile Picture"
                     />
+                    <p class="hover:underline">View my profile</p>
                 </router-link>
             </div>
             <nav class="w-full">
@@ -39,6 +39,16 @@
                             <p>Working time</p>
                         </li>
                     </router-link>
+                    <router-link to="/statistics" class="font-regular">
+                        <li
+                            class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
+                            @click="setActive('statistics')"
+                            :class="{ active: activeLink === 'statistics' }"
+                        >
+                            <ChartColumnBigIcon strokeWidth="1.5" />
+                            <p>Statistics</p>
+                        </li>
+                    </router-link>
                 </ul>
                 <div v-if="activeLink" class="active-bar"></div>
             </nav>
@@ -54,6 +64,7 @@
 <script setup>
 import DashboardIcon from '../../icons/DashboardIcon.vue'
 import WorkingTimeIcon from '../../icons/WorkingTimeIcon.vue'
+import { ChartColumnBigIcon } from 'lucide-vue-next';
 </script>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div>   
         <Clock />
     </div>
 </template>

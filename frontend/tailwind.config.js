@@ -9,6 +9,15 @@ export default {
                     200: '#FA9115',
                     300: '#FFEAD2',
                 },
+                background: {
+                    100: '#FEFFEE',
+                },
+                'text-color': {
+                    100: '#544407',
+                },
+                card: {
+                    100: '#544407',
+                },
             },
         },
     },

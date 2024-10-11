@@ -1,8 +1,14 @@
 <template>
     <div>
         <button @click="showModal" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete</button>
-        <Modal :isVisible="isModalVisible" title="Delete Working Time" confirmText="Delete" cancelText="Cancel"
-            @close="closeModal" @confirm="handleConfirm">
+        <Modal
+            :isVisible="isModalVisible"
+            title="Delete Working Time"
+            confirmText="Delete"
+            cancelText="Cancel"
+            @close="closeModal"
+            @confirm="handleConfirm"
+        >
             <template #default>
                 <p>Are you sure you want to delete this working time?</p>
             </template>
@@ -26,8 +32,8 @@ import 'vue3-toastify/dist/index.css'
 const props = defineProps({
     workingTimeId: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 })
 
 const emit = defineEmits(['workingTimeDeleted'])

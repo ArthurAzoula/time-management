@@ -1,7 +1,7 @@
 <script setup>
-import Chart from 'chart.js/auto';
-import { onMounted, ref } from 'vue';
-import { workingTimeService } from '../service/workingTimeService';
+import Chart from 'chart.js/auto'
+import { onMounted, ref } from 'vue'
+import { workingTimeService } from '../../service/workingTimeService'
 
 const lineChart = ref(null)
 const pieChart = ref(null)
@@ -23,7 +23,7 @@ const getDailyWorkingTimes = (workingTimes) => {
     const today = new Date()
     today.setHours(0, 0, 0, 0) // Réinitialiser l'heure à 00:00:00
 
-    const filteredWorkingTimes = workingTimes.filter(wt => {
+    const filteredWorkingTimes = workingTimes.filter((wt) => {
         const start = new Date(wt.start)
         start.setHours(0, 0, 0, 0) // Réinitialiser l'heure de début à 00:00:00
         return start.getTime() === today.getTime() // Comparer uniquement les dates
@@ -60,7 +60,7 @@ const getWeeklyWorkingTimes = (workingTimes) => {
     endOfWeek.setDate(startOfWeek.getDate() + 6)
 
     // Filtrer les entrées de temps de travail pour la semaine en cours
-    const filteredWorkingTimes = workingTimes.filter(wt => {
+    const filteredWorkingTimes = workingTimes.filter((wt) => {
         const start = new Date(wt.start)
         return start >= startOfWeek && start <= endOfWeek
     })
@@ -69,7 +69,7 @@ const getWeeklyWorkingTimes = (workingTimes) => {
     const dailyWorkingMinutes = Array(7).fill(0)
 
     // Calculer les heures de travail pour chaque jour de la semaine
-    filteredWorkingTimes.forEach(wt => {
+    filteredWorkingTimes.forEach((wt) => {
         const start = new Date(wt.start)
         const end = new Date(wt.end)
         if (!isNaN(start) && !isNaN(end)) {
@@ -79,7 +79,7 @@ const getWeeklyWorkingTimes = (workingTimes) => {
         }
     })
 
-    return dailyWorkingMinutes.map(minutes => Math.min(minutes, 7 * 60)) // Limiter à 7 heures par jour
+    return dailyWorkingMinutes.map((minutes) => Math.min(minutes, 7 * 60)) // Limiter à 7 heures par jour
 }
 
 onMounted(async () => {
@@ -88,20 +88,13 @@ onMounted(async () => {
 
         const workingTimes = response.data || []
 
-        console.log('Working times:', workingTimes)
+        workingTimes.map((wt) => console.log('Start:', wt.start, 'End:', wt.end))
 
-        workingTimes.map(wt => console.log('Start:', wt.start, 'End:', wt.end))
-
-        // Obtenir les temps de travail journaliers
         const { workingMinutes, breakMinutes } = getDailyWorkingTimes(workingTimes)
 
         const workingTimeFormatted = formatTime(workingMinutes)
         const breakTimeFormatted = formatTime(breakMinutes)
 
-        console.log('Formatted Working Time:', workingTimeFormatted)
-        console.log('Formatted Break Time:', breakTimeFormatted)
-
-        // Préparer les données pour le graphique en camembert
         const pieLabels = ['Working Hours', 'Break Hours']
         const pieData = [workingMinutes, breakMinutes]
 
@@ -129,23 +122,23 @@ onMounted(async () => {
                 }]
             },
             options: {
-                cutout: '85%', // Réduire l'épaisseur du cercle doughnut
+                cutout: '85%',
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Daily Work Time Distribution'
+                        text: 'Daily Work Time Distribution',
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 const index = context.dataIndex
                                 const value = context.raw
                                 return `${context.label}: ${formatTime(value)}`
-                            }
-                        }
-                    }
-                }
-            }
+                            },
+                        },
+                    },
+                },
+            },
         })
 
         // Obtenir les temps de travail hebdomadaires
@@ -155,9 +148,9 @@ onMounted(async () => {
         const lineLabels = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
 
         const lineCtx = document.getElementById('lineChart').getContext('2d')
-        const gradient = lineCtx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, '#C026D3');
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        const gradient = lineCtx.createLinearGradient(0, 0, 0, 400)
+        gradient.addColorStop(0, '#C026D3')
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)')
 
         lineChart.value = new Chart(lineCtx, {
             type: 'line',
@@ -179,17 +172,17 @@ onMounted(async () => {
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Weekly Work Time'
+                        text: 'Weekly Work Time',
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 const index = context.dataIndex
                                 const value = context.raw
                                 return `${context.label}: ${formatTime(value)}`
-                            }
-                        }
-                    }
+                            },
+                        },
+                    },
                 },
                 scales: {
                     y: {
@@ -197,13 +190,13 @@ onMounted(async () => {
                         max: 8 * 60, // Limiter à 7 heures par jour
                         ticks: {
                             stepSize: 60, // Afficher les étiquettes par incréments de 1 heure
-                            callback: function(value) {
+                            callback: function (value) {
                                 return formatTime(value).replace('0m', '\n')
-                            }
-                        }
-                    }
-                }
-            }
+                            },
+                        },
+                    },
+                },
+            },
         })
 
         const radarCtx = document.getElementById('radarChart').getContext('2d')
@@ -211,32 +204,31 @@ onMounted(async () => {
             type: 'radar',
             data: {
                 labels: lineLabels,
-                datasets: [{
-                    label: 'Working Hours',
-                    data: weeklyWorkingMinutes,
-                    backgroundColor: [
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(153, 102, 255, 0.2)'
+                datasets: [
+                    {
+                        label: 'Working Hours',
+                        data: weeklyWorkingMinutes,
+                        backgroundColor: ['rgba(153, 102, 255, 0.2)', 'rgba(153, 102, 255, 0.2)'],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1,
+                    },
                 ],
-                    borderColor: 'rgba(153, 102, 255, 1)',
-                    borderWidth: 1
-                }]
             },
             options: {
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Weekly Work Time'
+                        text: 'Weekly Work Time',
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(context) {
+                            label: function (context) {
                                 const index = context.dataIndex
                                 const value = context.raw
                                 return `${context.label}: ${formatTime(value)}`
-                            }
-                        }
-                    }
+                            },
+                        },
+                    },
                 },
                 scales: {
                     r: {
@@ -244,13 +236,13 @@ onMounted(async () => {
                         max: 7 * 60, // Limiter à 7 heures par jour
                         ticks: {
                             stepSize: 60, // Afficher les étiquettes par incréments de 1 heure
-                            callback: function(value) {
+                            callback: function (value) {
                                 return formatTime(value).replace('0m', '\n')
-                            }
-                        }
-                    }
-                }
-            }
+                            },
+                        },
+                    },
+                },
+            },
         })
     } catch (error) {
         console.error('Failed to fetch working times:', error)
@@ -259,14 +251,14 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="flex flex-wrap justify-around items-center">
-        <div class="p-5 bg-[#FEFFEE] rounded-lg m-2">
+    <div class="flex flex-wrap items-center gap-6">
+        <div class="p-5 bg-[#FEFFEE] rounded-lg">
             <canvas id="lineChart" width="400" height="400"></canvas>
         </div>
-        <div class="p-5 bg-[#FEFFEE] rounded-lg m-2">
+        <div class="p-5 bg-[#FEFFEE] rounded-lg">
             <canvas id="pieChart" width="400" height="400"></canvas>
         </div>
-        <div class="p-5 bg-[#FEFFEE] rounded-lg m-2">
+        <div class="p-5 bg-[#FEFFEE] rounded-lg">
             <canvas id="radarChart" width="400" height="400"></canvas>
         </div>
     </div>

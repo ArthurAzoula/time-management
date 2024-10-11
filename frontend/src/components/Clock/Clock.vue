@@ -44,7 +44,7 @@ const updateMessage = async () => {
     } else if (isYesterday(lastClockDate)) {
         message.value = 'First clock-in of the day'
     } else if (isToday(lastClockDate) && lastClock.status) {
-        message.value = 'You are currently working'
+        message.value = 'You are currently working since ' + format(lastClockDate, 'hh:mm a')
     } else if (isToday(lastClockDate) && !lastClock.status) {
         message.value = `Last check : ${formatDateUtils(lastClockDate)}`
     }

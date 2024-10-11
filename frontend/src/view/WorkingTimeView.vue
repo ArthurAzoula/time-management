@@ -21,7 +21,6 @@ onMounted(() => {
     workingTimeService.getWorkingTimeByUserId(1).then((response) => {
         const workingTimes = response.data
 
-        // sort by start date
         workingTimes.sort((a, b) => new Date(b.start) - new Date(a.start))
 
         workingTimesStore.setWorkingTimes(workingTimes)

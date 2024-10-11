@@ -112,10 +112,10 @@ onMounted(async () => {
                 labels: pieLabels,
                 datasets: [{
                     label: 'Time Distribution',
-                    data: [breakMinutes, workingMinutes], // Placer les heures de pause avant les heures de travail
+                    data: [workingMinutes, breakMinutes], // Placer les heures de pause avant les heures de travail
                     backgroundColor: [
+                    '#C026D3', // Couleur pour les heures de travail
                         '#FAE8FF',  // Couleur pour les heures de pause
-                        '#C026D3', // Couleur pour les heures de travail
                     ],
                     borderColor: [
                         '#FAE8FF',  // Couleur pour les heures de pause
@@ -124,8 +124,8 @@ onMounted(async () => {
                     borderWidth: 1,
                     hoverOffset: 4,
                     radius: '85%', // Réduire le rayon du cercle doughnut
-                    borderRadius: [0, 10], // Ajouter un borderRadius uniquement à la partie C026D3
-                    spacing: -7 // Réduire l'espace entre les segments
+                    borderRadius: [20, 2], // Ajouter un borderRadius uniquement à la partie C026D3
+                    spacing: -5 // Réduire l'espace entre les segments
                 }]
             },
             options: {
@@ -171,7 +171,7 @@ onMounted(async () => {
                     borderWidth: 2,
                     tension: 0.47,
                     fill: true,
-                    pointRadius: 0
+                    pointRadius: 2
                     
                 }]
             },

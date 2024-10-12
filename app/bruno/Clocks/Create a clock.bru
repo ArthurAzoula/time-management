@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: {{BASE}}/api/clocks/1
+  url: {{BASE}}/api/clocks/38
   body: none
   auth: none
 }
@@ -13,6 +13,17 @@ post {
 tests {
   test("Create a clock", function() {
     const data = res.getBody();
-    expect(res.getStatus()).to.equal(201);
+    expect(res.getStatus()).to.equal(422);
+  });
+  
+  test("Create a clock when it already exists", function() {
+    
+    const userId = 37;
+  
+    // Effectue la requête de création
+    const res = await bruno.post("/api/clocks/" + userId);
+  
+    expect(res.getStatus()).to.equal(422);
+    expect(res.getBody().error).to.equal("Clock already exists for this user"); 
   });
 }

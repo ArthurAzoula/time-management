@@ -1,7 +1,6 @@
-import api from "../api/axios"
+import api from '../api/axios'
 
 export const userService = {
-
     async getUsers(params) {
         try {
             const response = await api.get('users', { params })
@@ -46,5 +45,4 @@ export const userService = {
             throw new Error(error)
         }
     },
-
 }

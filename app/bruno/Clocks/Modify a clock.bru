@@ -1,0 +1,20 @@
+meta {
+  name: Modify a clock
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BASE}}/api/clocks/37
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "clock" : {
+      "time": "2020-01-01T00:00:00Z",
+      "status": false
+    }
+  }
+}

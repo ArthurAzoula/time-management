@@ -1,8 +1,7 @@
-import api from "../api/axios"
+import api from '../api/axios'
 
 export const workingTimeService = {
-
-    async getWorkingTimeByUserId (userId, params) { 
+    async getWorkingTimeByUserId(userId, params) {
         try {
             const response = await api.get(`workingtime/${userId}`, { params })
             return response.data
@@ -11,7 +10,7 @@ export const workingTimeService = {
         }
     },
 
-    async getWorkingTimeByUserAndById (userId, id) {
+    async getWorkingTimeByUserAndById(userId, id) {
         try {
             const response = await api.get(`workingtime/${userId}/${id}`)
             return response.data
@@ -20,7 +19,7 @@ export const workingTimeService = {
         }
     },
 
-    async createWorkingTime (userId, data) {
+    async createWorkingTime(userId, data) {
         try {
             const response = await api.post(`workingtime/${userId}`, data)
             return response.data
@@ -29,7 +28,7 @@ export const workingTimeService = {
         }
     },
 
-    async updateWorkingTime (id, data) {
+    async updateWorkingTime(id, data) {
         try {
             const response = await api.put(`workingtime/${id}`, data)
             return response.data
@@ -38,13 +37,12 @@ export const workingTimeService = {
         }
     },
 
-    async deleteWorkingTime (id) {
+    async deleteWorkingTime(id) {
         try {
             const response = await api.delete(`workingtime/${id}`)
-            return response // No content to return
+            return response
         } catch (error) {
             throw new Error(error)
         }
     },
-
 }

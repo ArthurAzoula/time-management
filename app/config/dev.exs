@@ -17,7 +17,11 @@ config :app, App.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :app, AppWeb.Endpoint,
+<<<<<<< HEAD
   http: [ip: {0 ,0 ,0 ,0}, port: 4000],
+=======
+  http: [ip: {0.0.0.0}, port: 4000],
+>>>>>>> 81ece055ddd974a0f58237048c6519f53b29a678
   debug_errors: true,
   code_reloader: true,
   check_origin: false,

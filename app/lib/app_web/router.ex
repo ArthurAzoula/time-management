@@ -27,6 +27,7 @@ defmodule AppWeb.Router do
     resources "/clocks", ClockController, only: [:index, :update, :delete]
     post "/clocks/:userID", ClockController, :create
     get "/clocks/:userID", ClockController, :show
+    put "/clocks/:id", ClockController, :update
 
   end
 

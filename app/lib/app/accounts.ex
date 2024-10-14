@@ -51,9 +51,16 @@ defmodule App.Accounts do
 
   """
   def create_user(attrs \\ %{}) do
-    %User{}
-    |> User.changeset(attrs)
-    |> Repo.insert()
+    Repo.transaction(fn ->
+      with {:ok, %User{} = user} <- %User{}
+                                             |> User.changeset(attrs)
+                                             |> Repo.insert(),
+           {:ok, %App.Time.Clock{} = clock} <- create_clock_for_user(user) do
+        {:ok, user}
+      else
+        {:error, _reason} = error -> Repo.rollback(error)
+      end
+    end)
   end
 
   @doc """
@@ -146,5 +153,19 @@ defmodule App.Accounts do
   defp filter_by_username(query, username) do
     from u in query, where: ilike(u.username, ^"%#{username}%")
   end
+
+
+  defp create_clock_for_user(%User{id: user_id} = user) do
+  # Vérifier s'il existe déjà un clock associé à cet utilisateur
+  case Repo.get_by(App.Time.Clock, user: user_id) do
+    nil ->
+      %App.Time.Clock{}
+      |> App.Time.Clock.changeset(%{user: user_id, time: NaiveDateTime.utc_now(), status: true})
+      |> Repo.insert()
+
+    _clock ->
+      {:error, :clock_already_exists}
+  end
+end
 
 end

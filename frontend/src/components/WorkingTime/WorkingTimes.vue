@@ -4,16 +4,30 @@
             <div>
                 <h2 class="text-2xl font-bold">My working times</h2>
                 <div class="flex gap-2 items-center mt-6 mb-6">
-                    <input type="text" v-model="day" placeholder="JJ"
-                        class="text-button-200 text-xl border border-button-200 rounded-lg py-1 px-2 w-16" />
-                    <p class="text-button-200 text-xl">/</p>
-                    <input type="text" v-model="month" placeholder="MM"
-                        class="text-button-200 text-xl border border-button-200 rounded-lg py-1 px-2 w-16" />
-                    <p class="text-button-200 text-xl">/</p>
-                    <input type="text" v-model="year" placeholder="YYYY"
-                        class="text-button-200 text-xl border border-button-200 rounded-lg py-1 px-2 w-20" />
-                    <button @click="searchByDate"
-                        class="text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded-lg ml-4 font-semibold">
+                    <input
+                        type="text"
+                        v-model="day"
+                        placeholder="JJ"
+                        class="text-button-200 text-lg border border-button-200 rounded-lg py-1 px-2 w-16 text-center"
+                    />
+                    <p class="text-button-200 text-lg">/</p>
+                    <input
+                        type="text"
+                        v-model="month"
+                        placeholder="MM"
+                        class="text-button-200 text-lg border border-button-200 rounded-lg py-1 px-2 w-16 text-center"
+                    />
+                    <p class="text-button-200 text-lg">/</p>
+                    <input
+                        type="text"
+                        v-model="year"
+                        placeholder="YYYY"
+                        class="text-button-200 text-lg border border-button-200 rounded-lg py-1 px-2 w-20 text-center"
+                    />
+                    <button
+                        @click="searchByDate"
+                        class="text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded-lg ml-4 font-semibold"
+                    >
                         Search by date
                     </button>
                 </div>
@@ -24,8 +38,11 @@
             No working times available at this date
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
-            <div v-for="time in workingTimes" :key="time.id"
-                class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between">
+            <div
+                v-for="time in workingTimes"
+                :key="time.id"
+                class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
+            >
                 <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
                     <h2 class="m-3">Total duration</h2>
                     <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
@@ -46,8 +63,12 @@
                     </div>
                     <div class="flex space-x-3">
                         <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
-                        <ModalUpdate :workingTimeId="time.id" :initialStart="time.start" :initialEnd="time.end"
-                            @workingTimeUpdated="updateWorkingTime" />
+                        <ModalUpdate
+                            :workingTimeId="time.id"
+                            :initialStart="time.start"
+                            :initialEnd="time.end"
+                            @workingTimeUpdated="updateWorkingTime"
+                        />
                     </div>
                 </div>
             </div>
@@ -82,7 +103,6 @@ const month = ref('')
 const year = ref('')
 
 const searchByDate = async () => {
-
     if (!day.value || !month.value || !year.value) {
         console.error('Please enter a valid date')
         return

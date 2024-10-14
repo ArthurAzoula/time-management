@@ -1,7 +1,7 @@
 <template>
-    <div class="py-12 p-6">
+    <div>
         <h2 class="text-2xl font-bold">My Statistics</h2>
-        <div class="flex items-center justify-between py-12 px-4">
+        <div>
             <HoursWork :workingTimes="workingTimesStore.workingTimes" />
             <AverageHoursWork :workingTimes="workingTimesStore.workingTimes" />
             <MostProductiveDay :workingTimes="workingTimesStore.workingTimes" />

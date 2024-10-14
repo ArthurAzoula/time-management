@@ -69,17 +69,17 @@
 import { ref, onMounted } from 'vue'
 import { userService } from '../../service/userService'
 import { toast } from 'vue3-toastify'
-import ModalCreateUser from '../Modal/ModalCreateUser.vue' 
+import ModalCreateUser from '../Modal/ModalCreateUser.vue'
 
 export default {
     components: {
-        ModalCreateUser, 
+        ModalCreateUser,
     },
     setup() {
         const user = ref({})
         const userId = 1
         const isEditing = ref(false)
-        const isModalVisible = ref(true) 
+        const isModalVisible = ref(true)
 
         onMounted(async () => {
             try {

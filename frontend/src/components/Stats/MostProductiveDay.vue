@@ -1,10 +1,10 @@
 <template>
     <div class="flex justify-center items-center">
         <div
-            class="p-6 max-w-sm mx-auto bg-white rounded-xl flex items-center border space-x-4 transform transition duration-500 hover:scale-105"
+            class="p-6 max-w-sm mx-auto bg-background-100 rounded-md flex items-center space-x-4 transform transition duration-500 hover:scale-105"
         >
             <div class="flex items-center">
-                <CheckCheckIcon class="h-11 w-11 text-button-200" />
+                <CheckCheckIcon class="h-11 w-11 text-primary-100" />
             </div>
             <div>
                 <div class="text-xl font-medium text-black">Most Productive Day</div>
@@ -34,16 +34,12 @@ const workingTimes = ref(props.workingTimes)
 const totalHoursPerDay = ref([])
 const mostProductiveDay = ref(null)
 
-console.log(workingTimes.value)
-
 const calculeTotalHoursPerDay = () => {
     const hoursMap = new Map()
 
     workingTimes.value.forEach((wt) => {
         const startDate = new Date(wt.start).toDateString()
         const endDate = new Date(wt.end).toDateString()
-
-        console.log(startDate, endDate)
 
         if (!hoursMap.has(startDate)) {
             hoursMap.set(startDate, 0)

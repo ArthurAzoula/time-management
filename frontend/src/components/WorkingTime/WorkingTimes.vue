@@ -34,41 +34,46 @@
                 <ModalCreate @workingTimeCreated="addWorkingTime" />
             </div>
         </div>
-        <div v-if="workingTimes.length === 0" class="text-center text-xl text-text-color-100 mt-6">
-            No working times available at this date
+        <div v-if="loading" class="flex justify-center items-center h-64">
+            <Loader />
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
-            <div
-                v-for="time in workingTimes"
-                :key="time.id"
-                class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
-            >
-                <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
-                    <h2 class="m-3">Total duration</h2>
-                    <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
-                </div>
-                <div class="flex justify-between w-11/12 my-2 mx-auto text-text-color-100 font-bold">
-                    <p>{{ formatTime(time.start) }}</p>
-                    <p>{{ formatTime(time.end) }}</p>
-                </div>
-                <div class="flex flex-col gap-2 my-2">
-                    <p class="font-bold">Activity performed</p>
-                    <p class="text-sm text-wrap text-ellipsis">
-                        During this time, I did accounting, answered emails...
-                    </p>
-                </div>
-                <div class="mt-4 text-text-color-purple font-semibold flex justify-between">
-                    <div class="bg-card-date rounded px-6 flex justify-center items-center">
-                        <p class="text-sm">{{ formatDateRange(time.start, time.end) }}</p>
+        <div v-else>
+            <div v-if="workingTimes.length === 0" class="text-center text-xl text-text-color-100 mt-6">
+                No working times available at this date
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
+                <div
+                    v-for="time in workingTimes"
+                    :key="time.id"
+                    class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
+                >
+                    <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
+                        <h2 class="m-3">Total duration</h2>
+                        <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
                     </div>
-                    <div class="flex space-x-3">
-                        <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
-                        <ModalUpdate
-                            :workingTimeId="time.id"
-                            :initialStart="time.start"
-                            :initialEnd="time.end"
-                            @workingTimeUpdated="updateWorkingTime"
-                        />
+                    <div class="flex justify-between w-11/12 my-2 mx-auto text-text-color-100 font-bold">
+                        <p>{{ formatTime(time.start) }}</p>
+                        <p>{{ formatTime(time.end) }}</p>
+                    </div>
+                    <div class="flex flex-col gap-2 my-2">
+                        <p class="font-bold">Activity performed</p>
+                        <p class="text-sm text-wrap text-ellipsis">
+                            During this time, I did accounting, answered emails...
+                        </p>
+                    </div>
+                    <div class="mt-4 text-text-color-purple font-semibold flex justify-between">
+                        <div class="bg-card-date rounded px-6 flex justify-center items-center">
+                            <p class="text-sm">{{ formatDateRange(time.start, time.end) }}</p>
+                        </div>
+                        <div class="flex space-x-3">
+                            <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
+                            <ModalUpdate
+                                :workingTimeId="time.id"
+                                :initialStart="time.start"
+                                :initialEnd="time.end"
+                                @workingTimeUpdated="updateWorkingTime"
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -85,6 +90,9 @@ import ModalDelete from '../Modal/ModalDelete.vue'
 import ModalUpdate from '../Modal/ModalUpdate.vue'
 import { useWorkingTimesStore } from '../../store/useWorkingTimesStore'
 import { workingTimeService } from '../../service/workingTimeService'
+import Loader from '../Loader/Loader.vue'
+
+const loading = ref(false)
 
 const props = defineProps({
     workingTimes: {
@@ -110,10 +118,13 @@ const searchByDate = async () => {
 
     const startDate = `${year.value}-${month.value.padStart(2, '0')}-${day.value.padStart(2, '0')}T00:00:00`
     try {
+        loading.value = true
         const response = await workingTimeService.getWorkingTimeByUserId(1, { start_date: startDate })
         workingTimesStore.setWorkingTimes(response.data)
+        loading.value = false
     } catch (error) {
         console.error('Failed to fetch working times:', error)
+        loading.value = false
     }
 }
 

@@ -1,10 +1,10 @@
 <template>
     <div class="flex justify-center items-center">
         <div
-            class="p-6 max-w-sm mx-auto bg-white rounded-xl border flex items-center space-x-4 transform transition duration-500 hover:scale-105"
+            class="p-6 max-w-sm mx-auto bg-background-100 rounded-md flex items-center space-x-4 transform transition duration-500 hover:scale-105"
         >
             <div class="flex items-center">
-                <ChartSplineIcon class="h-11 w-11 text-button-200" />
+                <ChartSplineIcon class="h-11 w-11 text-primary-100" />
             </div>
             <div>
                 <div class="text-xl font-medium text-black">Average Hours Worked</div>
@@ -32,7 +32,7 @@ const averageHours = ref(0)
 const totalHours = ref(0)
 
 const calculeAverage = () => {
-    totalHours.value = 0 // Reset total hours before calculation
+    totalHours.value = 0
     workingTimes.value.forEach((wt) => {
         totalHours.value += getDifferenceInhours(wt.start, wt.end)
     })

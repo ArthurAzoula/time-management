@@ -1,11 +1,11 @@
 <template>
     <div class="flex justify-center items-center">
         <div
-            class="p-6 max-w-sm mx-auto bg-white rounded-xl flex items-center space-x-4 transform transition duration-500 hover:scale-105 border"
+            class="p-6 max-w-sm mx-auto bg-background-100 rounded-md flex items-center space-x-4 transform transition duration-500 hover:scale-105"
         >
             <div class="flex items-center">
                 <svg
-                    class="h-12 w-12 text-button-200"
+                    class="h-12 w-12 text-primary-100"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 28 28"

@@ -70,7 +70,7 @@ const handleClock = async () => {
 
         if (!responseUpdateClock) return
 
-        toast.success('Début de la journée enregistré avec succès !')
+        toast.success('Activity started successfully!')
     } else {
         // le modifier et le passé à false (fin de la journée)
         const body = {
@@ -98,7 +98,7 @@ const handleClock = async () => {
 
         if (!responseCreateWorkingTime) return
 
-        toast.success('Fin de la journée enregistrée avec succès !')
+        toast.success('End of work period')
     }
 
     updateMessage()

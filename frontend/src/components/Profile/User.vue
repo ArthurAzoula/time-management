@@ -1,6 +1,6 @@
 <template>
     <div class="user-profile p-6 py-12">
-        <h1 class="text-2xl font-bold mb-4">My Profil</h1>
+        <h1 class="text-2xl font-bold mb-4">My Profile</h1>
         <div class="profile-info" v-if="user">
             <div class="flex items-center justify-between">
                 <div>
@@ -53,26 +53,33 @@
                 />
             </div>
             <div class="mt-4 flex space-x-4">
-                <button @click="createUser" class="bg-blue-500 text-white py-2 px-4 rounded">Create user</button>
                 <button @click="updateUser" v-if="isEditing" class="bg-blue-500 text-white py-2 px-4 rounded">
                     Update
                 </button>
                 <button @click="deleteUser" class="bg-red-500 text-white py-2 px-4 rounded">Delete</button>
             </div>
         </div>
+
+        <!-- User Creation Modal -->
+        <ModalCreateUser v-if="isModalVisible" @close="closeModal" @userCreated="onUserCreated" />
     </div>
 </template>
 
 <script>
 import { ref, onMounted } from 'vue'
-import { userService } from '../../service/userService';
+import { userService } from '../../service/userService'
 import { toast } from 'vue3-toastify'
+import ModalCreateUser from '../Modal/ModalCreateUser.vue'
 
 export default {
+    components: {
+        ModalCreateUser,
+    },
     setup() {
         const user = ref({})
         const userId = 1
         const isEditing = ref(false)
+        const isModalVisible = ref(true)
 
         onMounted(async () => {
             try {
@@ -87,19 +94,18 @@ export default {
             isEditing.value = !isEditing.value
         }
 
-        const createUser = async () => {
-            const dataUser = {
-                user: {
-                    username: user.value.username,
-                    email: user.value.email,
-                },
-            }
-            try {
-                await userService.createUser(dataUser)
-                toast.success('User created successfully !')
-            } catch (error) {
-                toast.error("Erreur lors de la mise à jour de l'utilisateur :", error)
-            }
+        const showCreateUserModal = () => {
+            isModalVisible.value = true
+        }
+
+        const closeModal = () => {
+            isModalVisible.value = false
+        }
+
+        const onUserCreated = (newUser) => {
+            // Handle newly created user here
+            toast.success('User created successfully!')
+            closeModal()
         }
 
         const updateUser = async () => {
@@ -111,7 +117,7 @@ export default {
             }
             try {
                 await userService.updateUser(userId, dataUser)
-                toast.success('User updated successfully !')
+                toast.success('User updated successfully!')
                 isEditing.value = false
             } catch (error) {
                 toast.error("Erreur lors de la mise à jour de l'utilisateur :", error)
@@ -121,7 +127,7 @@ export default {
         const deleteUser = async () => {
             try {
                 await userService.deleteUser(userId)
-                toast.success('User deleted successfully !')
+                toast.success('User deleted successfully!')
             } catch (error) {
                 toast.error("Erreur lors de la suppression de l'utilisateur :", error)
             }
@@ -131,9 +137,12 @@ export default {
             user,
             isEditing,
             toggleEdit,
-            createUser,
+            showCreateUserModal,
+            closeModal,
+            onUserCreated,
             updateUser,
             deleteUser,
+            isModalVisible,
         }
     },
 }

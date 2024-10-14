@@ -6,27 +6,32 @@ import { workingTimeService } from '../../service/workingTimeService'
 const lineChart = ref(null)
 const pieChart = ref(null)
 const radarChart = ref(null)
+const timeWorked = ref(0)
+const timeBreak = ref(0)
+
+const props = defineProps({
+    all: {
+        type: Boolean,
+        required: true,
+    },
+})
 
 const userId = 1
 
 const formatTime = (minutes) => {
     const hours = Math.floor(minutes / 60)
     const mins = Math.floor(minutes % 60)
-    if (hours > 0) {
-        return `${hours}h ${mins}m`
-    } else {
-        return `${mins}m`
-    }
+    return hours > 0 ? `${hours}h ${mins}m` : `${mins}m`
 }
 
 const getDailyWorkingTimes = (workingTimes) => {
     const today = new Date()
-    today.setHours(0, 0, 0, 0) // Réinitialiser l'heure à 00:00:00
+    today.setHours(0, 0, 0, 0)
 
     const filteredWorkingTimes = workingTimes.filter((wt) => {
         const start = new Date(wt.start)
-        start.setHours(0, 0, 0, 0) // Réinitialiser l'heure de début à 00:00:00
-        return start.getTime() === today.getTime() // Comparer uniquement les dates
+        start.setHours(0, 0, 0, 0)
+        return start.getTime() === today.getTime()
     })
 
     const totalWorkingMinutes = filteredWorkingTimes.reduce((acc, wt) => {
@@ -36,88 +41,73 @@ const getDailyWorkingTimes = (workingTimes) => {
             console.error('Invalid date:', wt)
             return acc
         }
-        const minutes = (end - start) / (1000 * 60) // Durée en minutes
+        const minutes = (end - start) / (1000 * 60)
         return acc + minutes
     }, 0)
 
-    const totalMinutesInDay = 7 * 60
+    const totalMinutesInDay = 8 * 60
     const workingMinutes = Math.min(totalWorkingMinutes, totalMinutesInDay)
     const breakMinutes = totalMinutesInDay - workingMinutes
+
+    timeWorked.value = workingMinutes
+    timeBreak.value = breakMinutes
 
     return { workingMinutes, breakMinutes }
 }
 
 const getWeeklyWorkingTimes = (workingTimes) => {
     const today = new Date()
-    today.setHours(0, 0, 0, 0) // Réinitialiser l'heure à 00:00:00
+    today.setHours(0, 0, 0, 0)
 
-    // Obtenir le début de la semaine (lundi)
     const startOfWeek = new Date(today)
     startOfWeek.setDate(today.getDate() - today.getDay() + 1)
 
-    // Obtenir la fin de la semaine (dimanche)
     const endOfWeek = new Date(startOfWeek)
     endOfWeek.setDate(startOfWeek.getDate() + 6)
 
-    // Filtrer les entrées de temps de travail pour la semaine en cours
     const filteredWorkingTimes = workingTimes.filter((wt) => {
         const start = new Date(wt.start)
         return start >= startOfWeek && start <= endOfWeek
     })
 
-    // Initialiser un tableau pour stocker les heures de travail par jour
     const dailyWorkingMinutes = Array(7).fill(0)
 
-    // Calculer les heures de travail pour chaque jour de la semaine
     filteredWorkingTimes.forEach((wt) => {
         const start = new Date(wt.start)
         const end = new Date(wt.end)
         if (!isNaN(start) && !isNaN(end)) {
-            const dayIndex = (start.getDay() + 6) % 7 // Convertir dimanche (0) en dernier jour (6)
-            const minutes = (end - start) / (1000 * 60) // Durée en minutes
+            const dayIndex = (start.getDay() + 6) % 7
+            const minutes = (end - start) / (1000 * 60)
             dailyWorkingMinutes[dayIndex] += minutes
         }
     })
 
-    return dailyWorkingMinutes.map((minutes) => Math.min(minutes, 7 * 60)) // Limiter à 7 heures par jour
+    return dailyWorkingMinutes.map((minutes) => Math.min(minutes, 8 * 60))
 }
 
 onMounted(async () => {
     try {
         const response = await workingTimeService.getWorkingTimeByUserId(userId)
-
         const workingTimes = response.data || []
 
         const { workingMinutes, breakMinutes } = getDailyWorkingTimes(workingTimes)
-
-        const workingTimeFormatted = formatTime(workingMinutes)
-        const breakTimeFormatted = formatTime(breakMinutes)
-
-        const pieLabels = ['Working Hours', 'Break Hours']
-        const pieData = [workingMinutes, breakMinutes]
 
         const pieCtx = document.getElementById('pieChart').getContext('2d')
         pieChart.value = new Chart(pieCtx, {
             type: 'doughnut',
             data: {
-                labels: pieLabels,
+                labels: ['Working Hours', 'Break Hours'],
                 datasets: [
                     {
                         label: 'Time Distribution',
-                        data: [workingMinutes, breakMinutes], // Placer les heures de pause avant les heures de travail
-                        backgroundColor: [
-                            '#C026D3', // Couleur pour les heures de travail
-                            '#FAE8FF', // Couleur pour les heures de pause
-                        ],
-                        borderColor: [
-                            '#FAE8FF', // Couleur pour les heures de pause
-                            '#C026D3', // Couleur pour les heures de travail
-                        ],
-                        borderWidth: 1,
+                        data: [workingMinutes, breakMinutes],
+                        backgroundColor: ['#C026D3', '#FAE8FF'],
+                        borderColor: ['#FAE8FF', '#C026D3'],
+                        borderWidth: 0,
                         hoverOffset: 4,
-                        radius: '85%', // Réduire le rayon du cercle doughnut
-                        borderRadius: [20, 2], // Ajouter un borderRadius uniquement à la partie C026D3
-                        spacing: -5, // Réduire l'espace entre les segments
+                        radius: '85%',
+                        borderRadius: [2, 2],
+                        spacing: -5,
                     },
                 ],
             },
@@ -131,7 +121,6 @@ onMounted(async () => {
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                const index = context.dataIndex
                                 const value = context.raw
                                 return `${context.label}: ${formatTime(value)}`
                             },
@@ -141,11 +130,7 @@ onMounted(async () => {
             },
         })
 
-        // Obtenir les temps de travail hebdomadaires
         const weeklyWorkingMinutes = getWeeklyWorkingTimes(workingTimes)
-
-        // Préparer les labels pour les jours de la semaine
-        const lineLabels = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
 
         const lineCtx = document.getElementById('lineChart').getContext('2d')
         const gradient = lineCtx.createLinearGradient(0, 0, 0, 400)
@@ -155,7 +140,7 @@ onMounted(async () => {
         lineChart.value = new Chart(lineCtx, {
             type: 'line',
             data: {
-                labels: lineLabels,
+                labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
                 datasets: [
                     {
                         label: 'Working Hours',
@@ -178,7 +163,6 @@ onMounted(async () => {
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                const index = context.dataIndex
                                 const value = context.raw
                                 return `${context.label}: ${formatTime(value)}`
                             },
@@ -188,9 +172,9 @@ onMounted(async () => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        max: 8 * 60, // Limiter à 7 heures par jour
+                        max: 8 * 60,
                         ticks: {
-                            stepSize: 60, // Afficher les étiquettes par incréments de 1 heure
+                            stepSize: 60,
                             callback: function (value) {
                                 return formatTime(value).replace('0m', '\n')
                             },
@@ -204,7 +188,7 @@ onMounted(async () => {
         radarChart.value = new Chart(radarCtx, {
             type: 'radar',
             data: {
-                labels: lineLabels,
+                labels: ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'],
                 datasets: [
                     {
                         label: 'Working Hours',
@@ -224,7 +208,6 @@ onMounted(async () => {
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                const index = context.dataIndex
                                 const value = context.raw
                                 return `${context.label}: ${formatTime(value)}`
                             },
@@ -234,9 +217,9 @@ onMounted(async () => {
                 scales: {
                     r: {
                         beginAtZero: true,
-                        max: 7 * 60, // Limiter à 7 heures par jour
+                        max: 7 * 60,
                         ticks: {
-                            stepSize: 60, // Afficher les étiquettes par incréments de 1 heure
+                            stepSize: 60,
                             callback: function (value) {
                                 return formatTime(value).replace('0m', '\n')
                             },
@@ -254,10 +237,17 @@ onMounted(async () => {
 <template>
     <div class="flex flex-wrap items-center gap-6">
         <div class="p-5 bg-[#FEFFEE] rounded-lg">
-            <canvas id="lineChart" width="400" height="400"></canvas>
+            <canvas id="lineChart" width="420" height="425"></canvas>
         </div>
         <div class="p-5 bg-[#FEFFEE] rounded-lg">
             <canvas id="pieChart" width="400" height="400"></canvas>
+            <div class="flex space-x-4 justify-between">
+                <p><strong>Working Time:</strong> {{ formatTime(timeWorked?.valueOf()) }}</p>
+                <p><strong>Break Time:</strong> {{ formatTime(timeBreak?.valueOf()) }}</p>
+            </div>
+        </div>
+        <div v-if="all" class="p-5 bg-[#FEFFEE] rounded-lg">
+            <canvas id="radarChart" width="400" height="400"></canvas>
         </div>
     </div>
 </template>

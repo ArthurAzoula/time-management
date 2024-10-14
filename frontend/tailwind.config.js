@@ -27,6 +27,9 @@ export default {
                 menu: {
                     100: '#FFD4A2',
                 },
+                primary: {
+                    100: '#C026D3',
+                },
             },
         },
     },

@@ -1,6 +1,8 @@
 services:
   db:
     image: postgres:16
+#   env_file:
+#     - ./app/.env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -9,14 +11,22 @@ services:
       - "5432:5432"
     volumes:
       - ./data:/var/lib/postgresql/data
+    networks:
+      - app
 
   adminer:
     image: adminer
     ports:
       - "8080:8080"
+    networks:
+      - app
 
   app:
     build: .
+#      context: .
+#      dockerfile: Dockerfile
+#    env_file:
+#      - ./app/.env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -26,4 +36,26 @@ services:
     ports:
       - "4000:4000"
     depends_on:
-        - db
+      - db
+    networks:
+      - app
+
+#  frontend:
+#    build:
+#      context: ./frontend
+#      dockerfile: Dockerfile
+#    env_file:
+#      - ./frontend/.env
+#    environment:
+#      VITE_BASE_URL: ${VITE_BASE_URL}
+#      VITE_API_URL: ${VITE_API_URL}
+#    ports:
+#      - "5173:5173"
+#    depends_on:
+#      - app
+#    networks:
+#      - app
+
+networks:
+  app:
+    driver: bridge

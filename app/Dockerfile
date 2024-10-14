@@ -13,6 +13,8 @@ COPY . .
 RUN mix deps.get && \
     mix compile
 
+# RUN mix ecto.migrate
+
 RUN mix phx.digest
 
 EXPOSE 4000

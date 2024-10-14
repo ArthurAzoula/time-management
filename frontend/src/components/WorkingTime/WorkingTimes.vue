@@ -4,77 +4,33 @@
             <div>
                 <h2 class="text-2xl font-bold">My working times</h2>
                 <div class="flex gap-2 items-center mt-6 mb-6">
-                    <VDatePicker v-model="range" is-range :select-attribute="selectDragAttribute"
-                        :drag-attribute="selectDragAttribute">
+                    <VDatePicker
+                        v-model="range"
+                        is-range
+                        :select-attribute="selectDragAttribute"
+                        :drag-attribute="selectDragAttribute"
+                    >
                         <template #default="{ inputValue, inputEvents }">
-                        <div class="flex items-center">
-                            <input class="border border-button-200 rounded p-2" :value="inputValue.start"
-                                v-on="inputEvents.start" />
-                            <MoveRight class="mx-2" />
-                            <input class="border border-button-200 rounded p-2" :value="inputValue.end"
-                                v-on="inputEvents.end" />
-                        </div>
-</template>
-</VDatePicker>
-<button @click="searchByDate"
-    class="text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded-lg ml-4 font-semibold">
-    Search by date
-</button>
-</div>
-<ModalCreate @workingTimeCreated="addWorkingTime" />
-</div>
-</div>
-<div v-if="workingTimes.length === 0" class="text-center text-xl text-text-color-100 mt-6">
-    No working times available at this date
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
-    <div v-for="time in workingTimes" :key="time.id"
-        class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between">
-        <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
-            <h2 class="m-3">Total duration</h2>
-            <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
-        </div>
-        <div class="flex justify-between w-11/12 my-2 mx-auto text-text-color-100 font-bold">
-            <p>{{ formatTime(time.start) }}</p>
-            <p>{{ formatTime(time.end) }}</p>
-        </div>
-        <div class="flex flex-col gap-2 my-2">
-            <p class="font-bold">Activity performed</p>
-            <p class="text-sm text-wrap text-ellipsis">
-                During this time, I did accounting, answered emails...
-            </p>
-        </div>
-        <div class="mt-4 text-text-color-purple font-semibold flex justify-between">
-            <div class="bg-card-date rounded px-6 flex justify-center items-center">
-                <p class="text-sm">{{ formatDateRange(time.start, time.end) }}</p>
-            </div>
-            <div class="flex space-x-3">
-                <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
-                <ModalUpdate :workingTimeId="time.id" :initialStart="time.start" :initialEnd="time.end"
-                    @workingTimeUpdated="updateWorkingTime" />
-                    <input
-                        type="text"
-                        v-model="day"
-                        placeholder="JJ"
-                        class="text-button-200 text-lg border border-button-200 rounded-lg py-1 px-2 w-16 text-center"
-                    />
-                    <p class="text-button-200 text-lg">/</p>
-                    <input
-                        type="text"
-                        v-model="month"
-                        placeholder="MM"
-                        class="text-button-200 text-lg border border-button-200 rounded-lg py-1 px-2 w-16 text-center"
-                    />
-                    <p class="text-button-200 text-lg">/</p>
-                    <input
-                        type="text"
-                        v-model="year"
-                        placeholder="YYYY"
-                        class="text-button-200 text-lg border border-button-200 rounded-lg py-1 px-2 w-20 text-center"
-                    />
+                            <div class="flex items-center">
+                                <input
+                                    class="border border-button-200 rounded p-1 text-center"
+                                    :value="inputValue.start"
+                                    v-on="inputEvents.start"
+                                    placeholder="Start date"
+                                />
+                                <MoveRight class="mx-2" />
+                                <input
+                                    class="border border-button-200 rounded p-1 text-center"
+                                    :value="inputValue.end"
+                                    v-on="inputEvents.end"
+                                    placeholder="End date"
+                                />
+                            </div>
+                        </template>
+                    </VDatePicker>
                     <button
                         @click="searchByDate"
-                        class="text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded-lg ml-4 font-semibold"
+                        class="text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded ml-8 font-semibold"
                     >
                         Search by date
                     </button>
@@ -82,53 +38,46 @@
                 <ModalCreate @workingTimeCreated="addWorkingTime" />
             </div>
         </div>
-        <div v-if="loading" class="flex justify-center items-center h-64">
-            <Loader />
+        <div v-if="workingTimes.length === 0" class="text-center text-xl text-text-color-100 mt-6">
+            No working times available at this date
         </div>
-        <div v-else>
-            <div v-if="workingTimes.length === 0" class="text-center text-xl text-text-color-100 mt-6">
-                No working times available at this date
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
-                <div
-                    v-for="time in workingTimes"
-                    :key="time.id"
-                    class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
-                >
-                    <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
-                        <h2 class="m-3">Total duration</h2>
-                        <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
+            <div
+                v-for="time in workingTimes"
+                :key="time.id"
+                class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
+            >
+                <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
+                    <h2 class="m-3">Total duration</h2>
+                    <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
+                </div>
+                <div class="flex justify-between w-11/12 my-2 mx-auto text-text-color-100 font-bold">
+                    <p>{{ formatTime(time.start) }}</p>
+                    <p>{{ formatTime(time.end) }}</p>
+                </div>
+                <div class="flex flex-col gap-2 my-2">
+                    <p class="font-bold">Activity performed</p>
+                    <p class="text-sm text-wrap text-ellipsis">
+                        During this time, I did accounting, answered emails...
+                    </p>
+                </div>
+                <div class="mt-4 text-text-color-purple font-semibold flex justify-between">
+                    <div class="bg-card-date rounded px-6 flex justify-center items-center">
+                        <p class="text-sm">{{ formatDateRange(time.start, time.end) }}</p>
                     </div>
-                    <div class="flex justify-between w-11/12 my-2 mx-auto text-text-color-100 font-bold">
-                        <p>{{ formatTime(time.start) }}</p>
-                        <p>{{ formatTime(time.end) }}</p>
-                    </div>
-                    <div class="flex flex-col gap-2 my-2">
-                        <p class="font-bold">Activity performed</p>
-                        <p class="text-sm text-wrap text-ellipsis">
-                            During this time, I did accounting, answered emails...
-                        </p>
-                    </div>
-                    <div class="mt-4 text-text-color-purple font-semibold flex justify-between">
-                        <div class="bg-card-date rounded px-6 flex justify-center items-center">
-                            <p class="text-sm">{{ formatDateRange(time.start, time.end) }}</p>
-                        </div>
-                        <div class="flex space-x-3">
-                            <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
-                            <ModalUpdate
-                                :workingTimeId="time.id"
-                                :initialStart="time.start"
-                                :initialEnd="time.end"
-                                @workingTimeUpdated="updateWorkingTime"
-                            />
-                        </div>
+                    <div class="flex space-x-3">
+                        <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
+                        <ModalUpdate
+                            :workingTimeId="time.id"
+                            :initialStart="time.start"
+                            :initialEnd="time.end"
+                            @workingTimeUpdated="updateWorkingTime"
+                        />
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</div>
 </template>
 
 <script setup>
@@ -141,9 +90,6 @@ import ModalUpdate from '../Modal/ModalUpdate.vue'
 import { useWorkingTimesStore } from '../../store/useWorkingTimesStore'
 import { workingTimeService } from '../../service/workingTimeService'
 import { MoveRight } from 'lucide-vue-next'
-import Loader from '../Loader/Loader.vue'
-
-const loading = ref(false)
 
 const props = defineProps({
     workingTimes: {
@@ -160,29 +106,22 @@ const filterByDate = route.path !== '/'
 const workingTimesStore = useWorkingTimesStore()
 
 const selectDragAttribute = computed(() => ({
-    highlight: "orange",
-}));
+    highlight: 'orange',
+}))
 
 const searchByDate = async () => {
     const { start, end } = range.value
 
     if (!start || !end) {
         console.error('Please enter a valid date range')
-    if (!day.value || !month.value || !year.value) {
-        console.error('Please enter a valid date')
         return
     }
 
     try {
         const response = await workingTimeService.getWorkingTimeByUserId(1, { start_date: start, end_date: end })
-
-        loading.value = true
-        const response = await workingTimeService.getWorkingTimeByUserId(1, { start_date: startDate })
         workingTimesStore.setWorkingTimes(response.data)
-        loading.value = false
     } catch (error) {
         console.error('Failed to fetch working times:', error)
-        loading.value = false
     }
 }
 

@@ -2,9 +2,9 @@ use Mix.Config
 
 # Configure your database
 config :app, App.Repo,
-  username: System.get_env("POSTGRES_USER") || "timeuser",
-  password: System.get_env("POSTGRES_PASSWORD") || "timepassword",
-  database: System.get_env("POSTGRES_DB") || "timemanagement",
+  username: System.get_env("POSTGRES_USER") || "devuser",
+  password: System.get_env("POSTGRES_PASSWORD") || "devpassword",
+  database: System.get_env("POSTGRES_DB") || "timemanagement_dev",
   hostname: System.get_env("POSTGRES_HOST") || "localhost",
   port: String.to_integer(System.get_env("POSTGRES_PORT") || "5432"),
   show_sensitive_data_on_connection_error: true,
@@ -17,7 +17,7 @@ config :app, App.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :app, AppWeb.Endpoint,
-  http: [ip: {0, 0, 0, 0}, port: 4000],
+  http: [ip: {0 ,0 ,0 ,0}, port: 4000],
   debug_errors: true,
   code_reloader: true,
   check_origin: false,

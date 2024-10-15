@@ -14,7 +14,7 @@ Ce projet utilise Docker Compose pour orchestrer plusieurs services :
 ## :construction: Lancer en mode développement
 
 - Renseigner les fichiers .env.dev
-- Créer un fichier .env.dev à la racine du répertoire :
+- Créer un fichier .env.dev à la racine du répertoire ( Soyez cohérent le config.exs et dev.exs si vous rencontrez une erreur ) :
 
  #### Fichier .env.dev
 ```sh
@@ -46,7 +46,7 @@ docker compose --profile dev --env-file .env.dev down
 ## :construction: Lancer en mode production
 
 - Renseigner les fichiers .env.prod
-- Créer un fichier .env.prod à la racine du répertoire :
+- Créer un fichier .env.prod à la racine du répertoire ( Soyez cohérent le config.exs et prod.exs/prod.secret.exs si vous rencontrez une erreur ) :
 
  #### Fichier .env.dev
 ```sh

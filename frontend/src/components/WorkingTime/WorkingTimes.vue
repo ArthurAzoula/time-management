@@ -2,7 +2,7 @@
     <div class="p-6 py-12">
         <div v-if="filterByDate">
             <div>
-                <h2 class="text-2xl font-bold">My working times</h2>
+                <h2 class="text-2xl font-bold">My working time</h2>
                 <div class="flex gap-2 items-center mt-6 mb-6">
                     <VDatePicker
                         v-model="range"
@@ -28,12 +28,13 @@
                             </div>
                         </template>
                     </VDatePicker>
-                    <button
+                    <div
                         @click="searchByDate"
-                        class="text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded ml-8 font-semibold"
+                        class="flex items-center gap-2 text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded ml-8 cursor-pointer"
                     >
-                        Search by date
-                    </button>
+                        <SearchIcon size="20" />
+                        <p>Search</p>
+                    </div>
                 </div>
                 <ModalCreate @workingTimeCreated="addWorkingTime" />
             </div>
@@ -90,6 +91,7 @@ import ModalUpdate from '../Modal/ModalUpdate.vue'
 import { useWorkingTimesStore } from '../../store/useWorkingTimesStore'
 import { workingTimeService } from '../../service/workingTimeService'
 import { MoveRight } from 'lucide-vue-next'
+import { SearchIcon } from 'lucide-vue-next'
 
 const props = defineProps({
     workingTimes: {

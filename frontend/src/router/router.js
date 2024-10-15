@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import App from '../App.vue'
 import WorkingTimeView from '../view/WorkingTimeView.vue'
 import User from '../components/Profile/User.vue'
 import Graphs from '../components/Chart/Graphs.vue'

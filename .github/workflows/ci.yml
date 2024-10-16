@@ -2,6 +2,20 @@ version: 1.0
 
 name: Elixir Phoenix CI
 
+on:
+  push:
+    branches:
+      - '*'
+      # all except the following
+      - '!master'
+      - '!main'  
+  pull_request:
+    branches:
+      - '*'
+      # all except the following
+      - '!master'
+      - '!main'
+
 agent: 
   machine: 
     type: e1-standard-2

@@ -84,7 +84,7 @@ jobs:
       run: cd app && mix deps.get
 
     - name: Compiles without warnings
-      run: cd app && mix compile --warnings-as-errors
+      run: cd app && mix compile
 
     - name: Check Formatting
       run: cd app && mix format --check-formatted

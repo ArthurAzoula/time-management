@@ -89,8 +89,5 @@ jobs:
     - name: Format and check Formatting
       run: cd app && mix format && mix format --check-formatted
 
-    - name: Setup database
-      run: cd app && mix ecto.create && mix ecto.migrate && mix run priv/repo/seeds.exs
-
     - name: Run tests
       run: cd app && mix test

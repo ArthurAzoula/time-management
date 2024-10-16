@@ -102,7 +102,10 @@ defmodule App.TimeTest do
 
     test "update_working_time/2 with valid data updates the working_time" do
       working_time = working_time_fixture()
-      assert {:ok, %WorkingTime{} = working_time} = Time.update_working_time(working_time, @update_attrs)
+
+      assert {:ok, %WorkingTime{} = working_time} =
+               Time.update_working_time(working_time, @update_attrs)
+
       assert working_time.start == ~N[2011-05-18 15:01:01]
       assert working_time.end == ~N[2011-05-18 15:01:01]
     end

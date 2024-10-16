@@ -10,6 +10,6 @@ defmodule App.Repo.Migrations.CreateClocks do
       timestamps()
     end
 
-    create unique_index(:clocks, [:user_id]) 
+    create unique_index(:clocks, [:user_id])
   end
 end

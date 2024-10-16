@@ -53,8 +53,15 @@ defmodule AppWeb.WorkingTimeControllerTest do
   describe "update working_time" do
     setup [:create_working_time]
 
-    test "renders working_time when data is valid", %{conn: conn, working_time: %WorkingTime{id: id} = working_time} do
-      conn = put(conn, Routes.working_time_path(conn, :update, working_time), working_time: @update_attrs)
+    test "renders working_time when data is valid", %{
+      conn: conn,
+      working_time: %WorkingTime{id: id} = working_time
+    } do
+      conn =
+        put(conn, Routes.working_time_path(conn, :update, working_time),
+          working_time: @update_attrs
+        )
+
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 
       conn = get(conn, Routes.working_time_path(conn, :show, id))
@@ -67,7 +74,11 @@ defmodule AppWeb.WorkingTimeControllerTest do
     end
 
     test "renders errors when data is invalid", %{conn: conn, working_time: working_time} do
-      conn = put(conn, Routes.working_time_path(conn, :update, working_time), working_time: @invalid_attrs)
+      conn =
+        put(conn, Routes.working_time_path(conn, :update, working_time),
+          working_time: @invalid_attrs
+        )
+
       assert json_response(conn, 422)["errors"] != %{}
     end
   end

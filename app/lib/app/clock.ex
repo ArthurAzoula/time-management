@@ -7,7 +7,6 @@ defmodule App.Clock do
     field :time, :naive_datetime
     belongs_to :user, App.User, foreign_key: :user_id
 
-
     timestamps()
   end
 

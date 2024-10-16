@@ -16,78 +16,46 @@ on:
       - '!master'
       - '!main'
 
-agent: 
-  machine: 
-    type: e1-standard-2
-    os_image: ubuntu2004
+jobs:
+  build:
 
-blocks:
-  - name: Set up
-    task: 
-      jobs: 
-      - name: compile and build plts
-        commands:
-          - checkout
-
-          - bin/setup_ci_exilir
-          - sem-version elixir 1.17.3
+    runs-on: ubuntu-latest
 
 
-          - cache restore
-
-
-          - cache restore dialyzer-plt
-
-
-          - mix deps.get
-          - mix do compile, dialyzer --plt
-          - MIX_ENV=test mix compile  
-
-
-          - cache store
-          - cache store dialyzer-plt priv/plts/
-
-
-  - name: Analyze code
-    task:
-
-      prologue:
-        commands: 
-        - checkout
-        - bin/setup_ci_exilir
-        - sem-version elixir 1.17.3
-        - cache restore 
-        - cache restore dialyzer-plt
-      
-      jobs:
-      - name: credo
-        commands:
-        - mix credo -a
-      
-      - name: dialyzer
-        commands:
-        - mix dialyzer --halt-exit-status --no-compile
-      
-      - name: formatter
-        commands:
-        - mix format --check-formatted
-
-  - name: Run tests
-    task:
-      prologue:
-        commands: 
-        - checkout
-        - bin/setup_ci_exilir
-        - sem-version elixir 1.17.3
-        - cache restore   
+    services:
+      postgres: 
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: timeuser
+          POSTGRES_PASSWORD: timepassword
+          POSTGRES_DB: timemanagement
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     
-      jobs:
-      - name: ex_unit
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      env_vars:
-      - name: DATABASE_URL
-        value: ecto://timeuser:timepassword@localhost:5432/timemanagement
-      commands:
-      - sem-service start postgres
-      - mix test
+    - name: Set up Elixir
+      uses: actions/setup-elixir@v1
+      with:
+        elixir-version: '1.17.x'
+        otp-version: '24.x'
+
+    - name: Install dependencies
+      run: mix deps.get
+    
+    - name: Set up database
+      run: |
+        mix ecto.create
+        mix ecto.migrate
+        mix ecto.generate 
+
+    - name: Run tests
+      run: mix test
 

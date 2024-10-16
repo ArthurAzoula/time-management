@@ -77,19 +77,17 @@ jobs:
 
     - name: Clean to rule out incremental build as a source of flakiness
       if: github.run_attempt != '1'
-      run: |
-        mix deps.clean --all
-        mix clean
+      run: cd app && mix deps.clean --all && mix clean
       shell: sh
 
     - name: Install dependencies
-      run: mix deps.get
+      run: cd && mix deps.get
 
     - name: Compiles without warnings
-      run: mix compile --warnings-as-errors
+      run: cd app && mix compile --warnings-as-errors
 
     - name: Check Formatting
-      run: mix format --check-formatted
+      run: cd app && mix format --check-formatted
 
     - name: Setup database
       run: cd app && mix ecto.create && mix ecto.migrate && mix run priv/repo/seeds.exs

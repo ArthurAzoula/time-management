@@ -13,3 +13,4 @@ app.use(router)
 app.use(pinia)
 app.use(VCalendar, {})
 app.mount('#app')
+

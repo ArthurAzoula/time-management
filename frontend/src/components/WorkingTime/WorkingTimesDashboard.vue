@@ -1,15 +1,10 @@
 <template>
     <div class="w-full bg-background-100 px-6 py-4">
-        <div class="flex flex-col space-y-8">
-            <h1 class="text-xl font-bold">My working hours</h1>
+        <div class="flex flex-col">
+            <h1 class="text-xl font-bold">My last working time</h1>
             <div class="flex items-center">
                 <WorkingTimes :workingTimes="latestWorkingTimes" />
             </div>
-            <button
-                class="bg-button-300 border border-button-200 px-2 py-1 text-text-color-100 font-bold rounded-lg w-max"
-            >
-                See all my hours
-            </button>
         </div>
     </div>
 </template>
@@ -26,7 +21,8 @@ const props = defineProps({
 })
 
 const latestWorkingTimes = computed(() => {
-    return props.workingTimes.slice(-3).reverse()
+    props.workingTimes.sort((a, b) => new Date(b.start) - new Date(a.start))
+    return props.workingTimes.slice(0, 3)
 })
 
 watch(

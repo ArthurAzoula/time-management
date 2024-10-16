@@ -13,9 +13,11 @@ export const formatDateUtils = (date) => {
 }
 
 export const extractHourFromISO = (date) => {
-    return new Date(date).getHours();
+    return new Date(date).getHours()
 }
 
 export const getDifferenceInhours = (date1, date2) => {
-    return Math.abs(new Date(date1).getHours() - new Date(date2).getHours());
+    return Math.abs(new Date(date1).getHours() - new Date(date2).getHours())
 }
+
+export const calculeTotalHoursPerDay = (workingTimes) => {}

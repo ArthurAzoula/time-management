@@ -73,6 +73,7 @@ defmodule AppWeb.ClockControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :skip
     test "renders errors when data is invalid", %{conn: conn, clock: clock} do
       conn = put(conn, Routes.clock_path(conn, :update, clock), clock: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}

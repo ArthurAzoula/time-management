@@ -21,3 +21,6 @@ config :app, AppWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :wallaby,
+  driver: Wallaby.Experimental.Chrome

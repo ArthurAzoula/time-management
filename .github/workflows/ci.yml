@@ -81,7 +81,7 @@ jobs:
       shell: sh
 
     - name: Install dependencies
-      run: cd && mix deps.get
+      run: cd app && mix deps.get
 
     - name: Compiles without warnings
       run: cd app && mix compile --warnings-as-errors

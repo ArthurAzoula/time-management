@@ -86,6 +86,9 @@ jobs:
     - name: Compiles
       run: cd app && mix compile
 
+    - name: Initialize the database
+      run: cd app && mix ecto.create && mix ecto.migrate
+
     - name: Format and check Formatting
       run: cd app && mix format && mix format --check-formatted
 

@@ -49,9 +49,6 @@ jobs:
         otp-version: ${{matrix.otp}}
         elixir-version: ${{matrix.elixir}}
 
-    - name: Navigate to the app directory
-      run: cd app
-
     - name: Checkout code
       uses: actions/checkout@v3
 
@@ -61,7 +58,7 @@ jobs:
       env:
         cache-name: cache-elixir-deps
       with:
-        path: deps
+        path: app/deps
         key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
         restore-keys: |
           ${{ runner.os }}-mix-${{ env.cache-name }}-
@@ -87,7 +84,6 @@ jobs:
 
     - name: Install dependencies
       run: mix deps.get
-      working-directory: app
 
     - name: Compiles without warnings
       run: mix compile --warnings-as-errors
@@ -96,12 +92,7 @@ jobs:
       run: mix format --check-formatted
 
     - name: Setup database
-      run: |
-        mix ecto.create
-        mix ecto.migrate
-        mix ecto.generate
-      working-directory: app
+      run: cd app && mix ecto.create && mix ecto.migrate && mix run priv/repo/seeds.exs
 
     - name: Run tests
-      run: mix test
-      working-directory: app
+      run: cd app && mix test

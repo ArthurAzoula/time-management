@@ -1,5 +1,4 @@
 defmodule App.Accounts do
-
   @moduledoc """
   The Accounts context.
   """
@@ -52,9 +51,10 @@ defmodule App.Accounts do
   """
   def create_user(attrs \\ %{}) do
     Repo.transaction(fn ->
-      with {:ok, %User{} = user} <- %User{}
-                                             |> User.changeset(attrs)
-                                             |> Repo.insert(),
+      with {:ok, %User{} = user} <-
+             %User{}
+             |> User.changeset(attrs)
+             |> Repo.insert(),
            {:ok, %App.Time.Clock{} = clock} <- create_clock_for_user(user) do
         {:ok, user}
       else
@@ -123,7 +123,6 @@ defmodule App.Accounts do
     User.changeset(user, attrs)
   end
 
-
   @doc """
   Return the user with params.
 
@@ -145,27 +144,27 @@ defmodule App.Accounts do
   end
 
   defp filter_by_email(query, nil), do: query
+
   defp filter_by_email(query, email) do
     from u in query, where: ilike(u.email, ^"%#{email}%")
   end
 
   defp filter_by_username(query, nil), do: query
+
   defp filter_by_username(query, username) do
     from u in query, where: ilike(u.username, ^"%#{username}%")
   end
 
-
   defp create_clock_for_user(%User{id: user_id} = user) do
-  # Vérifier s'il existe déjà un clock associé à cet utilisateur
-  case Repo.get_by(App.Time.Clock, user: user_id) do
-    nil ->
-      %App.Time.Clock{}
-      |> App.Time.Clock.changeset(%{user: user_id, time: NaiveDateTime.utc_now(), status: true})
-      |> Repo.insert()
+    # Vérifier s'il existe déjà un clock associé à cet utilisateur
+    case Repo.get_by(App.Time.Clock, user: user_id) do
+      nil ->
+        %App.Time.Clock{}
+        |> App.Time.Clock.changeset(%{user: user_id, time: NaiveDateTime.utc_now(), status: true})
+        |> Repo.insert()
 
-    _clock ->
-      {:error, :clock_already_exists}
+      _clock ->
+        {:error, :clock_already_exists}
+    end
   end
-end
-
 end

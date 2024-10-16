@@ -6,9 +6,15 @@ defmodule App.TimeTest do
   describe "clocks" do
     alias App.Time.Clock
 
-    @valid_attrs %{status: true, time: ~N[2010-04-17 14:00:00]}
-    @update_attrs %{status: false, time: ~N[2011-05-18 15:01:01]}
-    @invalid_attrs %{status: nil, time: nil}
+    @valid_attrs %{status: true, time: ~N[2010-04-17 14:00:00], user: "1"}
+    @update_attrs %{status: false, time: ~N[2011-05-18 15:01:01], user: "1"}
+    @invalid_attrs %{status: nil, time: nil, user: nil}
+
+    setup do
+      # Clean de la db
+      App.Repo.delete_all(App.Time.Clock)
+      :ok
+    end
 
     def clock_fixture(attrs \\ %{}) do
       {:ok, clock} =
@@ -67,9 +73,15 @@ defmodule App.TimeTest do
   describe "workingtime" do
     alias App.Time.WorkingTime
 
-    @valid_attrs %{start: ~N[2010-04-17 14:00:00], end: ~N[2010-04-17 14:00:00]}
-    @update_attrs %{start: ~N[2011-05-18 15:01:01], end: ~N[2011-05-18 15:01:01]}
-    @invalid_attrs %{start: nil, end: nil}
+    @valid_attrs %{start: ~N[2010-04-17 14:00:00], end: ~N[2010-04-17 14:00:00], user: "1"}
+    @update_attrs %{start: ~N[2011-05-18 15:01:01], end: ~N[2011-05-18 15:01:01], user: "1"}
+    @invalid_attrs %{start: nil, end: nil, user: nil}
+
+    setup do
+      # Clean de la db
+      App.Repo.delete_all(App.Time.WorkingTime)
+      :ok
+    end
 
     def working_time_fixture(attrs \\ %{}) do
       {:ok, working_time} =
@@ -102,10 +114,8 @@ defmodule App.TimeTest do
 
     test "update_working_time/2 with valid data updates the working_time" do
       working_time = working_time_fixture()
-
       assert {:ok, %WorkingTime{} = working_time} =
                Time.update_working_time(working_time, @update_attrs)
-
       assert working_time.start == ~N[2011-05-18 15:01:01]
       assert working_time.end == ~N[2011-05-18 15:01:01]
     end

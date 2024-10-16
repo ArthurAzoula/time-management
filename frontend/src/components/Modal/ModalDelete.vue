@@ -12,7 +12,7 @@
             @confirm="handleConfirm"
         >
             <template #default>
-                <p>Are you sure you want to delete this working time?</p>
+                <p class="text-black">Are you sure you want to delete this working time?</p>
             </template>
             <template #footer>
                 <footer class="flex justify-end p-4">

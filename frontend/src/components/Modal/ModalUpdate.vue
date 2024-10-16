@@ -13,25 +13,27 @@
         >
             <template #default>
                 <form @submit.prevent="handleConfirm">
-                    <div class="mb-4">
-                        <label for="start" class="block text-gray-700">Start</label>
-                        <input
-                            type="datetime-local"
-                            id="start"
-                            v-model="workingTime.start"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            required
-                        />
-                    </div>
-                    <div class="mb-4">
-                        <label for="end" class="block text-gray-700">End</label>
-                        <input
-                            type="datetime-local"
-                            id="end"
-                            v-model="workingTime.end"
-                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            required
-                        />
+                    <div class="flex justify-between mb-4">
+                        <div class="w-1/2">
+                            <label for="start" class="block text-gray-700">Start</label>
+                            <VDatePicker v-model="workingTime.start" :format="'YYYY-MM-DD HH:mm:ss'" mode="datetime"
+                                :color="selectedColor">
+                                <template #default="{ inputValue, inputEvents }">
+                                    <input :value="inputValue" v-on="inputEvents"
+                                        class="border border-button-200 rounded p-1 text-center w-11/12 text-black" />
+                                </template>
+                            </VDatePicker>
+                        </div>
+                        <div class="w-1/2 text-right">
+                            <label for="end" class="block text-gray-700">End</label>
+                            <VDatePicker v-model="workingTime.end" :format="'YYYY-MM-DD HH:mm:ss'" mode="datetime"
+                                :color="selectedColor">
+                                <template #default="{ inputValue, inputEvents }">
+                                    <input :value="inputValue" v-on="inputEvents"
+                                        class="border border-button-200 rounded p-1 text-center w-11/12 text-black" />
+                                </template>
+                            </VDatePicker>
+                        </div>
                     </div>
                 </form>
             </template>
@@ -73,15 +75,17 @@ const emit = defineEmits(['workingTimeUpdated'])
 
 const isModalVisible = ref(false)
 const workingTime = ref({
-    start: props.initialStart,
-    end: props.initialEnd,
+    start: new Date(props.initialStart),
+    end: new Date(props.initialEnd),
 })
+
+const selectedColor = ref('orange')
 
 watch(
     () => props.workingTimeId,
     () => {
-        workingTime.value.start = props.initialStart
-        workingTime.value.end = props.initialEnd
+        workingTime.value.start = new Date(props.initialStart)
+        workingTime.value.end = new Date(props.initialEnd)
     },
 )
 

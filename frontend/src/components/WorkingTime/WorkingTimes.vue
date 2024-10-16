@@ -169,7 +169,7 @@ const formatDateRange = (start, end) => {
     const month = String(endDate.getMonth() + 1).padStart(2, '0')
     const year = endDate.getFullYear()
 
-    const formattedEnd = `${day} / ${month} / ${year}`
+    const formattedEnd = `${month} / ${day} / ${year}`
     return formattedEnd
 }
 </script>

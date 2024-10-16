@@ -49,6 +49,9 @@ jobs:
         otp-version: ${{matrix.otp}}
         elixir-version: ${{matrix.elixir}}
 
+    - name: Navigate to the app directory
+      run: cd app
+
     - name: Checkout code
       uses: actions/checkout@v3
 
@@ -84,13 +87,21 @@ jobs:
 
     - name: Install dependencies
       run: mix deps.get
+      working-directory: app
 
     - name: Compiles without warnings
       run: mix compile --warnings-as-errors
 
-
     - name: Check Formatting
       run: mix format --check-formatted
 
+    - name: Setup database
+      run: |
+        mix ecto.create
+        mix ecto.migrate
+        mix ecto.generate
+      working-directory: app
+
     - name: Run tests
       run: mix test
+      working-directory: app

@@ -1,10 +1,108 @@
 defmodule AppWeb.TeamController do
   use AppWeb, :controller
+  use PhoenixSwagger
 
+  alias ElixirLS.LanguageServer.Plugins.Phoenix
   alias App.Accounts
   alias App.Accounts.Team
 
   action_fallback AppWeb.FallbackController
+
+  def swagger_info do
+    %{
+      tags: ["Team"],
+      description: "Team management",
+      produces: ["application/json"],
+      consumes: ["application/json"],
+      parameters: [
+        %{
+          name: "id",
+          in: "path",
+          description: "Team ID",
+          required: true,
+          type: :string
+        },
+        %{
+          name: "team",
+          in: "body",
+          description: "Team attributes",
+          required: true,
+          schema: %{
+            type: :object,
+            properties: %{
+              name: %{type: :string},
+              manager_id: %{type: :integer}
+            }
+          }
+        }
+      ],
+      responses: %{
+        "200": %{
+          description: "Team found",
+          schema: %{
+            type: :object,
+            properties: %{
+              name: %{type: :string},
+              manager_id: %{type: :integer}
+            }
+          }
+        },
+        "201": %{
+          description: "Team created",
+          schema: %{
+            type: :object,
+            properties: %{
+              name: %{type: :string},
+              manager_id: %{type: :integer}
+            }
+          }
+        },
+        "204": %{
+          description: "Team deleted"
+        }
+      }
+    }
+  end
+
+  swagger_path :index do
+    get("/api/teams")
+    summary("List teams")
+    description("List all teams")
+    response(200, "OK", Schema.ref(:Team))
+  end
+
+  swagger_path :create do
+    post("/api/teams")
+    summary("Create a team")
+    description("Create a team with a manager")
+    parameter(:team, :body, Schema.ref(:Team), "Team attributes", required: true)
+    response(201, "Team created", Schema.ref(:Team))
+  end
+
+  swagger_path :show do
+    get("/api/teams/{id}")
+    summary("Show a team")
+    description("Show a team by ID")
+    parameter(:id, :path, :string, "Team ID", required: true)
+    response(200, "OK", Schema.ref(:Team))
+  end
+
+  swagger_path :update do
+    put("/api/teams/{id}")
+    summary("Update a team")
+    description("Update a team by ID")
+    parameter(:id, :path, :string, "Team ID", required: true)
+    parameter(:team, :body, Schema.ref(:Team), "Team attributes", required: true)
+    response(200, "OK", Schema.ref(:Team))
+  end
+
+  swagger_path :delete do
+    PhoenixSwagger.Path.delete("/api/teams/{id}")
+    summary("Delete a team")
+    description("Delete a team by ID")
+    parameter(:id, :path, :string, "Team ID", required: true)
+    response(204, "Team deleted")
+  end
 
   def index(conn, _params) do
     teams = Accounts.list_teams()

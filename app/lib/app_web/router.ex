@@ -15,6 +15,8 @@ defmodule AppWeb.Router do
     # Users
     resources "/users", UserController, only: [:index, :create, :show, :update, :delete]
     resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
+    
+    post "/login", UserController, :login
 
     # WorkingTime
     resources "/workingtime", WorkingTimeController, only: [:index, :create, :update, :delete]

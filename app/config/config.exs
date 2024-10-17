@@ -43,6 +43,12 @@ config :cors_plug,
   max_age: 86400,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 
+# Configure Guardian
+config :app, AppWeb.Guardian,
+  issuer: "app",
+  secret_key: "i7nYh0sf5F7cgE2mErTBoCo4BUudEVL2K9/edUxxbY8PX8/4cUzRPFNZvNd+v6gA"
+
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

@@ -49,6 +49,8 @@ defmodule App.MixProject do
       {:cors_plug, "~> 3.0"},
       {:timex, "~> 3.7"},
       {:ex_doc, "~> 0.24", only: :dev},
+      {:bcrypt_elixir, "~> 3.1"},
+      {:guardian, "~> 2.0"},
     ]
   end
 

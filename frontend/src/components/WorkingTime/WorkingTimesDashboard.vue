@@ -1,7 +1,7 @@
 <template>
     <div class="w-full bg-background-100 px-6 py-4">
         <div class="flex flex-col">
-            <h1 class="text-xl font-bold">My last working times</h1>
+            <h1 class="text-xl font-bold">My last working time</h1>
             <div class="flex items-center">
                 <WorkingTimes :workingTimes="latestWorkingTimes" />
             </div>

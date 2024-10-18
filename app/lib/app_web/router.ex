@@ -20,7 +20,7 @@ defmodule AppWeb.Router do
     post "/register", UserController, :create
 
     # Auth
-    post "/login", UserController, :login
+    post "/auth/login", AuthController, :login
 
   end
 

@@ -154,7 +154,6 @@ defmodule AppWeb.UserController do
         |> json(%{error: "Invalid credentials"})
 
       user ->
-        IO.inspect(user)
         if Bcrypt.verify_pass(password, user.password_hash) do
           {:ok, token, _claims} = AppWeb.Guardian.encode_and_sign(user, %{id: user.id, role: user.role})
           conn

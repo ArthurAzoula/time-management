@@ -13,6 +13,15 @@ defmodule AppWeb.Router do
     plug AppWeb.Guardian.AuthPipeline
   end
 
+  pipeline :manager do
+    plug AppWeb.RolePipeline, ["manager", "admin"]
+  end
+
+  pipeline :admin do
+    plug AppWeb.RolePipeline, ["admin"]
+  end
+
+  # Routes for login and register
   scope "/api", AppWeb do
     pipe_through :api
 
@@ -21,29 +30,52 @@ defmodule AppWeb.Router do
 
     # Auth
     post "/auth/login", AuthController, :login
+  end
+
+  # Routes for admin
+  scope "/api", AppWeb do
+    pipe_through [:api, :auth, :admin]
+
+    # Clocks
+    resources "/clocks", ClockController, only: [:delete]
+  end
+
+  # Routes for managers and admin
+  scope "/api", AppWeb do
+    pipe_through [:api, :auth, :manager]
+
+    # Users
+    resources "/users", UserController, only: [:create, :update, :delete]
+
+    # WorkingTime
+    resources "/workingtime", WorkingTimeController, only: [:create, :update, :delete]
+    post "/workingtime/:userID", WorkingTimeController, :create
+
+    # Teams
+    resources "/teams", TeamController, only: [:create, :update, :delete]
 
   end
 
+  # Routes for users
   scope "/api", AppWeb do
     pipe_through [:api, :auth]
 
     # Users
-    resources "/users", UserController, only: [:index, :create, :show, :update, :delete]
+    resources "/users", UserController, only: [:index, :show]
 
     # WorkingTime
-    resources "/workingtime", WorkingTimeController, only: [:index, :create, :update, :delete]
-    post "/workingtime/:userID", WorkingTimeController, :create
+    resources "/workingtime", WorkingTimeController, only: [:index]
     get "/workingtime/:userID", WorkingTimeController, :show
     get "/workingtime/:userID/:id", WorkingTimeController, :show_by_user_and_id
 
     # Clocks
-    resources "/clocks", ClockController, only: [:index, :update, :delete]
+    resources "/clocks", ClockController, only: [:index, :update]
     post "/clocks/:userID", ClockController, :create
     get "/clocks/:userID", ClockController, :show
     put "/clocks/:id", ClockController, :update
 
     # Teams
-    resources "/teams", TeamController, only: [:index, :create, :show, :update, :delete]
+    resources "/teams", TeamController, only: [:index, :show]
   end
 
   scope "/swagger" do

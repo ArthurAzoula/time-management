@@ -22,7 +22,6 @@ defmodule Seeds do
   def run do
     # Insert users
     Repo.insert!(%User{
-      id: 1,
       username: "alton",
       email: "alex.milton@gmail.com",
       password_hash: Bcrypt.hash_pwd_salt("alexmilton123"),
@@ -30,21 +29,18 @@ defmodule Seeds do
     })
 
     Repo.insert!(%User{
-      id: 2,
       username: "janesm",
       email: "jane.smith@outlook.fr",
       password_hash: Bcrypt.hash_pwd_salt("janesmith123")
     })
 
     Repo.insert!(%User{
-      id: 3,
       username: "johnsins",
       email: "john.sins@gmail.com",
       password_hash: Bcrypt.hash_pwd_salt("johnsins123")
     })
 
     Repo.insert!(%User{
-      id: 4,
       username: "willi59",
       email: "william.lille@hotmail.fr",
       password_hash: Bcrypt.hash_pwd_salt("williamlille123")
@@ -52,7 +48,6 @@ defmodule Seeds do
     })
 
     Repo.insert!(%User{
-      id: 5,
       username: "julie69",
       email: "julie.nam@outlook.fr",
       password_hash: Bcrypt.hash_pwd_salt("julienam123"),
@@ -61,13 +56,11 @@ defmodule Seeds do
 
     # Insert teams
     Repo.insert!(%Team{
-      id: 1,
       name: "TEAM-01-01",
       manager_id: 1,
     })
 
     Repo.insert!(%Team{
-      id: 2,
       name: "TEAM-02-05",
       manager_id: 5,
     })

@@ -11,7 +11,7 @@ defmodule App.Accounts.User do
     field :password_hash, :string
     field :role, Ecto.Enum, values: @roles, default: :employee
     many_to_many :teams, App.Accounts.Team, join_through: "users_teams"
-    has_one :clock, App.Clock, on_delete: :delete_all
+    has_one :clock, App.Clock,  on_delete: :delete_all
 
     timestamps()
   end

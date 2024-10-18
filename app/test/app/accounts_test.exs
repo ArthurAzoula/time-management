@@ -144,4 +144,61 @@ defmodule App.AccountsTest do
       assert %Ecto.Changeset{} = Accounts.change_team(team)
     end
   end
+
+  describe "users_teams" do
+    alias App.Accounts.UsersTeams
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def users_teams_fixture(attrs \\ %{}) do
+      {:ok, users_teams} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Accounts.create_users_teams()
+
+      users_teams
+    end
+
+    test "list_users_teams/0 returns all users_teams" do
+      users_teams = users_teams_fixture()
+      assert Accounts.list_users_teams() == [users_teams]
+    end
+
+    test "get_users_teams!/1 returns the users_teams with given id" do
+      users_teams = users_teams_fixture()
+      assert Accounts.get_users_teams!(users_teams.id) == users_teams
+    end
+
+    test "create_users_teams/1 with valid data creates a users_teams" do
+      assert {:ok, %UsersTeams{} = users_teams} = Accounts.create_users_teams(@valid_attrs)
+    end
+
+    test "create_users_teams/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Accounts.create_users_teams(@invalid_attrs)
+    end
+
+    test "update_users_teams/2 with valid data updates the users_teams" do
+      users_teams = users_teams_fixture()
+      assert {:ok, %UsersTeams{} = users_teams} = Accounts.update_users_teams(users_teams, @update_attrs)
+    end
+
+    test "update_users_teams/2 with invalid data returns error changeset" do
+      users_teams = users_teams_fixture()
+      assert {:error, %Ecto.Changeset{}} = Accounts.update_users_teams(users_teams, @invalid_attrs)
+      assert users_teams == Accounts.get_users_teams!(users_teams.id)
+    end
+
+    test "delete_users_teams/1 deletes the users_teams" do
+      users_teams = users_teams_fixture()
+      assert {:ok, %UsersTeams{}} = Accounts.delete_users_teams(users_teams)
+      assert_raise Ecto.NoResultsError, fn -> Accounts.get_users_teams!(users_teams.id) end
+    end
+
+    test "change_users_teams/1 returns a users_teams changeset" do
+      users_teams = users_teams_fixture()
+      assert %Ecto.Changeset{} = Accounts.change_users_teams(users_teams)
+    end
+  end
 end

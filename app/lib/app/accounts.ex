@@ -269,4 +269,100 @@ end
   def change_team(%Team{} = team, attrs \\ %{}) do
     Team.changeset(team, attrs)
   end
+
+  alias App.Accounts.UsersTeams
+
+  @doc """
+  Returns the list of users_teams.
+
+  ## Examples
+
+      iex> list_users_teams()
+      [%UsersTeams{}, ...]
+
+  """
+  def list_users_teams do
+    Repo.all(UsersTeams)
+  end
+
+  @doc """
+  Gets a single users_teams.
+
+  Raises `Ecto.NoResultsError` if the Users teams does not exist.
+
+  ## Examples
+
+      iex> get_users_teams!(123)
+      %UsersTeams{}
+
+      iex> get_users_teams!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_users_teams!(id), do: Repo.get!(UsersTeams, id)
+
+  @doc """
+  Creates a users_teams.
+
+  ## Examples
+
+      iex> create_users_teams(%{field: value})
+      {:ok, %UsersTeams{}}
+
+      iex> create_users_teams(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_users_teams(attrs \\ %{}) do
+    %UsersTeams{}
+    |> UsersTeams.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a users_teams.
+
+  ## Examples
+
+      iex> update_users_teams(users_teams, %{field: new_value})
+      {:ok, %UsersTeams{}}
+
+      iex> update_users_teams(users_teams, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_users_teams(%UsersTeams{} = users_teams, attrs) do
+    users_teams
+    |> UsersTeams.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a users_teams.
+
+  ## Examples
+
+      iex> delete_users_teams(users_teams)
+      {:ok, %UsersTeams{}}
+
+      iex> delete_users_teams(users_teams)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_users_teams(%UsersTeams{} = users_teams) do
+    Repo.delete(users_teams)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking users_teams changes.
+
+  ## Examples
+
+      iex> change_users_teams(users_teams)
+      %Ecto.Changeset{data: %UsersTeams{}}
+
+  """
+  def change_users_teams(%UsersTeams{} = users_teams, attrs \\ %{}) do
+    UsersTeams.changeset(users_teams, attrs)
+  end
 end

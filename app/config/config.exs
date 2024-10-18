@@ -22,12 +22,15 @@ config :app, AppWeb.Endpoint,
 config :app, :phoenix_swagger,
   swagger_files: %{
     "priv/static/swagger.json" => [
-      router: AppWeb.Router,     # phoenix routes will be converted to swagger paths
-      endpoint: AppWeb.Endpoint  # (optional) endpoint config used to set host, port and https schemes.
+      # phoenix routes will be converted to swagger paths
+      router: AppWeb.Router,
+      # (optional) endpoint config used to set host, port and https schemes.
+      endpoint: AppWeb.Endpoint
     ]
   }
 
-config :phoenix, :json_library, Jason # Use Jason for JSON parsing in Phoenix
+# Use Jason for JSON parsing in Phoenix
+config :phoenix, :json_library, Jason
 
 # Configures Elixir's Logger
 config :logger, :console,

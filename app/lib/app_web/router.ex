@@ -15,7 +15,8 @@ defmodule AppWeb.Router do
     # Users
     resources "/users", UserController, only: [:index, :create, :show, :update, :delete]
     resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
-    
+
+    # Auth
     post "/login", UserController, :login
 
     # WorkingTime
@@ -31,12 +32,15 @@ defmodule AppWeb.Router do
     get "/clocks/:userID", ClockController, :show
     put "/clocks/:id", ClockController, :update
 
+    # Teams
+    resources "/teams", TeamController, only: [:index, :create, :show, :update, :delete]
+
   end
 
   scope "/swagger" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI,
-    otp_app: :app,
-    swagger_file: "swagger.json"
+      otp_app: :app,
+      swagger_file: "swagger.json"
   end
 
   if Mix.env() in [:dev, :test] do
@@ -54,7 +58,7 @@ defmodule AppWeb.Router do
       info: %{
         title: "Time management private API",
         version: "0.1.0",
-        description: "This is a private API for Epitech students to manage their time",
+        description: "This is a private API for Epitech students to manage their time"
       },
       definitions: AppWeb.SwaggerSchema.swagger_definitions()
     }

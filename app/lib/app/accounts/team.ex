@@ -13,7 +13,7 @@ defmodule App.Accounts.Team do
   @doc false
   def changeset(team, attrs) do
     team
-    |> cast(attrs, [:name, :manager])
-    |> validate_required([:name, :manager])
+    |> cast(attrs, [:name, :manager_id])
+    |> validate_required([:name, :manager_id])
   end
 end

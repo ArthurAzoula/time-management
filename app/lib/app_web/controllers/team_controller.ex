@@ -31,7 +31,7 @@ defmodule AppWeb.TeamController do
             type: :object,
             properties: %{
               name: %{type: :string},
-              manager_id: %{type: :integer}
+              manager: %{type: :integer}
             }
           }
         }
@@ -43,7 +43,7 @@ defmodule AppWeb.TeamController do
             type: :object,
             properties: %{
               name: %{type: :string},
-              manager_id: %{type: :integer}
+              manager: %{type: :integer}
             }
           }
         },
@@ -53,7 +53,7 @@ defmodule AppWeb.TeamController do
             type: :object,
             properties: %{
               name: %{type: :string},
-              manager_id: %{type: :integer}
+              manager: %{type: :integer}
             }
           }
         },

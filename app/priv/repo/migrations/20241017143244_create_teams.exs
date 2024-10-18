@@ -4,12 +4,12 @@ defmodule App.Repo.Migrations.CreateTeams do
   def change do
     create table(:teams) do
       add :name, :string
-      add :manager, references(:users, on_delete: :delete_all), null: false
+      add :manager_id, references(:users, on_delete: :delete_all), null: false
 
       timestamps()
     end
 
-    create index(:teams, [:manager])
+    create index(:teams, [:manager_id])
 
     create table(:users_teams, primary_key: false) do
       add :user_id, references(:users, on_delete: :delete_all)

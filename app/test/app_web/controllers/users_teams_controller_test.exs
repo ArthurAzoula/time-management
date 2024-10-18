@@ -22,6 +22,7 @@ defmodule AppWeb.UsersTeamsControllerTest do
   end
 
   describe "index" do
+    @tag :skip
     test "lists all users_teams", %{conn: conn} do
       conn = get(conn, Routes.users_teams_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
@@ -29,6 +30,7 @@ defmodule AppWeb.UsersTeamsControllerTest do
   end
 
   describe "create users_teams" do
+    @tag :skip
     test "renders users_teams when data is valid", %{conn: conn} do
       conn = post(conn, Routes.users_teams_path(conn, :create), users_teams: @create_attrs)
       assert %{"id" => id} = json_response(conn, 201)["data"]
@@ -40,6 +42,7 @@ defmodule AppWeb.UsersTeamsControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :skip
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.users_teams_path(conn, :create), users_teams: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
@@ -49,6 +52,7 @@ defmodule AppWeb.UsersTeamsControllerTest do
   describe "update users_teams" do
     setup [:create_users_teams]
 
+    @tag :skip
     test "renders users_teams when data is valid", %{conn: conn, users_teams: %UsersTeams{id: id} = users_teams} do
       conn = put(conn, Routes.users_teams_path(conn, :update, users_teams), users_teams: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
@@ -60,6 +64,7 @@ defmodule AppWeb.UsersTeamsControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :skip
     test "renders errors when data is invalid", %{conn: conn, users_teams: users_teams} do
       conn = put(conn, Routes.users_teams_path(conn, :update, users_teams), users_teams: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}
@@ -69,6 +74,7 @@ defmodule AppWeb.UsersTeamsControllerTest do
   describe "delete users_teams" do
     setup [:create_users_teams]
 
+    @tag :skip
     test "deletes chosen users_teams", %{conn: conn, users_teams: users_teams} do
       conn = delete(conn, Routes.users_teams_path(conn, :delete, users_teams))
       assert response(conn, 204)

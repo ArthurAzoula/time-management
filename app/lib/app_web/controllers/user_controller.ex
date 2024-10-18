@@ -30,7 +30,8 @@ defmodule AppWeb.UserController do
             type: :object,
             properties: %{
               username: %{type: :string},
-              email: %{type: :string}
+              email: %{type: :string},
+              role: %{type: :string}
             }
           }
         }
@@ -143,28 +144,6 @@ defmodule AppWeb.UserController do
 
     with {:ok, %User{}} <- Accounts.delete_user(user) do
       send_resp(conn, :no_content, "")
-    end
-  end
-
-  def login(conn, %{"email" => email, "password" => password}) do
-    case Accounts.get_user_by_email(email) do
-      nil ->
-        conn
-        |> put_status(:unauthorized)
-        |> json(%{error: "Invalid credentials"})
-
-      user ->
-        IO.inspect(user)
-        if Bcrypt.verify_pass(password, user.password_hash) do
-          {:ok, token, _claims} = AppWeb.Guardian.encode_and_sign(user, %{id: user.id, role: user.role})
-          conn
-          |> put_status(:ok)
-          |> json(%{token: token})
-        else
-          conn
-          |> put_status(:unauthorized)
-          |> json(%{error: "Invalid credentials"})
-        end
     end
   end
 

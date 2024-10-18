@@ -48,6 +48,22 @@ defmodule AppWeb.SwaggerSchema do
             start_time: "2020-01-01T00:00:00Z",
             end_time: "2020-01-01T08:00:00Z"
           })
+      end,
+      Team:
+          swagger_schema do
+            title("Team")
+            description("A team to represent manager with team members")
+
+          properties do
+            name(:string, "Team name")
+            manager(:string, "Manager ID")
+          end
+
+
+          example(%{
+            name: "TEAM-012",
+            manager: "12"
+          })
         end
     }
   end

@@ -5,7 +5,7 @@ defmodule App.Clock do
   schema "clocks" do
     field :status, :boolean, default: false
     field :time, :naive_datetime
-    belongs_to :user, App.User, foreign_key: :user_id
+    field :user, :id
 
     timestamps()
   end

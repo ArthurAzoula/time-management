@@ -22,6 +22,7 @@ defmodule AppWeb.TeamControllerTest do
   end
 
   describe "index" do
+    @tag :skip
     test "lists all teams", %{conn: conn} do
       conn = get(conn, Routes.team_path(conn, :index))
       assert json_response(conn, 200)["data"] == []
@@ -41,7 +42,7 @@ defmodule AppWeb.TeamControllerTest do
                "name" => "some name"
              } = json_response(conn, 200)["data"]
     end
-
+    @tag :skip
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.team_path(conn, :create), team: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}

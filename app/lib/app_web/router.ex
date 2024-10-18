@@ -9,19 +9,29 @@ defmodule AppWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug AppWeb.Guardian.AuthPipeline
+  end
+
   scope "/api", AppWeb do
     pipe_through :api
 
     # Users
-    resources "/users", UserController, only: [:index, :create, :show, :update, :delete]
-    resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
+    post "/register", UserController, :create
 
     # Auth
     post "/login", UserController, :login
 
+  end
+
+  scope "/api", AppWeb do
+    pipe_through [:api, :auth]
+
+    # Users
+    resources "/users", UserController, only: [:index, :create, :show, :update, :delete]
+
     # WorkingTime
     resources "/workingtime", WorkingTimeController, only: [:index, :create, :update, :delete]
-
     post "/workingtime/:userID", WorkingTimeController, :create
     get "/workingtime/:userID", WorkingTimeController, :show
     get "/workingtime/:userID/:id", WorkingTimeController, :show_by_user_and_id
@@ -34,7 +44,6 @@ defmodule AppWeb.Router do
 
     # Teams
     resources "/teams", TeamController, only: [:index, :create, :show, :update, :delete]
-
   end
 
   scope "/swagger" do

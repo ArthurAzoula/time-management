@@ -6,7 +6,6 @@ defmodule App.Accounts do
 
   import Ecto.Query, warn: false
   alias App.Repo
-
   alias App.Accounts.User
 
   @doc """
@@ -95,13 +94,17 @@ defmodule App.Accounts do
   """
   def delete_user(%User{} = user) do
     Repo.transaction(fn ->
-      from(c in App.Time.Clock, where: c.user == ^user.id)
-      |> Repo.delete_all()
 
-      from(wt in App.Time.WorkingTime, where: wt.user == ^user.id)
-      |> Repo.delete_all()
+      Ecto.Adapters.SQL.query!(Repo, "DELETE FROM clocks c WHERE c.user = $1", [user.id])
 
-      Repo.delete(user)
+      Ecto.Adapters.SQL.query!(Repo, "DELETE FROM workingtime wt WHERE wt.user = $1", [user.id])
+
+      Ecto.Adapters.SQL.query!(Repo, "DELETE FROM users_teams WHERE user_id = $1", [user.id])
+
+      case Repo.delete(user) do
+        {:ok, _} -> {:ok, user}
+        {:error, reason} -> Repo.rollback(reason)
+      end
     end)
     |> case do
       {:ok, {:ok, user}} -> {:ok, user}

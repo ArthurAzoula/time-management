@@ -49,7 +49,7 @@ export const userService = {
     async login(data) {
         console.log(data)
         try {
-            const response = await api.post('/login', data)
+            const response = await api.post('/auth/login', data)
             return response.data.token
         } catch (error) {
             throw new Error(error)

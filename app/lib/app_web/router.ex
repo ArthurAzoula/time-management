@@ -53,6 +53,8 @@ defmodule AppWeb.Router do
 
     # Teams
     resources "/teams", TeamController, only: [:create, :update, :delete]
+    get "/manager/:manager_id/teams", TeamController, :get_users_by_manager_id
+
 
   end
 

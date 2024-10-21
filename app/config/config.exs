@@ -42,7 +42,7 @@ config :phoenix, :json_library, Jason
 
 # Configure the Cors
 config :cors_plug,
-  origin: ["http://localhost:5173"],
+  origin: ["http://localhost:5173", "http://34.163.87.178:5173", "http://time-manager.io:80"],
   max_age: 86400,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
 

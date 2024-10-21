@@ -1,0 +1,70 @@
+services:
+  db:
+    container_name: db
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    profiles:
+      - dev
+      - prod
+    networks:
+      - app
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    profiles:
+      - dev
+    networks:
+      - app
+
+  app:
+    container_name: app
+    build: app
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      MIX_ENV: ${MIX_ENV}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    profiles:
+      - dev
+      - prod
+    networks:
+      - app
+    volumes:
+      - ./app:/app
+
+  frontend:
+    container_name: frontend
+    build: frontend
+    environment:
+      VITE_BASE_URL: ${VITE_BASE_URL}
+      VITE_API_URL: ${VITE_API_URL}
+    ports:
+      - "3000:3000"
+    profiles:
+      - prod
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge

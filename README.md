@@ -1,6 +1,6 @@
 # Time Manager
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/xRezio/LIL10-time-manager-CI/ci.yml?branch=main&style=flat-square)](https://github.com/xRezio/LIL10-time-manager-CI/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/xRezio/LIL10-time-manager-CI/ci.yml?branch=main&style=flat-square&label=CD%20workflow)](https://github.com/xRezio/LIL10-time-manager-CI/actions)
 [![Docker Pulls](https://img.shields.io/docker/pulls/xrezio/app-backend?style=flat-square)](https://hub.docker.com/r/xrezio/app-backend)
 [![Docker Frontend Pulls](https://img.shields.io/docker/pulls/xrezio/app-frontend?style=flat-square)](https://hub.docker.com/r/xrezio/app-frontend)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v13-blue?style=flat-square)](https://www.postgresql.org)

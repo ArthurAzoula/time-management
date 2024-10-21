@@ -47,11 +47,21 @@ export const userService = {
     },
 
     async login(data) {
-        console.log(data)
         try {
             const response = await api.post('/auth/login', data)
+
             return response.data.token
         } catch (error) {
+            throw new Error(error)
+        }
+    },
+
+    async register(data){
+        try{
+            const response = await api.post('/auth/register', { user: data });
+            return response.data
+        }
+        catch (error) {
             throw new Error(error)
         }
     },

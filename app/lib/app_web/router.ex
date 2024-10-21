@@ -9,32 +9,79 @@ defmodule AppWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug AppWeb.Guardian.AuthPipeline
+  end
+
+  pipeline :manager do
+    plug AppWeb.RolePipeline, ["manager", "admin"]
+  end
+
+  pipeline :admin do
+    plug AppWeb.RolePipeline, ["admin"]
+  end
+
+  # Routes for login and register
   scope "/api", AppWeb do
     pipe_through :api
 
     # Users
-    resources "/users", UserController, only: [:index, :create, :show, :update, :delete]
-    resources "/users", UserController , only: [:index, :create, :show, :update, :delete]
+    post "/register", UserController, :create
+
+    # Auth
+    post "/auth/login", AuthController, :login
+  end
+
+  # Routes for admin
+  scope "/api", AppWeb do
+    pipe_through [:api, :auth, :admin]
+
+    # Clocks
+    resources "/clocks", ClockController, only: [:delete]
+  end
+
+  # Routes for managers and admin
+  scope "/api", AppWeb do
+    pipe_through [:api, :auth, :manager]
+
+    # Users
+    resources "/users", UserController, only: [:create, :update, :delete]
 
     # WorkingTime
-    resources "/workingtime", WorkingTimeController, only: [:index, :create, :update, :delete]
-
+    resources "/workingtime", WorkingTimeController, only: [:create, :update, :delete]
     post "/workingtime/:userID", WorkingTimeController, :create
+
+    # Teams
+    resources "/teams", TeamController, only: [:create, :update, :delete]
+
+  end
+
+  # Routes for users
+  scope "/api", AppWeb do
+    pipe_through [:api, :auth]
+
+    # Users
+    resources "/users", UserController, only: [:index, :show]
+
+    # WorkingTime
+    resources "/workingtime", WorkingTimeController, only: [:index]
     get "/workingtime/:userID", WorkingTimeController, :show
     get "/workingtime/:userID/:id", WorkingTimeController, :show_by_user_and_id
 
     # Clocks
-    resources "/clocks", ClockController, only: [:index, :update, :delete]
+    resources "/clocks", ClockController, only: [:index, :update]
     post "/clocks/:userID", ClockController, :create
     get "/clocks/:userID", ClockController, :show
     put "/clocks/:id", ClockController, :update
 
+    # Teams
+    resources "/teams", TeamController, only: [:index, :show]
   end
 
   scope "/swagger" do
     forward "/", PhoenixSwagger.Plug.SwaggerUI,
-    otp_app: :app,
-    swagger_file: "swagger.json"
+      otp_app: :app,
+      swagger_file: "swagger.json"
   end
 
   if Mix.env() in [:dev, :test] do
@@ -52,7 +99,7 @@ defmodule AppWeb.Router do
       info: %{
         title: "Time management private API",
         version: "0.1.0",
-        description: "This is a private API for Epitech students to manage their time",
+        description: "This is a private API for Epitech students to manage their time"
       },
       definitions: AppWeb.SwaggerSchema.swagger_definitions()
     }

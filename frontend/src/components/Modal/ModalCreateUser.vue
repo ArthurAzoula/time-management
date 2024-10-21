@@ -2,10 +2,10 @@
     <div class="flex justify-end">
         <button
             @click="showModal"
-            class="bg-button-200 text-white p-2 rounded-full hover:scale-105 transform ease-in-out duration-200 flex items-center"
+            class="bg-button-200 text-white p-2 rounded hover:scale-105 transform ease-in-out duration-200 flex items-center"
         >
-            <PlusIcon class="mr-2" />
-            Create a User
+            <PlusIcon class="mr-2" size="20" />
+            Create
         </button>
         <Modal
             :isVisible="isModalVisible"

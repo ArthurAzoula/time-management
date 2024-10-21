@@ -18,6 +18,10 @@
                     Login
                 </button>
             </form>
+            <div class="flex justify-between items-center">
+                <router-link to="/register" class="text-sm text-button-200 hover:underline">Create an account</router-link>
+                <router-link to="/forgot-password" class="text-sm text-button-200 hover:underline">Forgot password?</router-link>
+            </div>
         </div>
     </div>
 </template>

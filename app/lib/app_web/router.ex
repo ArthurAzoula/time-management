@@ -26,7 +26,7 @@ defmodule AppWeb.Router do
     pipe_through :api
 
     # Users
-    post "/register", UserController, :create
+    post "/auth/register", AuthController, :register
 
     # Auth
     post "/auth/login", AuthController, :login

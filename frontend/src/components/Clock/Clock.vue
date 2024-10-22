@@ -15,17 +15,24 @@
 <script setup>
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { clockService } from '../../service/clockService'
 import { workingTimeService } from '../../service/workingTimeService'
 import { isToday, isYesterday, format } from 'date-fns'
 import { formatDateUtils } from '../../utils/DateUtils'
 
-const userId = ref(1)
+const props = defineProps({
+    userId: {
+        type: Number,
+        required: true
+    }
+})
+
+console.log(props.userId, "araraazraz")
 const message = ref('')
 
 const updateMessage = async () => {
-    const response = await clockService.getClocks(userId.value)
+    const response = await clockService.getClocks(props.userId)
 
     if (!response) return
 
@@ -38,7 +45,6 @@ const updateMessage = async () => {
 
     const lastClockDate = new Date(lastClock.time)
 
-    // if the clock-in is from yesterday or earlier
     if (lastClock && new Date(lastClock.time).getDate() < new Date().getDate()) {
         message.value = 'No clock-in today'
     } else if (isYesterday(lastClockDate)) {
@@ -51,14 +57,13 @@ const updateMessage = async () => {
 }
 
 const handleClock = async () => {
-    const response = await clockService.getClocks(userId.value)
+    const response = await clockService.getClocks(props.userId)
 
     if (!response) return
 
     const lastClock = response.data[0] || null
 
     if (!lastClock.status) {
-        // le modifier et le passé à true (début de la journée)
         const body = {
             clock: {
                 time: new Date().toISOString(),
@@ -72,7 +77,6 @@ const handleClock = async () => {
 
         toast.success('Activity started successfully!')
     } else {
-        // le modifier et le passé à false (fin de la journée)
         const body = {
             clock: {
                 time: new Date().toISOString(),
@@ -88,8 +92,7 @@ const handleClock = async () => {
 
         if (!lastClock) return
 
-        // crée un temps de travail
-        const responseCreateWorkingTime = await workingTimeService.createWorkingTime(userId.value, {
+        const responseCreateWorkingTime = await workingTimeService.createWorkingTime(props.userId, {
             workingtime: {
                 start: lastClock.time,
                 end: new Date().toISOString(),

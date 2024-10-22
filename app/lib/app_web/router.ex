@@ -49,7 +49,6 @@ defmodule AppWeb.Router do
 
     # WorkingTime
     resources "/workingtime", WorkingTimeController, only: [:create, :update, :delete]
-    post "/workingtime/:userID", WorkingTimeController, :create
 
     # Teams
     resources "/teams", TeamController, only: [:create, :update, :delete]
@@ -68,6 +67,7 @@ defmodule AppWeb.Router do
     # WorkingTime
     resources "/workingtime", WorkingTimeController, only: [:index]
     get "/workingtime/:userID", WorkingTimeController, :show
+    post "/workingtime/:userID", WorkingTimeController, :create
     get "/workingtime/:userID/:id", WorkingTimeController, :show_by_user_and_id
 
     # Clocks

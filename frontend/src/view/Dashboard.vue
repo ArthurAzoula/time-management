@@ -4,9 +4,9 @@
             <div class="flex flex-col space-y-7">
                 <div class="flex flex-col space-y-7">
                     <h1 class="text-2xl font-bold">Dashboard</h1>
-                    <Clock />
+                    <Clock v-if="userId" :userId="userId" />
                 </div>
-                <Graphs />
+                <Graphs v-if="userId" :userId="userId" />
                 <WorkingTimesDashboard :workingTimes="workingTimesStore.workingTimes" />
             </div>
         </div>
@@ -26,11 +26,14 @@ import { useUserStore } from '../store/useUserStore'
 const workingTimesStore = useWorkingTimesStore()
 const userStore = useUserStore()
 
+const userId = ref(null)
+
 onMounted(() => {
     userStore.initializeFromLocalStorage()
     console.log(userStore.id, userStore.token, userStore.role)
 
     if (userStore.id) {
+        userId.value = userStore.id
         workingTimeService.getWorkingTimeByUserId(userStore.id).then((response) => {
             workingTimesStore.setWorkingTimes(response.data)
         })

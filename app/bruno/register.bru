@@ -1,11 +1,31 @@
 meta {
-  name: register
+  name: Register
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
-  url: http://localhost:4000
-  body: none
+  url: {{BASE}}/api/auth/register
+  body: json
   auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "user" : {
+      "username": "Edwin",
+      "email": "edwin.carin@epitech.eu"
+    }
+  }
+}
+
+tests {
+  test("Create a user", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(201);
+  });
 }

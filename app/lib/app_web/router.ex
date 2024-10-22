@@ -26,7 +26,7 @@ defmodule AppWeb.Router do
     pipe_through :api
 
     # Users
-    post "/register", UserController, :create
+    post "/auth/register", AuthController, :register
 
     # Auth
     post "/auth/login", AuthController, :login
@@ -49,10 +49,11 @@ defmodule AppWeb.Router do
 
     # WorkingTime
     resources "/workingtime", WorkingTimeController, only: [:create, :update, :delete]
-    post "/workingtime/:userID", WorkingTimeController, :create
 
     # Teams
     resources "/teams", TeamController, only: [:create, :update, :delete]
+    get "/manager/:manager_id/teams", TeamController, :get_users_by_manager_id
+
 
   end
 
@@ -66,6 +67,7 @@ defmodule AppWeb.Router do
     # WorkingTime
     resources "/workingtime", WorkingTimeController, only: [:index]
     get "/workingtime/:userID", WorkingTimeController, :show
+    post "/workingtime/:userID", WorkingTimeController, :create
     get "/workingtime/:userID/:id", WorkingTimeController, :show_by_user_and_id
 
     # Clocks

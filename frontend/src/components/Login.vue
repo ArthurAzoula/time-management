@@ -23,11 +23,12 @@
                 <router-link to="/forgot-password" class="text-sm text-button-200 hover:underline">Forgot password?</router-link>
             </div>
         </div>
+        
     </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, onMounted} from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -42,6 +43,16 @@ export default {
         const router = useRouter()
         const userStore = useUserStore()
 
+        onMounted(() => {
+            const registrationSuccess = localStorage.getItem('registrationSuccess')
+            if (registrationSuccess) {
+                toast.success('User created successfully! Please log in.', {
+                    position: toast.POSITION.TOP_RIGHT,
+                    autoClose: 5000,
+                })
+                localStorage.removeItem('registrationSuccess')
+            }
+        })
 
         const login = async () => {
             try {

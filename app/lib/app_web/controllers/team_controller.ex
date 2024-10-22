@@ -109,6 +109,16 @@ defmodule AppWeb.TeamController do
     render(conn, "index.json", teams: teams)
   end
 
+  def index_by_manager(conn, %{"manager_id" => manager_id}) do
+    teams = Accounts.get_teams_by_manager_id(manager_id)
+    render(conn, "index.json", teams: teams)
+  end
+
+  def get_users_by_manager_id(conn, %{"manager_id" => manager_id}) do
+    users = Accounts.get_users_by_manager_id(manager_id)
+    render(conn, "users_by_manager.json", users: users)
+  end
+
   def create(conn, %{"team" => team_params}) do
     with {:ok, %Team{} = team} <- Accounts.create_team(team_params) do
       conn

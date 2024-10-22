@@ -7,7 +7,8 @@ defmodule App.Accounts do
   import Ecto.Query, warn: false
   alias App.Repo
   alias App.Accounts.User
-
+  alias App.Accounts.Team
+  alias App.Accounts.UsersTeams
   @doc """
   Returns the list of users.
 
@@ -192,6 +193,24 @@ end
     Repo.all(Team)
   end
 
+
+  def get_users_by_manager_id(manager_id) do
+    from(u in User,
+      join: ut in UsersTeams, on: u.id == ut.user_id,
+      join: t in Team, on: ut.team_id == t.id,
+      where: t.manager_id == ^manager_id,
+      order_by: [t.id, u.username],
+      select: %{
+        user_id: u.id,
+        username: u.username,
+        email: u.email,
+        team_id: t.id,
+        team_name: t.name
+      }
+    )
+    |> Repo.all()
+  end
+  
   @doc """
   Gets a single team.
 
@@ -207,6 +226,8 @@ end
 
   """
   def get_team!(id), do: Repo.get!(Team, id)
+
+
 
   @doc """
   Creates a team.

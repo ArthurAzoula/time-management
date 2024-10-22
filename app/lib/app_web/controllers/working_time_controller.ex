@@ -119,7 +119,6 @@ defmodule AppWeb.WorkingTimeController do
 
   def create(conn, %{"userID" => user_id, "workingtime" => working_time_params}) do
     working_time_params = Map.put(working_time_params, "user", user_id)
-
     with {:ok, %WorkingTime{} = working_time} <- Time.create_working_time(working_time_params) do
       conn
       |> put_status(:created)

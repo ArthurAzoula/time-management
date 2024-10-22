@@ -2,7 +2,7 @@
     <div class="flex items-center justify-center min-h-screen bg-gray-100">
         <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-md">
             <h1 class="text-2xl font-bold text-center">Create your account</h1>
-            <form @submit.prevent="login" class="space-y-6">
+            <form @submit.prevent="register" class="space-y-6">
                 <div class="space-y-1">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input v-model="email" type="email" id="email" placeholder="Enter your email" required
@@ -30,3 +30,42 @@
         </div>
     </div>
 </template>
+
+<script>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import { userService } from '../service/userService'
+import { useUserStore } from '../store/useUserStore'
+
+
+export default {
+    setup() {
+        const email = ref('')
+        const username =ref('')
+        const password = ref('')
+        const router = useRouter()
+        const userStore = useUserStore()
+
+
+        const register = async () => {
+            try {
+                const user = await userService.register({ email: email.value, username:username.value ,password: password.value })
+                localStorage.setItem('registrationSuccess', 'true')
+                router.push('/login')
+            } catch (error) {
+                console.error('Registration error:', error);
+                toast.error('register failed')
+            }
+        }
+
+        return {
+            email,
+            username,
+            password,
+            register
+        }
+    }
+}
+</script>

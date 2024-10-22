@@ -1,11 +1,9 @@
 import React from 'react';
-import { StyleSheet, FlatList, View, SafeAreaView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { SafeAreaView, Dimensions, ScrollView, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { LineChart, PieChart } from 'react-native-chart-kit';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BarChart, LineChart } from 'react-native-chart-kit';
-import { Dimensions } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
 
@@ -13,84 +11,103 @@ export default function DashboardScreen() {
   const backgroundColor = useThemeColor({}, 'background');
   const cardBackgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
-  const iconColor = useThemeColor({}, 'icon');
 
-  const data = {
-    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  const dailyWorkData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
     datasets: [
       {
-        data: [10, 45, 28, 80, 99, 43],
+        data: [6, 7, 5, 8, 7, 6, 4],
+        color: () => '#C026D3',
       },
     ],
   };
 
-  const sections: Array<{ id: string; title: string; icon: 'time-outline' | 'checkmark-done-outline'; render: () => React.ReactNode }> = [
+  const workBreakData = [
     {
-      id: '1',
-      title: 'Total Working Hours',
-      icon: 'time-outline',
-      render: () => (
-        <LineChart
-          data={data}
-          width={screenWidth - 40} // from react-native
-          height={220}
-          chartConfig={{
-            backgroundColor: cardBackgroundColor,
-            backgroundGradientFrom: backgroundColor,
-            backgroundGradientTo: cardBackgroundColor,
-            decimalPlaces: 2,
-            color: () => iconColor,
-            labelColor: () => textColor,
-          }}
-          style={styles.chartStyle}
-        />
-      ),
+      name: 'Work Hours',
+      population: 75,
+      color: '#C026D3',
+      legendFontColor: textColor,
+      legendFontSize: 15,
     },
     {
-      id: '2',
-      title: 'Completed Tasks',
-      icon: 'checkmark-done-outline',
-      render: () => (
-        <BarChart
-          data={data}
-          width={screenWidth - 40}
-          height={220}
-          yAxisLabel="$"
-          yAxisSuffix="k"
-          chartConfig={{
-            backgroundColor: cardBackgroundColor,
-            backgroundGradientFrom: backgroundColor,
-            backgroundGradientTo: cardBackgroundColor,
-            decimalPlaces: 2,
-            color: () => iconColor,
-            labelColor: () => textColor,
-          }}
-          style={styles.chartStyle}
-        />
-      ),
+      name: 'Break Hours',
+      population: 25,
+      color: '#FAE8FF',
+      legendFontColor: textColor,
+      legendFontSize: 15,
     },
   ];
 
-  const renderItem = ({ item }: { item: { id: string; title: string; icon: 'time-outline' | 'checkmark-done-outline'; render: () => React.ReactNode } }) => (
-    <View style={[styles.sectionCard, { backgroundColor: cardBackgroundColor }]}>
-      <Ionicons name={item.icon} size={24} color={iconColor} style={styles.sectionIcon} />
-      <View style={styles.sectionContent}>
-        <ThemedText style={[styles.sectionTitle, { color: textColor }]}>{item.title}</ThemedText>
-        {item.render()}
-      </View>
-    </View>
-  );
+  const handlePieChartPress = (data: { name: any; population?: number; color?: string; legendFontColor?: string; legendFontSize?: number; }) => {
+    Alert.alert("Pie Chart Clicked", `You clicked on ${data.name}!`);
+  };
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-      <ThemedView style={[styles.container, { backgroundColor }]}>
-        <FlatList
-          data={sections}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContainer}
-        />
-      </ThemedView>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.dashboardContainer}>
+          {/* Line Chart for Daily Work */}
+          <TouchableOpacity onPress={() => Alert.alert('Line Chart Clicked', 'You clicked on the line chart!')}>
+          <ThemedView style={[styles.chartCard, { backgroundColor: cardBackgroundColor }]}>
+            <ThemedText style={[styles.chartTitle, { color: textColor }]}>Weekly Work Hours</ThemedText>
+            <LineChart
+              data={dailyWorkData}
+              width={screenWidth * 0.95}
+              height={250}
+              chartConfig={{
+                backgroundGradientFrom: backgroundColor,
+                backgroundGradientTo: cardBackgroundColor,
+                color: () => '#C026D3',
+                labelColor: () => textColor,
+                decimalPlaces: 1,
+                propsForBackgroundLines: {
+                  strokeWidth: 0.5,
+                  stroke: textColor,
+                },
+              }}
+              style={styles.chartStyle}
+              bezier
+              withInnerLines={false}
+            />
+          </ThemedView>
+          </TouchableOpacity>
+
+          {/* Pie Chart for Work/Break Distribution */}
+          <TouchableOpacity onPress={() => handlePieChartPress(workBreakData[1])}>
+            <ThemedView style={[styles.pieCard, { backgroundColor: cardBackgroundColor }]}>
+              <ThemedText style={[styles.chartTitle, { color: textColor }]}>Work vs. Break</ThemedText>
+              <PieChart
+                data={workBreakData}
+                width={screenWidth * 0.9}
+                height={240}
+                chartConfig={{
+                  backgroundColor: backgroundColor,
+                  backgroundGradientFrom: backgroundColor,
+                  backgroundGradientTo: cardBackgroundColor,
+                  color: (opacity = 1) => `rgba(192, 38, 211, ${opacity})`,
+                  labelColor: () => textColor,
+                }}
+                accessor={'population'}
+                backgroundColor={'transparent'}
+                paddingLeft={'15'}
+                center={[0, 0]}
+                hasLegend={true}
+                absolute
+              />
+            </ThemedView>
+          </TouchableOpacity>
+
+          {/* Summary Section */}
+          <ThemedView style={[styles.summaryCard, { backgroundColor: cardBackgroundColor }]}>
+            <ThemedText style={[styles.summaryTitle, { color: textColor }]}>Today's Summary</ThemedText>
+            <ThemedText style={[styles.summaryText, { color: textColor }]}>
+              You have worked for <ThemedText style={styles.boldText}>6 hours</ThemedText> and taken
+              <ThemedText style={styles.boldText}> 2 hours</ThemedText> of break today.
+            </ThemedText>
+          </ThemedView>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -98,41 +115,67 @@ export default function DashboardScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
+    backgroundColor: '#F3F4F6',
   },
-  container: {
-    flex: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
+  scrollContainer: {
+    paddingVertical: 20,
+    alignItems: 'center',
   },
-  listContainer: {
-    paddingBottom: 20,
-  },
-  sectionCard: {
+  dashboardContainer: {
     flexDirection: 'column',
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
-  sectionIcon: {
-    alignSelf: 'center',
+  chartCard: {
+    marginVertical: 0,
+    borderRadius: 20,
+    padding: 20,
+    elevation: 3,
+    alignItems: 'center',
+    width: '95%',
+    backgroundColor: '#FFFFFF',
+  },
+  pieCard: {
+    marginVertical: 0,
+    borderRadius: 20,
+    padding: 25,
+    elevation: 3,
+    alignItems: 'center',
+    width: '90%',
+    backgroundColor: '#FFFFFF',
+  },
+  chartTitle: {
+    fontSize: 20,
+    fontWeight: '700',
     marginBottom: 10,
-  },
-  sectionContent: {
-    flex: 1,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 10,
-    alignSelf: 'center',
+    textAlign: 'center',
   },
   chartStyle: {
-    borderRadius: 10,
-    alignSelf: 'center',
+    borderRadius: 16,
+    marginTop: 10,
+  },
+  summaryCard: {
+    marginVertical: 0,
+    borderRadius: 20,
+    padding: 20,
+    elevation: 3,
+    alignItems: 'center',
+    width: '90%',
+    backgroundColor: '#FFFFFF',
+  },
+  summaryTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  summaryText: {
+    fontSize: 17,
+    textAlign: 'center',
+  },
+  boldText: {
+    fontWeight: '700',
+    color: '#C026D3',
   },
 });

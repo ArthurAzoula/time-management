@@ -1,102 +1,174 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Image, Platform } from 'react-native';
-
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import React from 'react';
+import { SafeAreaView, Dimensions, ScrollView, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { LineChart, PieChart } from 'react-native-chart-kit';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { useThemeColor } from '@/hooks/useThemeColor';
 
-export default function TabTwoScreen() {
+const screenWidth = Dimensions.get('window').width;
+
+export default function DashboardScreen() {
+  const backgroundColor = useThemeColor({}, 'background');
+  const cardBackgroundColor = useThemeColor({}, 'background');
+  const textColor = useThemeColor({}, 'text');
+
+  const dailyWorkData = {
+    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    datasets: [
+      {
+        data: [6, 7, 5, 8, 7, 6, 4],
+        color: () => '#C026D3',
+      },
+    ],
+  };
+
+  const workBreakData = [
+    {
+      name: 'Work Hours',
+      population: 75,
+      color: '#C026D3',
+      legendFontColor: textColor,
+      legendFontSize: 15,
+    },
+    {
+      name: 'Break Hours',
+      population: 25,
+      color: '#FAE8FF',
+      legendFontColor: textColor,
+      legendFontSize: 15,
+    },
+  ];
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={<Ionicons size={310} name="code-slash" style={styles.headerImage} />}>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText> library
-          to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
+    <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.dashboardContainer}>
+          {/* Line Chart for Daily Work */}
+          <ThemedView style={[styles.chartCard, { backgroundColor: cardBackgroundColor }]}>
+            <ThemedText style={[styles.chartTitle, { color: textColor }]}>Weekly Work Hours</ThemedText>
+            <LineChart
+              data={dailyWorkData}
+              width={screenWidth * 0.95}
+              height={250}
+              chartConfig={{
+                backgroundGradientFrom: backgroundColor,
+                backgroundGradientTo: cardBackgroundColor,
+                color: () => '#C026D3',
+                labelColor: () => textColor,
+                decimalPlaces: 1,
+                propsForBackgroundLines: {
+                  strokeWidth: 0.5,
+                  stroke: textColor,
+                },
+              }}
+              style={styles.chartStyle}
+              bezier
+              withInnerLines={false}
+            />
+          </ThemedView>
+
+          {/* Pie Chart for Work/Break Distribution */}
+            <ThemedView style={[styles.pieCard, { backgroundColor: cardBackgroundColor }]}>
+              <ThemedText style={[styles.chartTitle, { color: textColor }]}>Work vs. Break</ThemedText>
+              <PieChart
+                data={workBreakData}
+                width={screenWidth * 0.9}
+                height={240}
+                chartConfig={{
+                  backgroundColor: backgroundColor,
+                  backgroundGradientFrom: backgroundColor,
+                  backgroundGradientTo: cardBackgroundColor,
+                  color: (opacity = 1) => `rgba(192, 38, 211, ${opacity})`,
+                  labelColor: () => textColor,
+                }}
+                accessor={'population'}
+                backgroundColor={'transparent'}
+                paddingLeft={'15'}
+                center={[0, 0]}
+                hasLegend={true}
+                absolute
+              />
+            </ThemedView>
+
+          {/* Summary Section */}
+          <ThemedView style={[styles.summaryCard, { backgroundColor: cardBackgroundColor }]}>
+            <ThemedText style={[styles.summaryTitle, { color: textColor }]}>Today's Summary</ThemedText>
+            <ThemedText style={[styles.summaryText, { color: textColor }]}>
+              You have worked for <ThemedText style={styles.boldText}>6 hours</ThemedText> and taken
+              <ThemedText style={styles.boldText}> 2 hours</ThemedText> of break today.
             </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+          </ThemedView>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F3F4F6',
   },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
+  scrollContainer: {
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
+  dashboardContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+  chartCard: {
+    marginVertical: 0,
+    borderRadius: 20,
+    padding: 20,
+    elevation: 3,
+    alignItems: 'center',
+    width: '95%',
+    backgroundColor: '#FFFFFF',
+  },
+  pieCard: {
+    marginVertical: 0,
+    borderRadius: 20,
+    padding: 25,
+    elevation: 3,
+    alignItems: 'center',
+    width: '90%',
+    backgroundColor: '#FFFFFF',
+  },
+  chartTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  chartStyle: {
+    borderRadius: 16,
+    left: -22,
+    marginTop: 10,
+  },
+  summaryCard: {
+    marginVertical: 0,
+    borderRadius: 20,
+    padding: 20,
+    elevation: 3,
+    alignItems: 'center',
+    width: '90%',
+    backgroundColor: '#FFFFFF',
+  },
+  summaryTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+  summaryText: {
+    fontSize: 17,
+    textAlign: 'center',
+  },
+  boldText: {
+    fontWeight: '700',
+    color: '#C026D3',
   },
 });

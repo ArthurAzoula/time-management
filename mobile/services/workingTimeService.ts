@@ -3,12 +3,12 @@ import { WorkingTimeType } from "@/types/workingTimeType";
 import { AxiosResponse } from "axios";
 
 export const workingTimeService = {
-    async getWorkingTimeByUserId(userId: WorkingTimeType['userId'], params: Record<string, string>): Promise<WorkingTimeType[]> {
+    async getWorkingTimeByUserId(userId: WorkingTimeType['userId'], params: Record<string, string>): Promise<{ data: WorkingTimeType[] }> {
         try {
-            const response: AxiosResponse<WorkingTimeType[]> = await api.get(`workingtime/${userId}`, { params })
-            return response.data
+            const response: AxiosResponse<{ data: WorkingTimeType[] }> = await api.get(`workingtime/${userId}`, { params });
+            return response.data;  // Return the data object
         } catch (error: any) {
-            throw new Error(error)
+            throw new Error(error);
         }
     },
 

@@ -1,4 +1,5 @@
 export interface WorkingTimeType {
+    data: any;
     id: number;
     userId: number;
     start: string;

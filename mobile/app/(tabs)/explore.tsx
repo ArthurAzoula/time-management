@@ -39,16 +39,11 @@ export default function DashboardScreen() {
     },
   ];
 
-  const handlePieChartPress = (data: { name: any; population?: number; color?: string; legendFontColor?: string; legendFontSize?: number; }) => {
-    Alert.alert("Pie Chart Clicked", `You clicked on ${data.name}!`);
-  };
-
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.dashboardContainer}>
           {/* Line Chart for Daily Work */}
-          <TouchableOpacity onPress={() => Alert.alert('Line Chart Clicked', 'You clicked on the line chart!')}>
           <ThemedView style={[styles.chartCard, { backgroundColor: cardBackgroundColor }]}>
             <ThemedText style={[styles.chartTitle, { color: textColor }]}>Weekly Work Hours</ThemedText>
             <LineChart
@@ -71,10 +66,8 @@ export default function DashboardScreen() {
               withInnerLines={false}
             />
           </ThemedView>
-          </TouchableOpacity>
 
           {/* Pie Chart for Work/Break Distribution */}
-          <TouchableOpacity onPress={() => handlePieChartPress(workBreakData[1])}>
             <ThemedView style={[styles.pieCard, { backgroundColor: cardBackgroundColor }]}>
               <ThemedText style={[styles.chartTitle, { color: textColor }]}>Work vs. Break</ThemedText>
               <PieChart
@@ -96,7 +89,6 @@ export default function DashboardScreen() {
                 absolute
               />
             </ThemedView>
-          </TouchableOpacity>
 
           {/* Summary Section */}
           <ThemedView style={[styles.summaryCard, { backgroundColor: cardBackgroundColor }]}>
@@ -153,6 +145,7 @@ const styles = StyleSheet.create({
   },
   chartStyle: {
     borderRadius: 16,
+    left: -22,
     marginTop: 10,
   },
   summaryCard: {

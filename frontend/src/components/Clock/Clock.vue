@@ -28,7 +28,6 @@ const props = defineProps({
     }
 })
 
-console.log(props.userId, "araraazraz")
 const message = ref('')
 
 const updateMessage = async () => {

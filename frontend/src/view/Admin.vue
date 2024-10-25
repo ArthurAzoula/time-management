@@ -188,22 +188,20 @@ h1 {
     font-weight: bold;
 }
 
-
 .animated-title {
-  animation: fadeInSlideIn 1s ease-in-out;
+    animation: fadeInSlideIn 1s ease-in-out;
 }
 
 @keyframes fadeInSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-
 
 .v-card-text {
     padding: 16px;

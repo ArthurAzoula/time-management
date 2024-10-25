@@ -17,8 +17,6 @@ const props = defineProps({
     },
 })
 
-console.log(props.chartData)
-
 const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,

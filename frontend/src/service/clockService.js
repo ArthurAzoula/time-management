@@ -1,6 +1,16 @@
 import api from '../api/axios'
 
 export const clockService = {
+
+    async getAllClocks() {
+        try {
+            const response = await api.get('clocks')
+            return response.data
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+
     async getClocks(userId) {
         try {
             const response = await api.get(`clocks/${userId}`)

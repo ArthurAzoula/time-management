@@ -12,7 +12,8 @@ defmodule AppWeb.TeamView do
   def render("team.json", %{team: team}) do
     %{
       id: team.id,
-      name: team.name
+      name: team.name,
+      manager: render_one(team.manager, AppWeb.UserView, "user.json"),
     }
   end
 

@@ -63,6 +63,12 @@ defmodule Seeds do
       role: :manager
     })
 
+    Repo.insert!(%User{
+      username: "julie70",
+      email: "julie70.nam@outlook.fr",
+      password_hash: Bcrypt.hash_pwd_salt("julienam123"),
+    })
+
     # Insert teams
     Repo.insert!(%Team{
       name: "TEAM-01-02",
@@ -72,6 +78,11 @@ defmodule Seeds do
     Repo.insert!(%Team{
       name: "TEAM-02-06",
       manager_id: 6,
+    })
+
+    Repo.insert!(%Team{
+      name: "TEAM-02-06",
+      manager_id: 1,
     })
 
     # Team 1
@@ -99,6 +110,11 @@ defmodule Seeds do
     Repo.insert!(%UsersTeams{
       user_id: 2,
       team_id: 2
+    })
+
+    Repo.insert!(%UsersTeams{
+      user_id: 6,
+      team_id: 3
     })
 
 

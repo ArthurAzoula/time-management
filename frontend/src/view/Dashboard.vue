@@ -30,7 +30,6 @@ const userId = ref(null)
 
 onMounted(() => {
     userStore.initializeFromLocalStorage()
-    console.log(userStore.id, userStore.token, userStore.role)
 
     if (userStore.id) {
         userId.value = userStore.id

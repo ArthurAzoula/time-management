@@ -4,7 +4,11 @@ import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { HelloWave } from '@/components/HelloWave';
-import { Link } from 'expo-router'; // Import Link for navigation
+import { Link } from 'expo-router'; 
+import { userService } from '@/services/userService';  // Import the user service for fetching user data
+import { workingTimeService } from '@/services/workingTimeService';  // Import working time service for fetching times
+import { WorkingTimeType } from '@/types/workingTimeType';
+import { UserType } from '@/types/userType';
 
 export default function HomeScreen() {
   const backgroundColor = useThemeColor({}, 'background');
@@ -13,17 +17,38 @@ export default function HomeScreen() {
   const buttonBackgroundColor = useThemeColor({}, 'iconBackground');
   const buttonTextColor = useThemeColor({}, 'buttonText');
 
-  const [isClockedIn, setIsClockedIn] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
-  const username = "John"; // Placeholder username, replace with actual user data
+  const [isClockedIn, setIsClockedIn] = useState<boolean>(false);
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [username, setUsername] = useState<string>(''); // User's name
+  const [workingTimes, setWorkingTimes] = useState<WorkingTimeType[] | null>([]); // Working times array
+  const userId = 1;  // Example user ID to fetch data for
 
-  const fakeWorkingTimes = [
-    { id: '1', date: '2024-10-22', duration: 3600 }, // 1 hour
-    { id: '2', date: '2024-10-21', duration: 5400 }, // 1.5 hours
-    { id: '3', date: '2024-10-20', duration: 7200 }, // 2 hours
-    { id: '4', date: '2024-10-19', duration: 4500 }, // 1.25 hours
-  ];
+  // Fetch user and working times on mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user: UserType = await userService.getUser(userId);  // Fetch user data
+        setUsername(user.data.username);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
 
+    const fetchWorkingTimes = async () => {
+      try {
+        const response = await workingTimeService.getWorkingTimeByUserId(userId, {});
+        const times = response;  // Access the correct data array
+        setWorkingTimes(times.data);
+      } catch (error) {
+        console.error('Failed to fetch working times:', error);
+      }
+    };
+
+    fetchUserData();
+    fetchWorkingTimes();
+  }, []);
+
+  // Timer logic for clock in/out
   useEffect(() => {
     let timer: string | number | NodeJS.Timeout | undefined;
     if (isClockedIn) {
@@ -52,10 +77,10 @@ export default function HomeScreen() {
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
   };
 
-  const renderWorkingTime = ({ item }: { item: { id: string; date: string; duration: number } }) => (
+  const renderWorkingTime = ({ item }: { item: WorkingTimeType }) =>  (
     <View style={[styles.workingTimeCard, { backgroundColor: cardBackgroundColor }]}>
       <ThemedText style={[styles.workingTimeText, { color: textColor }]}>
-        {item.date} - {formatTime(item.duration)}
+        {item.start} - {item.end}
       </ThemedText>
     </View>
   );
@@ -66,7 +91,7 @@ export default function HomeScreen() {
         
         {/* Welcome Section */}
         <View style={styles.welcomeContainer}>
-          <ThemedText style={[styles.welcomeText, { color: textColor }]}>Welcome back, {username}! <HelloWave /></ThemedText>
+          <ThemedText style={[styles.welcomeText, { color: textColor }]}>Welcome back, {username} ! <HelloWave /></ThemedText>
         </View>
 
         {/* Shortcuts (Dashboard and Profile) */}
@@ -99,9 +124,9 @@ export default function HomeScreen() {
         <View style={styles.workingTimesContainer}>
           <ThemedText style={[styles.sectionTitle, { color: textColor }]}>Recent Working Times</ThemedText>
           <FlatList
-            data={fakeWorkingTimes}
+            data={workingTimes}  // Use the real working times data
             renderItem={renderWorkingTime}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
             style={styles.workingTimesList}
           />
         </View>
@@ -120,7 +145,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingBottom: 40, // Space for the Clock In button
+    paddingBottom: 40,
   },
   welcomeContainer: {
     position: 'absolute',
@@ -139,7 +164,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     width: '100%',
-    marginBottom: 30, // Space between shortcuts and Clock In button
+    marginBottom: 30,
   },
   shortcutButton: {
     flex: 1,
@@ -197,8 +222,7 @@ const styles = StyleSheet.create({
   workingTimeCard: {
     padding: 15,
     borderRadius: 10,
-    borderBlockColor: '#000',
-    elevation : 2,
+    elevation: 2,
     marginBottom: 10,
     alignItems: 'center',
   },

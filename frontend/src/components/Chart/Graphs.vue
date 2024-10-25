@@ -12,14 +12,13 @@ const timeBreak = ref(0)
 const props = defineProps({
     userId: {
         type: Number,
-        required: true
+        required: true,
     },
     all: {
         type: Boolean,
         required: true,
     },
 })
-
 
 const formatTime = (minutes) => {
     const hours = Math.floor(minutes / 60)

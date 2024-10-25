@@ -24,11 +24,11 @@ import { formatDateUtils } from '../../utils/DateUtils'
 const props = defineProps({
     userId: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 })
 
-console.log(props.userId, "araraazraz")
+console.log(props.userId, 'araraazraz')
 const message = ref('')
 
 const updateMessage = async () => {
@@ -85,8 +85,6 @@ const handleClock = async () => {
         }
 
         const responseUpdateClock = await clockService.updateClock(lastClock.id, body)
-
-        console.log(responseUpdateClock)
 
         if (!responseUpdateClock) return
 

@@ -114,7 +114,7 @@ defmodule AppWeb.WorkingTimeController do
 
   def index(conn, _params) do
     workingtime = Time.list_workingtime()
-    render(conn, "index.json", workingtime: workingtime)
+    render(conn, "index.json", working_times: workingtime)
   end
 
   def create(conn, %{"userID" => user_id, "workingtime" => working_time_params}) do

@@ -16,21 +16,35 @@
                     <div class="flex justify-between mb-4">
                         <div class="w-1/2">
                             <label for="start" class="block text-gray-700">Start</label>
-                            <VDatePicker v-model="workingTime.start" :format="'YYYY-MM-DD HH:mm:ss'" mode="datetime"
-                                :color="selectedColor">
+                            <VDatePicker
+                                v-model="workingTime.start"
+                                :format="'YYYY-MM-DD HH:mm:ss'"
+                                mode="datetime"
+                                :color="selectedColor"
+                            >
                                 <template #default="{ inputValue, inputEvents }">
-                                    <input :value="inputValue" v-on="inputEvents"
-                                        class="border border-button-200 rounded p-1 text-center w-11/12 text-black" />
+                                    <input
+                                        :value="inputValue"
+                                        v-on="inputEvents"
+                                        class="border border-button-200 rounded p-1 text-center w-11/12 text-black"
+                                    />
                                 </template>
                             </VDatePicker>
                         </div>
                         <div class="w-1/2 text-right">
                             <label for="end" class="block text-gray-700">End</label>
-                            <VDatePicker v-model="workingTime.end" :format="'YYYY-MM-DD HH:mm:ss'" mode="datetime"
-                                :color="selectedColor">
+                            <VDatePicker
+                                v-model="workingTime.end"
+                                :format="'YYYY-MM-DD HH:mm:ss'"
+                                mode="datetime"
+                                :color="selectedColor"
+                            >
                                 <template #default="{ inputValue, inputEvents }">
-                                    <input :value="inputValue" v-on="inputEvents"
-                                        class="border border-button-200 rounded p-1 text-center w-11/12 text-black" />
+                                    <input
+                                        :value="inputValue"
+                                        v-on="inputEvents"
+                                        class="border border-button-200 rounded p-1 text-center w-11/12 text-black"
+                                    />
                                 </template>
                             </VDatePicker>
                         </div>

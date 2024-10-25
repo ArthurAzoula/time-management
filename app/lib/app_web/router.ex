@@ -48,10 +48,10 @@ defmodule AppWeb.Router do
     resources "/users", UserController, only: [:create, :update, :delete]
 
     # WorkingTime
-    resources "/workingtime", WorkingTimeController, only: [:create, :update, :delete]
+    resources "/workingtime", WorkingTimeController, only: [:index, :create, :update, :delete]
 
     # Teams
-    resources "/teams", TeamController, only: [:create, :update, :delete]
+    resources "/teams", TeamController, only: [:index, :create, :update, :delete]
     get "/manager/:manager_id/teams", TeamController, :get_users_by_manager_id
 
 

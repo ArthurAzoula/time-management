@@ -54,6 +54,12 @@ defmodule Seeds do
       role: :manager
     })
 
+    Repo.insert!(%User{
+      username: "julie70",
+      email: "julie70.nam@outlook.fr",
+      password_hash: Bcrypt.hash_pwd_salt("julienam123"),
+    })
+
     # Insert teams
     Repo.insert!(%Team{
       name: "TEAM-01-01",
@@ -63,6 +69,11 @@ defmodule Seeds do
     Repo.insert!(%Team{
       name: "TEAM-02-05",
       manager_id: 5,
+    })
+
+    Repo.insert!(%Team{
+      name: "TEAM-02-06",
+      manager_id: 1,
     })
 
     # Team 1
@@ -90,6 +101,11 @@ defmodule Seeds do
     Repo.insert!(%UsersTeams{
       user_id: 1,
       team_id: 2
+    })
+
+    Repo.insert!(%UsersTeams{
+      user_id: 6,
+      team_id: 3
     })
 
 
@@ -124,6 +140,12 @@ defmodule Seeds do
       status: false
     })
 
+    Repo.insert!(%Clock{
+      user: 6,
+      time: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+      status: false
+    })
+
     # Generate working times for each user for a week
     start_date = Timex.today()
     generate_working_times(1, start_date)
@@ -131,6 +153,7 @@ defmodule Seeds do
     generate_working_times(3, start_date)
     generate_working_times(4, start_date)
     generate_working_times(5, start_date)
+    generate_working_times(6, start_date)
     IO.puts("Seeds inserted")
   end
 

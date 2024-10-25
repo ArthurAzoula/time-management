@@ -43,14 +43,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { format } from 'date-fns'
 import Modal from './Modal.vue'
 import { workingTimeService } from '../../service/workingTimeService'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { PlusIcon } from 'lucide-vue-next'
+import { useUserStore } from '../../store/useUserStore'
+import { useRoute } from 'vue-router'
 
+const userStore = useUserStore()
+const route = useRoute()
+const username = ref(route.params.username)
+const id = ref(route.params.id)
 
 const emit = defineEmits(['workingTimeCreated'])
 const isModalVisible = ref(false)
@@ -61,6 +67,10 @@ const workingTime = ref({
 })
 
 const selectedColor = ref('orange')
+
+onMounted(async () => {
+    userStore.initializeFromLocalStorage()
+})
 
 const showModal = () => {
     isModalVisible.value = true
@@ -94,9 +104,9 @@ const handleConfirm = async () => {
     }
 
     try {
-        const userId = 1
+        const userId = id.value || userStore.id
         const response = await workingTimeService.createWorkingTime(userId, data)
-        toast.success('working time created successfully!')
+        toast.success('Working time created successfully!')
         emit('workingTimeCreated', response.data)
         closeModal()
     } catch (error) {

@@ -5,36 +5,53 @@
             <form @submit.prevent="login" class="space-y-6">
                 <div class="space-y-1">
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input v-model="email" type="email" id="email" placeholder="Enter your email" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-button-200" />
+                    <input
+                        v-model="email"
+                        type="email"
+                        id="email"
+                        placeholder="Enter your email"
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-button-200"
+                    />
                 </div>
                 <div class="space-y-1">
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input v-model="password" type="password" id="password" placeholder="Enter your password" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-button-200" />
+                    <input
+                        v-model="password"
+                        type="password"
+                        id="password"
+                        placeholder="Enter your password"
+                        required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-button-200"
+                    />
                 </div>
-                <button type="submit"
-                    class="w-full px-4 py-2 text-white bg-button-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2">
+                <button
+                    type="submit"
+                    class="w-full px-4 py-2 text-white bg-button-200 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2"
+                >
                     Login
                 </button>
             </form>
             <div class="flex justify-between items-center">
-                <router-link to="/register" class="text-sm text-button-200 hover:underline">Create an account</router-link>
-                <router-link to="/forgot-password" class="text-sm text-button-200 hover:underline">Forgot password?</router-link>
+                <router-link to="/register" class="text-sm text-button-200 hover:underline"
+                    >Create an account</router-link
+                >
+                <router-link to="/forgot-password" class="text-sm text-button-200 hover:underline"
+                    >Forgot password?</router-link
+                >
             </div>
         </div>
-        
     </div>
 </template>
 
 <script>
-import { ref, onMounted} from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import { userService } from '../service/userService'
 import { useUserStore } from '../store/useUserStore'
-
+import { format } from 'date-fns'
 
 export default {
     setup() {
@@ -58,6 +75,7 @@ export default {
             try {
                 const token = await userService.login({ email: email.value, password: password.value })
                 localStorage.setItem('token', token)
+                localStorage.setItem('lastConnection', format(new Date(), 'yyyy-MM-dd HH:mm:ss'))
                 userStore.setToken(token)
                 router.push('/')
             } catch (error) {
@@ -68,8 +86,8 @@ export default {
         return {
             email,
             password,
-            login
+            login,
         }
-    }
+    },
 }
 </script>

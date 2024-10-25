@@ -20,7 +20,16 @@ import Timex
 
 defmodule Seeds do
   def run do
+
     # Insert users
+
+    Repo.insert(%User{
+      username: "admin",
+      email: "admin@admin.fr",
+      password_hash: Bcrypt.hash_pwd_salt("AdminPassword123"),
+      role: :admin
+    })
+
     Repo.insert!(%User{
       username: "alton",
       email: "alex.milton@gmail.com",
@@ -62,13 +71,13 @@ defmodule Seeds do
 
     # Insert teams
     Repo.insert!(%Team{
-      name: "TEAM-01-01",
-      manager_id: 1,
+      name: "TEAM-01-02",
+      manager_id: 2,
     })
 
     Repo.insert!(%Team{
-      name: "TEAM-02-05",
-      manager_id: 5,
+      name: "TEAM-02-06",
+      manager_id: 6,
     })
 
     Repo.insert!(%Team{
@@ -78,28 +87,28 @@ defmodule Seeds do
 
     # Team 1
     Repo.insert!(%UsersTeams{
+      user_id: 4,
+      team_id: 1
+    })
+
+    Repo.insert!(%UsersTeams{
       user_id: 3,
       team_id: 1
     })
 
-    Repo.insert!(%UsersTeams{
-      user_id: 2,
-      team_id: 1
-    })
-
     # Team 2
-    Repo.insert!(%UsersTeams{
-      user_id: 4,
-      team_id: 2
-    })
-
     Repo.insert!(%UsersTeams{
       user_id: 5,
       team_id: 2
     })
 
     Repo.insert!(%UsersTeams{
-      user_id: 1,
+      user_id: 6,
+      team_id: 2
+    })
+
+    Repo.insert!(%UsersTeams{
+      user_id: 2,
       team_id: 2
     })
 
@@ -110,6 +119,7 @@ defmodule Seeds do
 
 
     # Insert clocks
+
     Repo.insert!(%Clock{
       user: 1,
       time: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),

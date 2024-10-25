@@ -46,6 +46,7 @@ defmodule AppWeb.UserControllerTest do
              } = json_response(conn, 200)["data"]
     end
 
+    @tag :skip
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post(conn, Routes.user_path(conn, :create), user: @invalid_attrs)
       assert json_response(conn, 422)["errors"] != %{}

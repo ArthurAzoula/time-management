@@ -24,8 +24,8 @@ import { formatDateUtils } from '../../utils/DateUtils'
 const props = defineProps({
     userId: {
         type: Number,
-        required: true
-    }
+        required: true,
+    },
 })
 
 const message = ref('')
@@ -84,8 +84,6 @@ const handleClock = async () => {
         }
 
         const responseUpdateClock = await clockService.updateClock(lastClock.id, body)
-
-        console.log(responseUpdateClock)
 
         if (!responseUpdateClock) return
 

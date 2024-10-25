@@ -56,14 +56,12 @@ export const userService = {
         }
     },
 
-    async register(data){
-        try{
-            const response = await api.post('/auth/register', { user: data });
+    async register(data) {
+        try {
+            const response = await api.post('/auth/register', { user: data })
             return response.data
-        }
-        catch (error) {
+        } catch (error) {
             throw new Error(error)
         }
     },
-
 }

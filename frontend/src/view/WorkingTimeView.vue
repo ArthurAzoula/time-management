@@ -16,17 +16,14 @@ const users = ref([])
 const workingTimesStore = useWorkingTimesStore()
 const userStore = useUserStore()
 
-
 const userId = computed(() => userStore.id)
 const userRole = computed(() => userStore.role)
-
 
 onMounted(() => {
     userService.getUsers().then((response) => {
         users.value = response.data
     })
     userStore.initializeFromLocalStorage()
-    console.log(userId.value, userRole.value, "arazazrazrazrer")
     workingTimeService.getWorkingTimeByUserId(userId.value).then((response) => {
         const workingTimes = response.data
 

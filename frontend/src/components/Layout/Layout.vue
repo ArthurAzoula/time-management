@@ -45,6 +45,16 @@
                             <p>Statistics</p>
                         </li>
                     </router-link>
+                    <router-link to="/admin" class="font-regular">
+                        <li
+                            class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
+                            @click="setActive('admin')"
+                            :class="{ active: activeLink === 'admin' }"
+                            v-if="userRole === 'admin'"
+                        >
+                            <UserRoundCogIcon strokeWidth="1.5" />
+                            <p>Admin</p>
+                        </li>
                     <router-link v-if="userRole === 'manager' || userRole === 'admin'" to="/teams" class="font-regular">
                         <li class="flex items-center gap-4 w-full hover:bg-menu-100 cursor-pointer transition duration-200 ease-in-out p-2 transform hover:p-2 rounded"
                             @click="setActive('teams')" :class="{ active: activeLink === 'teams' }">
@@ -56,11 +66,10 @@
                 <div v-if="activeLink" class="active-bar"></div>
             </nav>
         </div>
+    </div>
 
-        <div
-            :class="['content flex-1 px-6 transition-all duration-300', { 'ml-[18%]': isDesktop, 'ml-0': !isDesktop }]">
-            <router-view></router-view>
-        </div>
+    <div :class="['content flex-1 px-6 transition-all duration-300', { 'ml-[18%]': isDesktop, 'ml-0': !isDesktop }]">
+        <router-view></router-view>
     </div>
 </template>
 
@@ -68,8 +77,9 @@
 import { ref, computed, onMounted } from 'vue'
 import DashboardIcon from '../../icons/DashboardIcon.vue'
 import WorkingTimeIcon from '../../icons/WorkingTimeIcon.vue'
-import { ChartColumnBigIcon, Users } from 'lucide-vue-next'
+import { ChartColumnBigIcon, LogOutIcon, UserRoundCogIcon } from 'lucide-vue-next'
 import { useUserStore } from '../../store/useUserStore'
+import User from '../Profile/User.vue'
 
 const userStore = useUserStore()
 const userRole = computed(() => userStore.role)
@@ -100,7 +110,6 @@ onMounted(() => {
     userStore.initializeFromLocalStorage()
     handleResize()
     window.addEventListener('resize', handleResize)
-
 })
 </script>
 

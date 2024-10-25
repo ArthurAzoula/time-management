@@ -2,9 +2,9 @@ use Mix.Config
 
 # Configure your database
 config :app, App.Repo,
-  username: System.get_env("POSTGRES_USER") || "devuser",
-  password: System.get_env("POSTGRES_PASSWORD") || "devpassword",
-  database: System.get_env("POSTGRES_DB") || "timemanagement_dev",
+  username: System.get_env("POSTGRES_USER") || "timeuser",
+  password: System.get_env("POSTGRES_PASSWORD") || "timepassword",
+  database: System.get_env("POSTGRES_DB") || "timemanagement",
   hostname: System.get_env("POSTGRES_HOST") || "localhost",
   port: String.to_integer(System.get_env("POSTGRES_PORT") || "5432"),
   show_sensitive_data_on_connection_error: true,

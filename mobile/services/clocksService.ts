@@ -7,7 +7,7 @@ export const clockService = {
         try {
             const response: AxiosResponse<ClockType[]> = await api.get(`clocks/${userId}`);
             return response.data;
-        } catch (error : any) {
+        } catch (error: any) {
             throw new Error(error.message);
         }
     },
@@ -26,6 +26,7 @@ export const clockService = {
             const response: AxiosResponse<ClockType> = await api.put(`clocks/${id}`, data);
             return response.data;
         } catch (error: any) {
+            console.error('Fail:', error);
             throw new Error(error.message);
         }
     },

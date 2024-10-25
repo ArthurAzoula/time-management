@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { userService } from '@/services/userService'; // Import the service
+import { userService } from '@/services/userService'; 
 import { UserType } from '@/types/userType';
 
 export default function ProfileScreen() {

@@ -1,56 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { SafeAreaView, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { Ionicons } from '@expo/vector-icons';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { HelloWave } from '@/components/HelloWave';
-import { Link } from 'expo-router'; 
-import { userService } from '@/services/userService';  // Import the user service for fetching user data
-import { workingTimeService } from '@/services/workingTimeService';  // Import working time service for fetching times
+import { fetchUserData, fetchWorkingTimes, fetchClocks } from '@/utils/apiUtils';
+import { handleClock } from '@/utils/clockUtils';
 import { WorkingTimeType } from '@/types/workingTimeType';
 import { UserType } from '@/types/userType';
+import { HelloWave } from '@/components/HelloWave';
+import { Link } from 'expo-router';
+import WorkingTimeList from '@/components/WorkingTimeList';
+import { format } from 'date-fns';
 
 export default function HomeScreen() {
   const backgroundColor = useThemeColor({}, 'background');
   const cardBackgroundColor = useThemeColor({}, 'cardBackground');
   const textColor = useThemeColor({}, 'text');
-  const buttonBackgroundColor = useThemeColor({}, 'iconBackground');
   const buttonTextColor = useThemeColor({}, 'buttonText');
 
   const [isClockedIn, setIsClockedIn] = useState<boolean>(false);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
-  const [username, setUsername] = useState<string>(''); // User's name
-  const [workingTimes, setWorkingTimes] = useState<WorkingTimeType[] | null>([]); // Working times array
-  const userId = 1;  // Example user ID to fetch data for
+  const [username, setUsername] = useState<string>(''); 
+  const [workingTimes, setWorkingTimes] = useState<WorkingTimeType[] | null>([]); 
+  const [clockMessage, setClockMessage] = useState<string>('');
+  const userId = 1;
 
-  // Fetch user and working times on mount
   useEffect(() => {
-    const fetchUserData = async () => {
+    const initializeData = async () => {
       try {
-        const user: UserType = await userService.getUser(userId);  // Fetch user data
+        const user: UserType = await fetchUserData(userId);
         setUsername(user.data.username);
+
+        const workingTimes: WorkingTimeType[] = await fetchWorkingTimes(userId);
+        setWorkingTimes(workingTimes);
       } catch (error) {
-        console.error('Failed to fetch user data:', error);
+        console.error('Failed to initialize data:', error);
       }
     };
 
-    const fetchWorkingTimes = async () => {
-      try {
-        const response = await workingTimeService.getWorkingTimeByUserId(userId, {});
-        const times = response;  // Access the correct data array
-        setWorkingTimes(times.data);
-      } catch (error) {
-        console.error('Failed to fetch working times:', error);
-      }
-    };
-
-    fetchUserData();
-    fetchWorkingTimes();
+    initializeData();
   }, []);
 
-  // Timer logic for clock in/out
   useEffect(() => {
-    let timer: string | number | NodeJS.Timeout | undefined;
+    let timer: NodeJS.Timeout | undefined;
     if (isClockedIn) {
       timer = setInterval(() => {
         setElapsedTime((prevTime) => prevTime + 1);
@@ -61,76 +53,84 @@ export default function HomeScreen() {
     return () => clearInterval(timer);
   }, [isClockedIn]);
 
-  const handleClockIn = () => {
-    setIsClockedIn(true);
+  const handleClockAction = async () => {
+    await handleClock(userId);
+    setIsClockedIn(!isClockedIn);
     setElapsedTime(0);
+    updateClockMessage(); // Update the message after clocking in/out
   };
 
-  const handleClockOut = () => {
-    setIsClockedIn(false);
+  const updateClockMessage = async () => {
+    try {
+      const clocks = await fetchClocks(userId);
+      const lastClock = clocks[0];
+  
+      if (!lastClock) {
+        setClockMessage('No clock-in record found');
+        return;
+      }
+  
+      const lastClockDate = new Date(lastClock.time);
+  
+      if (lastClock.status) {
+        setClockMessage('You are currently working since ' + format(lastClockDate, 'hh:mm a'));
+      } else {
+        setClockMessage(`Last clocked out at: ${format(lastClockDate, 'hh:mm a')}`);
+      }
+    } catch (error) {
+      console.error('Failed to update clock message:', error);
+    }
   };
-
-  const formatTime = (seconds: number) => {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-  };
-
-  const renderWorkingTime = ({ item }: { item: WorkingTimeType }) =>  (
-    <View style={[styles.workingTimeCard, { backgroundColor: cardBackgroundColor }]}>
-      <ThemedText style={[styles.workingTimeText, { color: textColor }]}>
-        {item.start} - {item.end}
-      </ThemedText>
-    </View>
-  );
+  
+  useEffect(() => {
+    updateClockMessage();
+  }, [isClockedIn]);
 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
-      <View style={styles.container}>
-        
-        {/* Welcome Section */}
-        <View style={styles.welcomeContainer}>
-          <ThemedText style={[styles.welcomeText, { color: textColor }]}>Welcome back, {username} ! <HelloWave /></ThemedText>
-        </View>
-
-        {/* Shortcuts (Dashboard and Profile) */}
-        <View style={styles.shortcutContainer}>
-          <Link href="/explore" asChild>
-            <TouchableOpacity style={[styles.shortcutButton, { backgroundColor: buttonBackgroundColor }]}>
-              <Ionicons name="stats-chart-outline" size={30} color={buttonTextColor} />
-              <ThemedText style={[styles.shortcutButtonText, { color: buttonTextColor }]}>Statistics</ThemedText>
-            </TouchableOpacity>
-          </Link>
-          <Link href="/profile" asChild>
-            <TouchableOpacity style={[styles.shortcutButton, { backgroundColor: buttonBackgroundColor }]}>
-              <Ionicons name="person-outline" size={30} color={buttonTextColor} />
-              <ThemedText style={[styles.shortcutButtonText, { color: buttonTextColor }]}>Profile</ThemedText>
-            </TouchableOpacity>
-          </Link>
-        </View>
-
-        {/* Clock In/Out Button */}
-        <TouchableOpacity
-          onPress={isClockedIn ? handleClockOut : handleClockIn}
-          style={[styles.clockButton, isClockedIn ? styles.clockOutButton : styles.clockInButton]}
-        >
-          <Ionicons name={isClockedIn ? "log-out-outline" : "log-in-outline"} size={30} color="#fff" />
-          <ThemedText style={styles.clockButtonText}>{isClockedIn ? "Clock Out" : "Clock In"}</ThemedText>
-          {isClockedIn && <ThemedText style={styles.timerText}>{formatTime(elapsedTime)}</ThemedText>}
-        </TouchableOpacity>
-
-        {/* Recent Working Times */}
-        <View style={styles.workingTimesContainer}>
-          <ThemedText style={[styles.sectionTitle, { color: textColor }]}>Recent Working Times</ThemedText>
-          <FlatList
-            data={workingTimes}  // Use the real working times data
-            renderItem={renderWorkingTime}
-            keyExtractor={(item) => item.id.toString()}
-            style={styles.workingTimesList}
-          />
-        </View>
+      {/* Header */}
+      <View style={styles.header}>
+        <ThemedText style={[styles.greeting, { color: textColor }]}>
+          Hello, {username}! <HelloWave/>
+        </ThemedText>
       </View>
+
+      <View style={styles.cardContainer}>
+        <Link href="/explore" asChild style={styles.actionCard}>
+          <TouchableOpacity>
+            <Ionicons name="stats-chart-outline" size={30} color={buttonTextColor} />
+            <ThemedText style={[styles.cardText, { color: buttonTextColor }]}>Statistics</ThemedText>
+          </TouchableOpacity>
+        </Link>
+
+        <Link href="/profile" asChild style={styles.actionCard}>
+          <TouchableOpacity >
+            <Ionicons name="person-outline" size={30} color={buttonTextColor} />
+            <ThemedText style={[styles.cardText, { color: buttonTextColor }]}>Profile</ThemedText>
+          </TouchableOpacity>
+        </Link>
+      </View>
+
+      {/* Working Times List */}
+      {workingTimes && (
+        <WorkingTimeList
+          workingTimes={workingTimes}
+          cardBackgroundColor={cardBackgroundColor}
+          textColor={textColor}
+        />
+      )}
+
+      {/* Clock In/Out Button */}
+      <TouchableOpacity
+        onPress={handleClockAction}
+        style={[styles.fab, isClockedIn ? styles.clockOutButton : styles.clockInButton]}
+      >
+        <Ionicons name={isClockedIn ? "time" : "time-outline"} size={30} color="#fff" />
+        {isClockedIn && <ThemedText style={styles.fabText}>{elapsedTime}</ThemedText>}
+      </TouchableOpacity>
+
+      {/* Display Clock Message */}
+      <ThemedText style={styles.clockMessage}>{clockMessage}</ThemedText>
     </SafeAreaView>
   );
 }
@@ -138,56 +138,60 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    justifyContent: 'flex-end',
   },
-  container: {
-    flex: 1,
-    justifyContent: 'center',
+  header: {
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingBottom: 40,
+    marginVertical: 20,
   },
-  welcomeContainer: {
-    position: 'absolute',
-    top: 50,
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 30,
-  },
-  welcomeText: {
-    fontSize: 20,
+  greeting: {
+    fontSize: 24,
     fontWeight: '700',
-    marginRight: 10,
-    textAlign: 'center',
   },
-  shortcutContainer: {
+  cardContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 30,
+    paddingHorizontal: 20,
+    marginVertical: 20,
   },
-  shortcutButton: {
+  actionCard: {
     flex: 1,
     marginHorizontal: 10,
-    padding: 20,
-    borderRadius: 15,
+    paddingVertical: 25,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 3,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 2, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    backgroundColor: '#4C51BF',
   },
-  shortcutButtonText: {
+  fullButtonLink: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  cardText: {
     marginTop: 10,
     fontSize: 16,
     fontWeight: '700',
+    letterSpacing: 0.5,
   },
-  clockButton: {
+  fab: {
     position: 'absolute',
-    bottom: 20,
-    width: '50%',
-    paddingVertical: 20,
-    borderRadius: 80,
-    alignItems: 'center',
+    bottom: 30,
+    right: 30,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
     justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 5,
+  },
+  fabText: {
+    fontSize: 12,
+    color: '#fff',
+    marginTop: 5,
   },
   clockInButton: {
     backgroundColor: '#34D399',
@@ -195,39 +199,10 @@ const styles = StyleSheet.create({
   clockOutButton: {
     backgroundColor: '#F87171',
   },
-  clockButtonText: {
-    marginTop: 10,
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#fff',
-  },
-  timerText: {
-    marginTop: 5,
-    fontSize: 16,
-    color: '#fff',
-  },
-  workingTimesContainer: {
-    width: '100%',
-    marginTop: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 10,
+  clockMessage: {
     textAlign: 'center',
-  },
-  workingTimesList: {
-    width: '100%',
-  },
-  workingTimeCard: {
-    padding: 15,
-    borderRadius: 10,
-    elevation: 2,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  workingTimeText: {
     fontSize: 16,
-    fontWeight: '600',
-  },
+    marginTop: 10,
+    color: '#6B7280',
+  }
 });

@@ -6,9 +6,9 @@ defmodule App.Accounts do
 
   import Ecto.Query, warn: false
   alias App.Repo
-
   alias App.Accounts.User
-
+  alias App.Accounts.Team
+  alias App.Accounts.UsersTeams
   @doc """
   Returns the list of users.
 
@@ -95,19 +95,28 @@ defmodule App.Accounts do
   """
   def delete_user(%User{} = user) do
     Repo.transaction(fn ->
-      from(c in App.Time.Clock, where: c.user == ^user.id)
-      |> Repo.delete_all()
 
-      from(wt in App.Time.WorkingTime, where: wt.user == ^user.id)
-      |> Repo.delete_all()
+      Ecto.Adapters.SQL.query!(Repo, "DELETE FROM clocks c WHERE c.user = $1", [user.id])
 
-      Repo.delete(user)
+      Ecto.Adapters.SQL.query!(Repo, "DELETE FROM workingtime wt WHERE wt.user = $1", [user.id])
+
+      Ecto.Adapters.SQL.query!(Repo, "DELETE FROM users_teams WHERE user_id = $1", [user.id])
+
+      case Repo.delete(user) do
+        {:ok, _} -> {:ok, user}
+        {:error, reason} -> Repo.rollback(reason)
+      end
     end)
     |> case do
       {:ok, {:ok, user}} -> {:ok, user}
       {:ok, _} -> {:error, :unexpected_result}
       {:error, reason} -> {:error, reason}
     end
+  end
+
+  # Get user by email
+  def get_user_by_email(email) do
+    Repo.get_by(User, email: email)
   end
 
   @doc """
@@ -168,4 +177,226 @@ defmodule App.Accounts do
   end
 end
 
+
+  alias App.Accounts.Team
+
+  @doc """
+  Returns the list of teams.
+
+  ## Examples
+
+      iex> list_teams()
+      [%Team{}, ...]
+
+  """
+  def list_teams do
+    Repo.all(Team)
+  end
+
+
+  def get_users_by_manager_id(manager_id) do
+    from(t in Team,
+      join: ut in UsersTeams, on: t.id == ut.team_id,
+      join: u in User, on: ut.user_id == u.id,
+      where: t.manager_id == ^manager_id,
+      order_by: [t.id, u.username],
+      select: %{
+        team_id: t.id,
+        team_name: t.name,
+        user_id: u.id,
+        username: u.username,
+        email: u.email
+      }
+    )
+    |> Repo.all()
+    |> Enum.group_by(& &1.team_id, fn member ->
+      %{
+        user_id: member.user_id,
+        username: member.username,
+        email: member.email,
+        team_name: member.team_name  
+      }
+    end)
+  end
+
+
+
+  @doc """
+  Gets a single team.
+
+  Raises `Ecto.NoResultsError` if the Team does not exist.
+
+  ## Examples
+
+      iex> get_team!(123)
+      %Team{}
+
+      iex> get_team!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_team!(id), do: Repo.get!(Team, id)
+
+
+
+  @doc """
+  Creates a team.
+
+  ## Examples
+
+      iex> create_team(%{field: value})
+      {:ok, %Team{}}
+
+      iex> create_team(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_team(attrs \\ %{}) do
+    %Team{}
+    |> Team.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a team.
+
+  ## Examples
+
+      iex> update_team(team, %{field: new_value})
+      {:ok, %Team{}}
+
+      iex> update_team(team, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_team(%Team{} = team, attrs) do
+    team
+    |> Team.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a team.
+
+  ## Examples
+
+      iex> delete_team(team)
+      {:ok, %Team{}}
+
+      iex> delete_team(team)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_team(%Team{} = team) do
+    Repo.delete(team)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking team changes.
+
+  ## Examples
+
+      iex> change_team(team)
+      %Ecto.Changeset{data: %Team{}}
+
+  """
+  def change_team(%Team{} = team, attrs \\ %{}) do
+    Team.changeset(team, attrs)
+  end
+
+  alias App.Accounts.UsersTeams
+
+  @doc """
+  Returns the list of users_teams.
+
+  ## Examples
+
+      iex> list_users_teams()
+      [%UsersTeams{}, ...]
+
+  """
+  def list_users_teams do
+    Repo.all(UsersTeams)
+  end
+
+  @doc """
+  Gets a single users_teams.
+
+  Raises `Ecto.NoResultsError` if the Users teams does not exist.
+
+  ## Examples
+
+      iex> get_users_teams!(123)
+      %UsersTeams{}
+
+      iex> get_users_teams!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_users_teams!(id), do: Repo.get!(UsersTeams, id)
+
+  @doc """
+  Creates a users_teams.
+
+  ## Examples
+
+      iex> create_users_teams(%{field: value})
+      {:ok, %UsersTeams{}}
+
+      iex> create_users_teams(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_users_teams(attrs \\ %{}) do
+    %UsersTeams{}
+    |> UsersTeams.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a users_teams.
+
+  ## Examples
+
+      iex> update_users_teams(users_teams, %{field: new_value})
+      {:ok, %UsersTeams{}}
+
+      iex> update_users_teams(users_teams, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_users_teams(%UsersTeams{} = users_teams, attrs) do
+    users_teams
+    |> UsersTeams.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a users_teams.
+
+  ## Examples
+
+      iex> delete_users_teams(users_teams)
+      {:ok, %UsersTeams{}}
+
+      iex> delete_users_teams(users_teams)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_users_teams(%UsersTeams{} = users_teams) do
+    Repo.delete(users_teams)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking users_teams changes.
+
+  ## Examples
+
+      iex> change_users_teams(users_teams)
+      %Ecto.Changeset{data: %UsersTeams{}}
+
+  """
+  def change_users_teams(%UsersTeams{} = users_teams, attrs \\ %{}) do
+    UsersTeams.changeset(users_teams, attrs)
+  end
 end

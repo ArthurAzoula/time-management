@@ -10,13 +10,15 @@ const timeWorked = ref(0)
 const timeBreak = ref(0)
 
 const props = defineProps({
+    userId: {
+        type: Number,
+        required: true,
+    },
     all: {
         type: Boolean,
         required: true,
     },
 })
-
-const userId = 1
 
 const formatTime = (minutes) => {
     const hours = Math.floor(minutes / 60)
@@ -87,7 +89,7 @@ const getWeeklyWorkingTimes = (workingTimes) => {
 
 onMounted(async () => {
     try {
-        const response = await workingTimeService.getWorkingTimeByUserId(userId)
+        const response = await workingTimeService.getWorkingTimeByUserId(props.userId)
         const workingTimes = response.data || []
 
         const { workingMinutes, breakMinutes } = getDailyWorkingTimes(workingTimes)

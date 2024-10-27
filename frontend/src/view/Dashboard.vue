@@ -4,9 +4,9 @@
             <div class="flex flex-col space-y-7">
                 <div class="flex flex-col space-y-7">
                     <h1 class="text-2xl font-bold">Dashboard</h1>
-                    <Clock />
+                    <Clock v-if="userId" :userId="userId" />
                 </div>
-                <Graphs />
+                <Graphs v-if="userId" :userId="userId" />
                 <WorkingTimesDashboard :workingTimes="workingTimesStore.workingTimes" />
             </div>
         </div>
@@ -19,16 +19,23 @@ import Graphs from '../components/Chart/Graphs.vue'
 import WorkingTimesDashboard from '../components/WorkingTime/WorkingTimesDashboard.vue'
 
 import { ref, onMounted } from 'vue'
-import { userService } from '../service/userService'
 import { workingTimeService } from '../service/workingTimeService'
 import { useWorkingTimesStore } from '../store/useWorkingTimesStore'
+import { useUserStore } from '../store/useUserStore'
 
-const users = ref([])
 const workingTimesStore = useWorkingTimesStore()
+const userStore = useUserStore()
+
+const userId = ref(null)
 
 onMounted(() => {
-    workingTimeService.getWorkingTimeByUserId(1).then((response) => {
-        workingTimesStore.setWorkingTimes(response.data)
-    })
+    userStore.initializeFromLocalStorage()
+
+    if (userStore.id) {
+        userId.value = userStore.id
+        workingTimeService.getWorkingTimeByUserId(userStore.id).then((response) => {
+            workingTimesStore.setWorkingTimes(response.data)
+        })
+    }
 })
 </script>

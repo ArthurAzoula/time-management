@@ -1,0 +1,23 @@
+meta {
+  name: Get team by manager
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BASE}}/api/manager/teams/
+  body: none
+  auth: none
+}
+
+tests {
+  test("Get the user", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("User doesn't exist", function() {
+    const data = res.getBody();
+    expect(res.getStatus()).not.equal(404);
+  });
+}

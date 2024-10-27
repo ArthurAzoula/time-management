@@ -36,7 +36,7 @@
                         <p>Search</p>
                     </div>
                 </div>
-                <ModalCreate @workingTimeCreated="addWorkingTime" />
+                <ModalCreate v-if="userRole !== 'employee'" @workingTimeCreated="addWorkingTime" />
             </div>
         </div>
         <div v-if="workingTimes.length === 0" class="text-center text-xl text-text-color-100 mt-6">
@@ -48,7 +48,7 @@
                 :key="time.id"
                 class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
             >
-                <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
+                <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-md">
                     <h2 class="m-3">Total duration</h2>
                     <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
                 </div>
@@ -66,7 +66,7 @@
                     <div class="bg-card-date rounded px-6 flex justify-center items-center">
                         <p class="text-sm">{{ formatDateRange(time.start, time.end) }}</p>
                     </div>
-                    <div class="flex space-x-3">
+                    <div class="flex space-x-3" v-if="userRole !== 'employee'">
                         <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
                         <ModalUpdate
                             :workingTimeId="time.id"
@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { defineProps } from 'vue'
 import { useRoute } from 'vue-router'
 import ModalCreate from '../Modal/ModalCreate.vue'
@@ -92,6 +92,9 @@ import { useWorkingTimesStore } from '../../store/useWorkingTimesStore'
 import { workingTimeService } from '../../service/workingTimeService'
 import { MoveRight } from 'lucide-vue-next'
 import { SearchIcon } from 'lucide-vue-next'
+import { useUserStore } from '../../store/useUserStore'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 const props = defineProps({
     workingTimes: {
@@ -99,6 +102,8 @@ const props = defineProps({
         required: true,
     },
 })
+
+const userStore = useUserStore()
 
 const range = ref({ start: '', end: '' })
 
@@ -111,19 +116,33 @@ const selectDragAttribute = computed(() => ({
     highlight: 'orange',
 }))
 
+onMounted(async () => {
+    userStore.initializeFromLocalStorage()
+})
+
+const userId = computed(() => userStore.id)
+const userRole = computed(() => userStore.role)
+
 const searchByDate = async () => {
     const { start, end } = range.value
 
     if (!start || !end) {
-        console.error('Please enter a valid date range')
+        toast.error('Please enter a valid date range')
         return
     }
 
     try {
-        const response = await workingTimeService.getWorkingTimeByUserId(1, { start_date: start, end_date: end })
-        workingTimesStore.setWorkingTimes(response.data)
+        const response = await workingTimeService.getWorkingTimeByUserId(userId.value, {
+            start_date: start,
+            end_date: end,
+        })
+        if (response && response.data) {
+            workingTimesStore.setWorkingTimes(response.data)
+        } else {
+            toast.error('No data received from the server')
+        }
     } catch (error) {
-        console.error('Failed to fetch working times:', error)
+        toast.error('Failed to fetch working times:', error)
     }
 }
 

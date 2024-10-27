@@ -40,7 +40,26 @@ export const userService = {
     async deleteUser(id) {
         try {
             const response = await api.delete(`users/${id}`)
-            return response // No content to return
+            return response
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+
+    async login(data) {
+        try {
+            const response = await api.post('/auth/login', data)
+
+            return response.data.token
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+
+    async register(data) {
+        try {
+            const response = await api.post('/auth/register', { user: data })
+            return response.data
         } catch (error) {
             throw new Error(error)
         }

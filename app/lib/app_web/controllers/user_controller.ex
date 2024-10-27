@@ -30,7 +30,8 @@ defmodule AppWeb.UserController do
             type: :object,
             properties: %{
               username: %{type: :string},
-              email: %{type: :string}
+              email: %{type: :string},
+              role: %{type: :string}
             }
           }
         }
@@ -64,46 +65,45 @@ defmodule AppWeb.UserController do
   end
 
   swagger_path :index do
-    get "/api/users"
-    summary "List users"
-    description "List all users"
-    parameter :email, :query, :string, "Filter by email", required: false
-    parameter :username, :query, :string, "Filter by username", required: false
-    response 200, "OK", Schema.ref(:User)
+    get("/api/users")
+    summary("List users")
+    description("List all users")
+    parameter(:email, :query, :string, "Filter by email", required: false)
+    parameter(:username, :query, :string, "Filter by username", required: false)
+    response(200, "OK", Schema.ref(:User))
   end
 
   swagger_path :create do
-    post "/api/users"
-    summary "Create user"
-    description "Create a new user"
-    parameter :user, :body, Schema.ref(:User), "User attributes", required: true
-    response 201, "Created", Schema.ref(:User)
+    post("/api/users")
+    summary("Create user")
+    description("Create a new user")
+    parameter(:user, :body, Schema.ref(:User), "User attributes", required: true)
+    response(201, "Created", Schema.ref(:User))
   end
 
   swagger_path :show do
-    get "/api/users/{id}"
-    summary "Show user"
-    description "Show a user by ID"
-    parameter :id, :path, :string, "User ID", required: true
-    response 200, "OK", Schema.ref(:User)
+    get("/api/users/{id}")
+    summary("Show user")
+    description("Show a user by ID")
+    parameter(:id, :path, :string, "User ID", required: true)
+    response(200, "OK", Schema.ref(:User))
   end
 
   swagger_path :update do
-    put "/api/users/{id}"
-    summary "Update user"
-    description "Update a user by ID"
-    parameter :id, :path, :string, "User ID", required: true
-    parameter :user, :body, Schema.ref(:User), "User attributes", required: true
-    response 200, "OK", Schema.ref(:User)
+    put("/api/users/{id}")
+    summary("Update user")
+    description("Update a user by ID")
+    parameter(:id, :path, :string, "User ID", required: true)
+    parameter(:user, :body, Schema.ref(:User), "User attributes", required: true)
+    response(200, "OK", Schema.ref(:User))
   end
 
   swagger_path :delete do
-    PhoenixSwagger.Path.delete "/api/users/{id}"
-    summary "Delete a user"
-    description "Delete a user by ID"
-    parameter :id, :path, :string, "User ID", required: true, example: 3
-    response 204, "No Content (User deleted)"
-
+    PhoenixSwagger.Path.delete("/api/users/{id}")
+    summary("Delete a user")
+    description("Delete a user by ID")
+    parameter(:id, :path, :string, "User ID", required: true, example: 3)
+    response(204, "No Content (User deleted)")
   end
 
   def index(conn, params) do
@@ -146,4 +146,5 @@ defmodule AppWeb.UserController do
       send_resp(conn, :no_content, "")
     end
   end
+
 end

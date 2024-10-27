@@ -1,4 +1,4 @@
-FROM elixir:1.17.3-otp-27-alpine
+FROM elixir:1.17.3-otp-27
 
 RUN apk update && \
     apk add --no-cache build-base npm git

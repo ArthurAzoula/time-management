@@ -1,6 +1,15 @@
 import api from '../api/axios'
 
 export const workingTimeService = {
+    async getWorkingTimes(params) {
+        try {
+            const response = await api.get('workingtime', { params })
+            return response.data
+        } catch (error) {
+            throw new Error(error)
+        }
+    },
+
     async getWorkingTimeByUserId(userId, params) {
         try {
             const response = await api.get(`workingtime/${userId}`, { params })

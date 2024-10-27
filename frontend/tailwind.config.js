@@ -8,6 +8,7 @@ export default {
                     100: '#544407',
                     200: '#FA9115',
                     300: '#FFEAD2',
+                    400: '#ffd4a2',
                 },
                 background: {
                     100: '#FEFFEE',

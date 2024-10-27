@@ -68,58 +68,57 @@ defmodule AppWeb.WorkingTimeController do
   end
 
   swagger_path :show_by_user_and_id do
-    get "/api/workingtime/{userId}/{id}"
-    summary "Show a workingtime by user and ID"
-    description "Show a workingtime by user and ID"
-    parameter :userId, :path, :string, "User ID", required: true
-    parameter :id, :path, :string, "WorkingTime ID", required: true
-    response 200, "OK", :WorkingTime
+    get("/api/workingtime/{userId}/{id}")
+    summary("Show a workingtime by user and ID")
+    description("Show a workingtime by user and ID")
+    parameter(:userId, :path, :string, "User ID", required: true)
+    parameter(:id, :path, :string, "WorkingTime ID", required: true)
+    response(200, "OK", :WorkingTime)
   end
 
   swagger_path :show_by_user do
-    get "/api/workingtime/{userId}"
-    summary "Show workingtimes by user"
-    description "Show workingtimes by user"
-    parameter :user_id, :path, :string, "User ID", required: true
-    parameter :start, :query, :date, "Start date", required: false
-    parameter :end, :query, :date, "End date", required: false
-    response 200, "OK", :WorkingTime
+    get("/api/workingtime/{userId}")
+    summary("Show workingtimes by user")
+    description("Show workingtimes by user")
+    parameter(:user_id, :path, :string, "User ID", required: true)
+    parameter(:start, :query, :date, "Start date", required: false)
+    parameter(:end, :query, :date, "End date", required: false)
+    response(200, "OK", :WorkingTime)
   end
 
   swagger_path :create do
-    post "/api/workingtime/{userId}"
-    summary "Create a workingtime"
-    description "Create a workingtime for a user"
-    parameter :userId, :path, :string, "User ID", required: true
-    parameter :workingtime, :body, :WorkingTime, "WorkingTime attributes", required: true
-    response 201, "Created", :WorkingTime
+    post("/api/workingtime/{userId}")
+    summary("Create a workingtime")
+    description("Create a workingtime for a user")
+    parameter(:userId, :path, :string, "User ID", required: true)
+    parameter(:workingtime, :body, :WorkingTime, "WorkingTime attributes", required: true)
+    response(201, "Created", :WorkingTime)
   end
 
   swagger_path :update do
-    put "/api/workingtime/{id}"
-    summary "Update a workingtime"
-    description "Update a workingtime by ID"
-    parameter :id, :path, :string, "WorkingTime ID", required: true
-    parameter :workingtime, :body, :WorkingTime, "WorkingTime attributes", required: true
-    response 200, "OK", :WorkingTime
+    put("/api/workingtime/{id}")
+    summary("Update a workingtime")
+    description("Update a workingtime by ID")
+    parameter(:id, :path, :string, "WorkingTime ID", required: true)
+    parameter(:workingtime, :body, :WorkingTime, "WorkingTime attributes", required: true)
+    response(200, "OK", :WorkingTime)
   end
 
   swagger_path :delete do
-    PhoenixSwagger.Path.delete "/api/workingtime/{id}"
-    summary "Delete a workingtime"
-    description "Delete a workingtime by ID"
-    parameter :id, :path, :string, "WorkingTime ID", required: true
-    response 204, "No Content"
+    PhoenixSwagger.Path.delete("/api/workingtime/{id}")
+    summary("Delete a workingtime")
+    description("Delete a workingtime by ID")
+    parameter(:id, :path, :string, "WorkingTime ID", required: true)
+    response(204, "No Content")
   end
 
   def index(conn, _params) do
     workingtime = Time.list_workingtime()
-    render(conn, "index.json", workingtime: workingtime)
+    render(conn, "index.json", working_times: workingtime)
   end
 
   def create(conn, %{"userID" => user_id, "workingtime" => working_time_params}) do
     working_time_params = Map.put(working_time_params, "user", user_id)
-
     with {:ok, %WorkingTime{} = working_time} <- Time.create_working_time(working_time_params) do
       conn
       |> put_status(:created)
@@ -144,6 +143,7 @@ defmodule AppWeb.WorkingTimeController do
         conn
         |> put_status(:not_found)
         |> json(%{error: "Working time not found"})
+
       working_time ->
         conn
         |> put_status(:ok)

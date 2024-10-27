@@ -111,7 +111,7 @@ const chartData = ref({
     labels: totalUsers.value.map((user) => user.username),
     datasets: [
         {
-            label: 'Total Hours per User',
+            label: 'Total hours per user',
             backgroundColor: '#42A5F5',
             data: [],
         },
@@ -164,7 +164,7 @@ const updateChartData = async () => {
                     return calculateTotalHours(response.data)
                 } catch (error) {
                     console.error(`Failed to fetch working times for user ${user.id}`, error)
-                    return 0 // Default to 0 hours if there's an error
+                    return 0
                 }
             }),
         )
@@ -188,22 +188,20 @@ h1 {
     font-weight: bold;
 }
 
-
 .animated-title {
-  animation: fadeInSlideIn 1s ease-in-out;
+    animation: fadeInSlideIn 1s ease-in-out;
 }
 
 @keyframes fadeInSlideIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
-
 
 .v-card-text {
     padding: 16px;

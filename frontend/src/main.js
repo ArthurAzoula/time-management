@@ -11,6 +11,7 @@ import * as directives from 'vuetify/directives'
 import { createVuetify } from 'vuetify'
 import '@mdi/font/css/materialdesignicons.css'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 
 const vuetify = createVuetify({
     components,
@@ -27,6 +28,7 @@ const app = createApp(App)
 const pinia = createPinia()
 
 app.use(router)
+app.use(VueQueryPlugin)
 app.use(vuetify)
 app.use(pinia)
 app.use(VCalendar, {})

@@ -1,7 +1,6 @@
 import api from '../api/axios'
 
 export const teamService = {
-  
     async getTeams(params) {
         try {
             const response = await api.get('teams', { params })
@@ -25,7 +24,7 @@ export const teamService = {
             const response = await api.post('teams', data)
             return response.data
         } catch (error) {
-          throw new Error(error)
+            throw new Error(error)
         }
     },
 

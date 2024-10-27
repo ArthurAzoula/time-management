@@ -9,7 +9,10 @@
                 v-if="!isEditing"
                 @click="userStore.logout"
             >
-                Déconnexion
+                <div class="flex items-center gap-2">
+                    <LogOutIcon strokeWidth="1.2" />
+                    Déconnexion
+                </div>
             </button>
         </div>
         <div class="profile-info" v-if="user">
@@ -100,6 +103,7 @@ import { userService } from '../../service/userService'
 import { useUserStore } from '../../store/useUserStore'
 import { toast } from 'vue3-toastify'
 import ModalCreateUser from '../Modal/ModalCreateUser.vue'
+import { LogOutIcon } from 'lucide-vue-next'
 
 const userStore = useUserStore()
 userStore.initializeFromLocalStorage()

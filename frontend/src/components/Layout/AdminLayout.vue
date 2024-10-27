@@ -28,8 +28,8 @@
             app
         >
             <v-toolbar-title
-                >Connected as <span class="font-bold">{{ user?.email }}</span></v-toolbar-title
-            >
+                >Connected as <span class="font-bold">{{ user?.email }}</span>
+            </v-toolbar-title>
             <div class="flex items-center gap-2">
                 <v-toolbar-title class="hover:underline underline-offset-2 cursor-pointer">{{
                     user?.username

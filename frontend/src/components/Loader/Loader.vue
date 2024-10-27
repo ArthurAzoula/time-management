@@ -6,20 +6,34 @@
 .loader {
     width: 48px;
     height: 48px;
-    border: 5px solid #fa9115;
-    border-bottom-color: transparent;
-    border-radius: 50%;
     display: inline-block;
+    position: relative;
+}
+.loader::after,
+.loader::before {
+    content: '';
     box-sizing: border-box;
-    animation: rotation 1s linear infinite;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #fa9115;
+    position: absolute;
+    left: 0;
+    top: 0;
+    animation: animloader 2s linear infinite;
+}
+.loader::after {
+    animation-delay: 1s;
 }
 
-@keyframes rotation {
+@keyframes animloader {
     0% {
-        transform: rotate(0deg);
+        transform: scale(0);
+        opacity: 1;
     }
     100% {
-        transform: rotate(360deg);
+        transform: scale(1);
+        opacity: 0;
     }
 }
 </style>

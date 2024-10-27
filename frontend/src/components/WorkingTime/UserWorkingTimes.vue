@@ -4,20 +4,34 @@
             <div>
                 <h2 class="text-2xl font-bold">Working times of {{ username }}</h2>
                 <div class="flex gap-2 items-center mt-6 mb-6">
-                    <VDatePicker v-model="range" is-range :select-attribute="selectDragAttribute"
-                        :drag-attribute="selectDragAttribute">
+                    <VDatePicker
+                        v-model="range"
+                        is-range
+                        :select-attribute="selectDragAttribute"
+                        :drag-attribute="selectDragAttribute"
+                    >
                         <template #default="{ inputValue, inputEvents }">
                             <div class="flex items-center">
-                                <input class="border border-button-200 rounded p-1 text-center"
-                                    :value="inputValue.start" v-on="inputEvents.start" placeholder="Start date" />
+                                <input
+                                    class="border border-button-200 rounded p-1 text-center"
+                                    :value="inputValue.start"
+                                    v-on="inputEvents.start"
+                                    placeholder="Start date"
+                                />
                                 <MoveRight class="mx-2" />
-                                <input class="border border-button-200 rounded p-1 text-center" :value="inputValue.end"
-                                    v-on="inputEvents.end" placeholder="End date" />
+                                <input
+                                    class="border border-button-200 rounded p-1 text-center"
+                                    :value="inputValue.end"
+                                    v-on="inputEvents.end"
+                                    placeholder="End date"
+                                />
                             </div>
                         </template>
                     </VDatePicker>
-                    <div @click="searchByDate"
-                        class="flex items-center gap-2 text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded ml-8 cursor-pointer">
+                    <div
+                        @click="searchByDate"
+                        class="flex items-center gap-2 text-text-color-100 py-1 px-3 bg-button-300 border border-button-200 rounded ml-8 cursor-pointer"
+                    >
                         <SearchIcon size="20" />
                         <p>Search</p>
                     </div>
@@ -29,8 +43,11 @@
             No working times available at this date
         </div>
         <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full mt-6">
-            <div v-for="time in workingTimes" :key="time.id"
-                class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between">
+            <div
+                v-for="time in workingTimes"
+                :key="time.id"
+                class="bg-white border border-text-color-100 rounded-lg p-4 flex flex-col justify-between"
+            >
                 <div class="flex justify-between bg-workingHeader-100 text-text-color-100 rounded-xl">
                     <h2 class="m-3">Total duration</h2>
                     <h2 class="m-3">{{ calculateDuration(time.start, time.end) }}</h2>
@@ -51,8 +68,12 @@
                     </div>
                     <div class="flex space-x-3" v-if="userRole !== 'employee'">
                         <ModalDelete :workingTimeId="time.id" @workingTimeDeleted="removeWorkingTime" />
-                        <ModalUpdate :workingTimeId="time.id" :initialStart="time.start" :initialEnd="time.end"
-                            @workingTimeUpdated="updateWorkingTime" />
+                        <ModalUpdate
+                            :workingTimeId="time.id"
+                            :initialStart="time.start"
+                            :initialEnd="time.end"
+                            @workingTimeUpdated="updateWorkingTime"
+                        />
                     </div>
                 </div>
             </div>
@@ -91,7 +112,7 @@ const selectDragAttribute = computed(() => ({
 
 onMounted(async () => {
     userStore.initializeFromLocalStorage()
-    await fetchWorkingTimes() 
+    await fetchWorkingTimes()
 })
 
 const userRole = computed(() => userStore.role)
@@ -134,11 +155,11 @@ const addWorkingTime = (newWorkingTime) => {
 }
 
 const removeWorkingTime = (id) => {
-    workingTimes.value = workingTimes.value.filter(time => time.id !== id)
+    workingTimes.value = workingTimes.value.filter((time) => time.id !== id)
 }
 
 const updateWorkingTime = (updatedWorkingTime) => {
-    const index = workingTimes.value.findIndex(time => time.id === updatedWorkingTime.id)
+    const index = workingTimes.value.findIndex((time) => time.id === updatedWorkingTime.id)
     if (index !== -1) {
         workingTimes.value[index] = updatedWorkingTime
     }

@@ -106,7 +106,11 @@ defmodule AppWeb.TeamController do
 
   def index(conn, _params) do
     teams = Accounts.list_teams()
-    render(conn, "index.json", teams: teams)
+    teams_with_managers = Enum.map(teams, fn team ->
+      manager = Accounts.get_user!(team.manager_id)
+      Map.put(team, :manager, manager)
+    end)
+    render(conn, "index.json", teams: teams_with_managers)
   end
 
   def index_by_manager(conn, %{"manager_id" => manager_id}) do

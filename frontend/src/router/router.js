@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import {jwtDecode} from 'jwt-decode'
 import WorkingTimeView from '../view/WorkingTimeView.vue'
 import User from '../components/Profile/User.vue'
 import Graphs from '../components/Chart/Graphs.vue'
@@ -12,24 +11,34 @@ import AdminLayout from '../components/Layout/AdminLayout.vue'
 import UserList from '../components/Admin/UserList.vue'
 import TeamList from '../components/Admin/TeamList.vue'
 import WorkingTimeList from '../components/Admin/WorkingTimeList.vue'
+import UserWorkingTimes from '../components/WorkingTime/UserWorkingTimes.vue'
+import Teams from '../components/Teams/Teams.vue'
 import { useUserStore } from '../store/useUserStore'
 import ClockList from '../components/Admin/ClockList.vue'
 import Admin from '../view/Admin.vue'
-import Teams from '../components/Teams/Teams.vue'
-import UserWorkingTimes from '../components/WorkingTime/UserWorkingTimes.vue'
 
 const routes = [
     {
         path: '/',
         component: Layout,
         children: [
-            { path: '', name: 'Home', component: Dashboard, meta: { requiresAuth: true } },
+            { path: '', component: Dashboard, meta: { requiresAuth: true } },
             { path: 'workingtimes', name: 'WorkingTimes', component: WorkingTimeView, meta: { requiresAuth: true } },
-            { path: 'workingtimes/:username/:id', name: 'UserWorkingTimes', component: UserWorkingTimes, meta: { requiresAuth: true, roles: ['manager', 'admin'] } },
+            {
+                path: 'workingtimes/:username/:id',
+                name: 'UserWorkingTimes',
+                component: UserWorkingTimes,
+                meta: { requiresAuth: true, roles: ['manager', 'admin'] },
+            },
             { path: 'me', name: 'UserProfile', component: User, meta: { requiresAuth: true } },
             { path: 'graphs', name: 'Graphs', component: Graphs, meta: { requiresAuth: true } },
             { path: 'statistics', name: 'Statistics', component: Statistics, meta: { requiresAuth: true } },
-            { path: 'teams', name: 'Teams', component: Teams, meta: { requiresAuth: true, roles: ['manager', 'admin'] } },
+            {
+                path: 'teams',
+                name: 'Teams',
+                component: Teams,
+                meta: { requiresAuth: true, roles: ['manager', 'admin'] },
+            },
         ],
     },
     {
@@ -65,28 +74,6 @@ router.beforeEach((to, from, next) => {
         next({ name: 'Dashboard' })
     } else if (to.matched.some((record) => record.meta.requiresAdmin) && !isAuthenticated) {
         next({ name: 'Login' })
-
-    const token = localStorage.getItem('token')
-    const isAuthenticated = !!token
-
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!isAuthenticated) {
-            next({ name: 'Login' })
-        } else {
-            const decodedToken = jwtDecode(token)
-            const userRole = decodedToken.role
-
-            if (to.matched.some(record => record.meta.roles)) {
-                const requiredRoles = to.meta.roles
-                if (requiredRoles.includes(userRole)) {
-                    next()
-                } else {
-                    next({ name: 'Home' }) 
-                }
-            } else {
-                next()
-            }
-        }
     } else {
         next()
     }

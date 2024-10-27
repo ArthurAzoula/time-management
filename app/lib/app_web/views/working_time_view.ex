@@ -18,4 +18,5 @@ defmodule AppWeb.WorkingTimeView do
       user: working_time.user
     }
   end
+
 end

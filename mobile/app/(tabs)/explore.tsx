@@ -123,9 +123,7 @@ const styles = StyleSheet.create({
     marginVertical: 0,
     borderRadius: 20,
     padding: 20,
-    elevation: 3,
     alignItems: 'center',
-    width: '95%',
     backgroundColor: '#FFFFFF',
   },
   pieCard: {
@@ -134,7 +132,6 @@ const styles = StyleSheet.create({
     padding: 25,
     elevation: 3,
     alignItems: 'center',
-    width: '90%',
     backgroundColor: '#FFFFFF',
   },
   chartTitle: {
@@ -144,17 +141,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   chartStyle: {
-    borderRadius: 16,
     left: -22,
     marginTop: 10,
   },
   summaryCard: {
     marginVertical: 0,
-    borderRadius: 20,
     padding: 20,
-    elevation: 3,
     alignItems: 'center',
-    width: '90%',
     backgroundColor: '#FFFFFF',
   },
   summaryTitle: {

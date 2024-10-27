@@ -11,6 +11,7 @@ import { HelloWave } from '@/components/HelloWave';
 import { Link } from 'expo-router';
 import WorkingTimeList from '@/components/WorkingTimeList';
 import { format } from 'date-fns';
+import ClockButton from '@/components/ClockButton';
 
 export default function HomeScreen() {
   const backgroundColor = useThemeColor({}, 'background');
@@ -19,9 +20,8 @@ export default function HomeScreen() {
   const buttonTextColor = useThemeColor({}, 'buttonText');
 
   const [isClockedIn, setIsClockedIn] = useState<boolean>(false);
-  const [elapsedTime, setElapsedTime] = useState<number>(0);
-  const [username, setUsername] = useState<string>(''); 
-  const [workingTimes, setWorkingTimes] = useState<WorkingTimeType[] | null>([]); 
+  const [username, setUsername] = useState<string>('');
+  const [workingTimes, setWorkingTimes] = useState<WorkingTimeType[] | null>([]);
   const [clockMessage, setClockMessage] = useState<string>('');
   const userId = 1;
 
@@ -41,37 +41,25 @@ export default function HomeScreen() {
     initializeData();
   }, []);
 
-  useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
-    if (isClockedIn) {
-      timer = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
-      }, 1000);
-    } else if (!isClockedIn && elapsedTime !== 0) {
-      clearInterval(timer);
-    }
-    return () => clearInterval(timer);
-  }, [isClockedIn]);
 
   const handleClockAction = async () => {
     await handleClock(userId);
     setIsClockedIn(!isClockedIn);
-    setElapsedTime(0);
-    updateClockMessage(); // Update the message after clocking in/out
+    updateClockMessage();
   };
 
   const updateClockMessage = async () => {
     try {
       const clocks = await fetchClocks(userId);
       const lastClock = clocks[0];
-  
+
       if (!lastClock) {
         setClockMessage('No clock-in record found');
         return;
       }
-  
+
       const lastClockDate = new Date(lastClock.time);
-  
+
       if (lastClock.status) {
         setClockMessage('You are currently working since ' + format(lastClockDate, 'hh:mm a'));
       } else {
@@ -81,7 +69,7 @@ export default function HomeScreen() {
       console.error('Failed to update clock message:', error);
     }
   };
-  
+
   useEffect(() => {
     updateClockMessage();
   }, [isClockedIn]);
@@ -94,7 +82,6 @@ export default function HomeScreen() {
           Hello, {username}! <HelloWave/>
         </ThemedText>
       </View>
-
       <View style={styles.cardContainer}>
         <Link href="/explore" asChild style={styles.actionCard}>
           <TouchableOpacity>
@@ -121,13 +108,7 @@ export default function HomeScreen() {
       )}
 
       {/* Clock In/Out Button */}
-      <TouchableOpacity
-        onPress={handleClockAction}
-        style={[styles.fab, isClockedIn ? styles.clockOutButton : styles.clockInButton]}
-      >
-        <Ionicons name={isClockedIn ? "time" : "time-outline"} size={30} color="#fff" />
-        {isClockedIn && <ThemedText style={styles.fabText}>{elapsedTime}</ThemedText>}
-      </TouchableOpacity>
+      <ClockButton isClockedIn={isClockedIn} handleClockAction={handleClockAction} />
 
       {/* Display Clock Message */}
       <ThemedText style={styles.clockMessage}>{clockMessage}</ThemedText>
@@ -176,28 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
     letterSpacing: 0.5,
-  },
-  fab: {
-    position: 'absolute',
-    bottom: 30,
-    right: 30,
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 5,
-  },
-  fabText: {
-    fontSize: 12,
-    color: '#fff',
-    marginTop: 5,
-  },
-  clockInButton: {
-    backgroundColor: '#34D399',
-  },
-  clockOutButton: {
-    backgroundColor: '#F87171',
   },
   clockMessage: {
     textAlign: 'center',

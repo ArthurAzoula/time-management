@@ -28,23 +28,61 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-row>
-                            <v-col cols="12" md="6">
-                                <v-date-input v-model="editedItem.start" label="Start Date"></v-date-input>
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-date-input v-model="editedItem.end" label="End Date"></v-date-input>
-                            </v-col>
-                            <v-col cols="12" md="6">
-                                <v-select
-                                    v-model="editedItem.user"
-                                    :items="users.map((user) => user.email)"
-                                    item-text="email"
-                                    item-value="id"
-                                    label="User"
-                                ></v-select>
-                            </v-col>
-                        </v-row>
+                        <v-col cols="12" md="6">
+                            <v-menu
+                                ref="startMenu"
+                                v-model="startMenu"
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="auto"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="editedItem.start"
+                                        label="Start Date"
+                                        prepend-icon="mdi-calendar"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker v-model="editedItem.start" @input="startMenu = false"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                        <v-col cols="12" md="6">
+                            <v-menu
+                                ref="endMenu"
+                                v-model="endMenu"
+                                :close-on-content-click="false"
+                                :nudge-right="40"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="auto"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="editedItem.end"
+                                        label="End Date"
+                                        prepend-icon="mdi-calendar"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker v-model="editedItem.end" @input="endMenu = false"></v-date-picker>
+                            </v-menu>
+                        </v-col>
+                        <v-col cols="12" md="6">
+                            <v-select
+                                v-model="editedItem.user"
+                                :items="users.map((user) => user.email)"
+                                item-text="email"
+                                item-value="id"
+                                label="User"
+                            ></v-select>
+                        </v-col>
                     </v-container>
                 </v-card-text>
                 <v-card-actions>

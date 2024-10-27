@@ -111,7 +111,7 @@ const chartData = ref({
     labels: totalUsers.value.map((user) => user.username),
     datasets: [
         {
-            label: 'Total Hours per User',
+            label: 'Total hours per user',
             backgroundColor: '#42A5F5',
             data: [],
         },
@@ -164,7 +164,7 @@ const updateChartData = async () => {
                     return calculateTotalHours(response.data)
                 } catch (error) {
                     console.error(`Failed to fetch working times for user ${user.id}`, error)
-                    return 0 // Default to 0 hours if there's an error
+                    return 0
                 }
             }),
         )

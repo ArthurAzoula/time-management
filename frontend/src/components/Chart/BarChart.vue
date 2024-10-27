@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container">
-        <Bar :data="chartData" :options="chartOptions" />
+        <Bar :data="chartData" :options="chartOptions" ref="barChart" />
     </div>
 </template>
 
@@ -21,6 +21,7 @@ const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
 }
+
 </script>
 
 <style scoped>

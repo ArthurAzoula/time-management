@@ -12,54 +12,55 @@ import { Link } from 'expo-router';
 import WorkingTimeList from '@/components/WorkingTimeList';
 import { format } from 'date-fns';
 import ClockButton from '@/components/ClockButton';
-
+import { generateFakeWorkingTimes } from '@/utils/fakeDataUtils';
+ 
 export default function HomeScreen() {
   const backgroundColor = useThemeColor({}, 'background');
   const cardBackgroundColor = useThemeColor({}, 'cardBackground');
   const textColor = useThemeColor({}, 'text');
   const buttonTextColor = useThemeColor({}, 'buttonText');
-
+ 
   const [isClockedIn, setIsClockedIn] = useState<boolean>(false);
   const [username, setUsername] = useState<string>('');
   const [workingTimes, setWorkingTimes] = useState<WorkingTimeType[] | null>([]);
   const [clockMessage, setClockMessage] = useState<string>('');
   const userId = 1;
-
+ 
   useEffect(() => {
     const initializeData = async () => {
       try {
-        const user: UserType = await fetchUserData(userId);
-        setUsername(user.data.username);
-
-        const workingTimes: WorkingTimeType[] = await fetchWorkingTimes(userId);
+      //  const user: UserType = await fetchUserData(userId);
+        setUsername('John');
+ 
+        const workingTimes: WorkingTimeType[] = generateFakeWorkingTimes(1, 4);
         setWorkingTimes(workingTimes);
       } catch (error) {
         console.error('Failed to initialize data:', error);
       }
     };
-
+ 
     initializeData();
   }, []);
-
-
+ 
+ 
   const handleClockAction = async () => {
-    await handleClock(userId);
+   // await handleClock(userId);
     setIsClockedIn(!isClockedIn);
-    updateClockMessage();
+   // updateClockMessage();
   };
-
+ 
   const updateClockMessage = async () => {
     try {
       const clocks = await fetchClocks(userId);
       const lastClock = clocks[0];
-
+ 
       if (!lastClock) {
         setClockMessage('No clock-in record found');
         return;
       }
-
+ 
       const lastClockDate = new Date(lastClock.time);
-
+ 
       if (lastClock.status) {
         setClockMessage('You are currently working since ' + format(lastClockDate, 'hh:mm a'));
       } else {
@@ -69,11 +70,11 @@ export default function HomeScreen() {
       console.error('Failed to update clock message:', error);
     }
   };
-
+ 
   useEffect(() => {
-    updateClockMessage();
+   // updateClockMessage();
   }, [isClockedIn]);
-
+ 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
       {/* Header */}
@@ -89,7 +90,7 @@ export default function HomeScreen() {
             <ThemedText style={[styles.cardText, { color: buttonTextColor }]}>Statistics</ThemedText>
           </TouchableOpacity>
         </Link>
-
+ 
         <Link href="/profile" asChild style={styles.actionCard}>
           <TouchableOpacity >
             <Ionicons name="person-outline" size={30} color={buttonTextColor} />
@@ -97,7 +98,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
         </Link>
       </View>
-
+ 
       {/* Working Times List */}
       {workingTimes && (
         <WorkingTimeList
@@ -106,16 +107,16 @@ export default function HomeScreen() {
           textColor={textColor}
         />
       )}
-
+ 
       {/* Clock In/Out Button */}
       <ClockButton isClockedIn={isClockedIn} handleClockAction={handleClockAction} />
-
+ 
       {/* Display Clock Message */}
       <ThemedText style={styles.clockMessage}>{clockMessage}</ThemedText>
     </SafeAreaView>
   );
 }
-
+ 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -165,3 +166,4 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   }
 });
+ 

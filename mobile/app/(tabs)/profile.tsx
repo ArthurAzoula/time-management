@@ -4,32 +4,22 @@ import { Ionicons } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { userService } from '@/services/userService'; 
+import { generateFakeUser } from '@/utils/fakeDataUtils';
 import { UserType } from '@/types/userType';
-
+ 
 export default function ProfileScreen() {
   const backgroundColor = useThemeColor({}, 'background');
   const cardBackgroundColor = useThemeColor({}, 'background');
   const textColor = useThemeColor({}, 'text');
   const iconColor = useThemeColor({}, 'icon');
-
+ 
   const [user, setUser] = useState<UserType | null>(null);
-  const userId = 1; // Example user ID to be fetched
-
+ 
   useEffect(() => {
-    // Fetch user data on component mount
-    const fetchUser = async () => {
-      try {
-        const data = await userService.getUser(userId);
-        setUser(data); // Set the user data
-      } catch (error) {
-        console.error("Error fetching user data: ", error);
-      }
-    };
-
-    fetchUser();
+    const fakeUser = generateFakeUser();
+    setUser(fakeUser);
   }, []);
-
+ 
   const sections = [
     {
       id: '1',
@@ -60,7 +50,7 @@ export default function ProfileScreen() {
       action: () => console.log('Sign Out Pressed'),
     },
   ];
-
+ 
   const renderItem = ({ item }: { item: { id: string; title: string; description: string; icon: 'settings-outline' | 'lock-closed-outline' | 'notifications-outline' | 'exit-outline'; action: () => void; } }) => (
     <TouchableOpacity onPress={item.action}>
       <View style={[styles.sectionCard, { backgroundColor: cardBackgroundColor }]}>
@@ -72,12 +62,11 @@ export default function ProfileScreen() {
       </View>
     </TouchableOpacity>
   );
-
+ 
   return (
     <SafeAreaView style={[styles.safeArea, { backgroundColor }]}>
       <ThemedView style={[styles.container, { backgroundColor }]}>
         {user ? (
-            console.log(user),
           <FlatList
             ListHeaderComponent={
               <View>
@@ -88,8 +77,8 @@ export default function ProfileScreen() {
                     style={styles.profileImage}
                   />
                   <View style={styles.profileDetails}>
-                    <ThemedText style={[styles.profileName, { color: textColor }]}>{user.data.username}</ThemedText>
-                    <ThemedText style={[styles.profileEmail, { color: textColor }]}>{user.data.email}</ThemedText>
+                    <ThemedText style={[styles.profileName, { color: textColor }]}>{user.username}</ThemedText>
+                    <ThemedText style={[styles.profileEmail, { color: textColor }]}>{user.email}</ThemedText>
                   </View>
                 </ThemedView>
               </View>
@@ -106,7 +95,7 @@ export default function ProfileScreen() {
     </SafeAreaView>
   );
 }
-
+ 
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,

@@ -120,6 +120,7 @@ const editUser = (item) => {
 const deleteUser = (item) => {
     const index = users.value.indexOf(item)
     confirm('Are you sure you want to delete this item?') && users.value.splice(index, 1)
+    userService.deleteUser(index)
 }
 
 const closeDialog = () => {
@@ -132,9 +133,19 @@ const closeDialog = () => {
 
 const saveUser = () => {
     if (editedIndex.value > -1) {
+
         Object.assign(users.value[editedIndex.value], editedItem.value)
     } else {
-        users.value.push({ ...editedItem.value })
+        const body = {
+            username: editedItem.value.username,
+            email: editedItem.value.email,
+            role: editedItem.value.role,
+            password: editedItem.value.username,
+            password_hash: editedItem.value.username,
+        }
+        userService.createUser(body).then((
+            users.value.push({ ...editedItem.value })
+        ))
     }
     closeDialog()
 }

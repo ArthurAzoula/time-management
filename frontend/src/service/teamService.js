@@ -21,7 +21,9 @@ export const teamService = {
 
     async createTeam(data) {
         try {
-            const response = await api.post('teams', data)
+            const response = await api.post('teams', {
+                team: data,
+            })
             return response.data
         } catch (error) {
             throw new Error(error)

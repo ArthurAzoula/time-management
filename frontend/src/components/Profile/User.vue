@@ -140,6 +140,7 @@ const updateUser = async () => {
         user: {
             username: user.value.username,
             email: user.value.email,
+            password: user.value.password ?? 'AdminPassword123'
         },
     }
     try {

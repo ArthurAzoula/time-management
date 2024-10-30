@@ -21,7 +21,9 @@ export const userService = {
 
     async createUser(data) {
         try {
-            const response = await api.post('users', data)
+            const response = await api.post('users', {
+                user: data,
+            })
             return response.data
         } catch (error) {
             throw new Error(error)

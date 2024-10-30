@@ -11,8 +11,10 @@ defmodule AppWeb.ClockView do
   end
 
   def render("clock.json", %{clock: clock}) do
-    %{id: clock.id,
-      time: clock.time,
-      status: clock.status}
+    %{id: clock.id, time: clock.time, status: clock.status, user: clock.user}
+  end
+
+  def render("error.json", %{error: error}) do
+    %{errors: %{detail: error}}
   end
 end

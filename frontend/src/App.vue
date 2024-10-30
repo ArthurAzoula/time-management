@@ -1,7 +1,12 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
+<!-- App.vue -->
+<template>
+    <router-view />
+</template>
+
+<script>
+export default {
+    name: 'App',
+}
 </script>
 
-<template>
-    <h1 class="text-3xl underline">Hello vue js</h1>
-</template>
+<style scoped></style>

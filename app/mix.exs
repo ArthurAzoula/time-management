@@ -45,7 +45,12 @@ defmodule App.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phoenix_swagger, "~> 0.8"},
       {:ex_json_schema, "~> 0.5"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:cors_plug, "~> 3.0"},
+      {:timex, "~> 3.7"},
+      {:ex_doc, "~> 0.24", only: :dev},
+      {:bcrypt_elixir, "~> 3.1"},
+      {:guardian, "~> 2.0"},
     ]
   end
 
@@ -61,7 +66,8 @@ defmodule App.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "swagger.generate": ["phx.swagger.generate"]
+      "swagger.generate": ["phx.swagger.generate"],
+      "ecto.generate": "run priv/repo/seeds.exs"
     ]
   end
 end

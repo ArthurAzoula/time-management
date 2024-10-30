@@ -102,11 +102,11 @@ defmodule App.Time do
     Clock.changeset(clock, attrs)
   end
 
-
   def get_user_clocks(user_id) do
-    query = from c in Clock,
-      where: c.user == ^user_id,
-      select: c
+    query =
+      from c in Clock,
+        where: c.user == ^user_id,
+        select: c
 
     Repo.all(query)
   end
@@ -216,18 +216,17 @@ defmodule App.Time do
     |> filter_by_start_date(params["start_date"])
     |> filter_by_end_date(params["end_date"])
     |> Repo.all()
-end
+  end
 
-defp filter_by_start_date(query, nil), do: query
+  defp filter_by_start_date(query, nil), do: query
 
-defp filter_by_start_date(query, start_date) do
+  defp filter_by_start_date(query, start_date) do
     from w in query, where: w.start >= ^start_date
-end
+  end
 
-defp filter_by_end_date(query, nil), do: query
+  defp filter_by_end_date(query, nil), do: query
 
-defp filter_by_end_date(query, end_date) do
+  defp filter_by_end_date(query, end_date) do
     from w in query, where: w.end <= ^end_date
-end
-
+  end
 end
